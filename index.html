@@ -1,1 +1,122 @@
-<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Ultra Clicker</title><style>body{margin:0;background:#080d1d;color:white;font-family:Arial;text-align:center}.app{max-width:900px;margin:auto;padding:15px}.top{display:flex;justify-content:space-between;align-items:center}.money{background:#15213e;padding:12px 18px;border-radius:15px;font-weight:bold}.arena{min-height:520px;margin-top:20px;border-radius:30px;background:radial-gradient(circle,#193f7a,#090d1c 65%);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}.click-wrap{width:min(360px,75vw);height:min(360px,75vw);padding:16px;border-radius:50%;background:#1c315b;box-shadow:0 0 45px #56eaff}.click-wrap:before{content:'';position:absolute;width:min(410px,85vw);height:min(410px,85vw);border:3px dashed #56eaff;border-radius:50%;animation:spin 10s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}#clickBtn{position:relative;z-index:2;width:100%;height:100%;border:0;border-radius:50%;font-size:130px;cursor:pointer;touch-action:manipulation;background:radial-gradient(circle at 35% 25%,#dfffff,#50eaff 25%,#2565d8 60%,#101c58);box-shadow:inset 0 10px 25px #fff8,inset 0 -25px 35px #0009,0 15px 0 #050a25;color:white;-webkit-tap-highlight-color:transparent;user-select:none}.click-info{position:absolute;bottom:35px;font-size:22px;font-weight:bold;color:#60efff}.float{position:fixed;pointer-events:none;color:#ffd75e;font-size:25px;font-weight:bold;animation:float .7s forwards}@keyframes float{to{transform:translateY(-100px);opacity:0}}.stats{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin:20px 0}.stat{background:#121b34;border:1px solid #294675;padding:12px 25px;border-radius:15px}.skins{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px}.skin{border:2px solid #294675;background:#111a30;color:white;padding:10px;border-radius:15px;cursor:pointer}.preview{width:80px;height:80px;border-radius:50%;margin:auto;display:grid;place-items:center;font-size:40px}.active{border-color:#55eaff!important;box-shadow:0 0 20px #55eaff}@media(max-width:600px){.arena{min-height:480px}}</style></head><body><div class="app"><header class="top"><h2>⚡ ULTRA CLICKER</h2><div class="money">⚡ <span id="energy">0</span></div></header><div class="stats"><div class="stat">👆 Clics : <span id="clicks">0</span></div><div class="stat">💪 Puissance : <span id="power">1</span></div><div class="stat">⭐ Niveau : <span id="level">1</span></div></div><div class="arena"><div class="click-wrap"><button id="clickBtn" type="button" aria-label="Cliquer">⚡</button></div><div class="click-info">TAPE POUR GAGNER DE L'ÉNERGIE !</div></div><h2>🎨 CHOISIS TON BOUTON</h2><div class="skins" id="skins"></div></div><script>const SKINS=[['⚡','#56eaff','#2565d8'],['🔥','#ffb14e','#b51616'],['💎','#79ffff','#604dff'],['🌙','#e4e7ff','#4d558b'],['☀️','#fff38a','#ff8500'],['❄️','#e9ffff','#318cff'],['🌋','#ff6b27','#721010'],['🪐','#d188ff','#3c1679'],['👾','#93ff7e','#147d48'],['❤️','#ff9dc9','#b20c5d'],['⭐','#fff4a0','#e38b00'],['⚙️','#e8edf7','#45536b'],['🐉','#ffc05b','#9c3215'],['🌊','#77f1ff','#1265b8'],['☁️','#ffffff','#7187ae'],['🍀','#b9ff7c','#20853a'],['👑','#ffe47c','#9c6612'],['💀','#dddddd','#222222'],['🌀','#9df7ff','#7138e5'],['🌹','#ff9fce','#b50b61']];let D;try{D=JSON.parse(localStorage.getItem('ultra_clicker_working'))||{energy:0,clicks:0,power:1,skin:0}}catch(e){D={energy:0,clicks:0,power:1,skin:0}}const btn=document.getElementById('clickBtn');function save(){localStorage.setItem('ultra_clicker_working',JSON.stringify(D))}function render(){document.getElementById('energy').textContent=Math.floor(D.energy).toLocaleString('fr-FR');document.getElementById('clicks').textContent=D.clicks.toLocaleString('fr-FR');document.getElementById('power').textContent=D.power;document.getElementById('level').textContent=Math.floor(Math.sqrt(D.clicks/25))+1;const s=SKINS[D.skin];btn.textContent=s[0];btn.style.background='radial-gradient(circle at 35% 25%,#ffffff,'+s[1]+' 28%,'+s[2]+' 72%)';document.querySelector('.click-wrap').style.boxShadow='0 0 45px '+s[1];document.getElementById('skins').innerHTML=SKINS.map((s,i)=>'<button class="skin '+(i===D.skin?'active':'')+'" data-i="'+i+'"><div class="preview" style="background:radial-gradient(circle,#fff,'+s[1]+','+s[2]+')">'+s[0]+'</div>STYLE '+(i+1)+'</button>').join('');document.querySelectorAll('.skin').forEach(x=>x.onclick=()=>{D.skin=Number(x.dataset.i);save();render()})}function gameClick(e){D.energy+=D.power;D.clicks++;save();render();const f=document.createElement('div');f.className='float';f.textContent='+'+D.power+' ⚡';const x=e&&e.clientX?e.clientX:window.innerWidth/2;const y=e&&e.clientY?e.clientY:window.innerHeight/2;f.style.left=x+'px';f.style.top=y+'px';document.body.appendChild(f);setTimeout(()=>f.remove(),700)}btn.onclick=gameClick;btn.addEventListener('touchstart',function(e){e.preventDefault();gameClick(e.touches[0])},{passive:false});render();</script></body></html>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Ultra Clicker</title>
+<style>
+:root{--accent:#59eaff;--accent2:#356cff;--bg:#070b18;--panel:#101a31;--text:#fff;--muted:#9aabc9}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(circle at 50% -20%,#253f82,transparent 42%),var(--bg);color:var(--text);font-family:Arial,sans-serif;min-height:100vh}
+button{font:inherit;color:white;border:0;cursor:pointer;touch-action:manipulation}
+.app{max-width:1100px;margin:auto;padding:12px 14px 95px}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 0}
+.logo{font-weight:900;font-size:24px;letter-spacing:1px}.logo span{color:var(--accent)}
+.wallet{display:flex;gap:7px}.currency{background:#14203b;border:1px solid #314976;border-radius:14px;padding:9px 12px;font-weight:800}
+.page{display:none}.page.active{display:block}
+.hero{text-align:center;padding:10px}.hero h1{margin:5px;font-size:clamp(25px,5vw,48px)}.hero p{color:var(--muted);margin:5px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:12px 0}.stat{background:linear-gradient(145deg,#172542,#0e152a);border:1px solid #2b416d;border-radius:18px;padding:11px;text-align:center}.stat small{display:block;color:var(--muted);font-size:10px}.stat b{font-size:18px}
+.arena{min-height:480px;display:grid;place-items:center;position:relative;overflow:hidden;border:1px solid #2b426f;border-radius:35px;background:radial-gradient(circle at center,#1d3679 0,transparent 40%),linear-gradient(145deg,#111b38,#080d1c);box-shadow:inset 0 0 70px #0008}
+.ring{width:min(360px,78vw);aspect-ratio:1;border-radius:50%;padding:15px;position:relative;background:#1b2c50;box-shadow:0 0 35px var(--accent);animation:breath 2s ease-in-out infinite}.ring:before,.ring:after{content:'';position:absolute;inset:-18px;border:2px dashed var(--accent);border-radius:50%;animation:spin 12s linear infinite}.ring:after{inset:-38px;animation-direction:reverse;animation-duration:18s;opacity:.4}
+@keyframes spin{to{transform:rotate(360deg)}}@keyframes breath{50%{transform:scale(1.025)}}
+#clickBtn{position:relative;z-index:2;width:100%;height:100%;border-radius:50%;font-size:clamp(80px,18vw,145px);background:radial-gradient(circle at 35% 22%,#fff,#59eaff 25%,#2565d8 62%,#101a58);box-shadow:inset 0 12px 25px #fff8,inset 0 -22px 35px #0009,0 15px 0 #050921;transition:transform .08s}.clicking{transform:scale(.92)!important}.click-help{position:absolute;bottom:24px;text-align:center;font-weight:900;font-size:19px;color:var(--accent)}
+.float{position:fixed;pointer-events:none;z-index:99;color:#ffe16a;font-size:24px;font-weight:900;text-shadow:0 0 15px #ffb700;animation:float .8s forwards}@keyframes float{to{transform:translateY(-110px) scale(1.3);opacity:0}}
+.section{margin-top:15px;background:linear-gradient(145deg,#141f3a,#0c1224);border:1px solid #2b3d66;border-radius:25px;padding:15px}.section h2{margin:0 0 12px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}.card{background:#0a1020;border:1px solid #273a61;border-radius:18px;padding:14px;text-align:center}.card .icon{font-size:40px}.card h3{margin:7px 0}.card p{font-size:12px;color:var(--muted)}
+.buy,.action{width:100%;padding:11px;border-radius:12px;background:linear-gradient(90deg,#356cff,#7a5cff);font-weight:900;box-shadow:0 5px 0 #152a78}.buy:active,.action:active{transform:translateY(4px);box-shadow:0 1px 0 #152a78}
+.skin-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(115px,1fr));gap:10px}.skin{background:#0b1223;border:2px solid #27395f;border-radius:18px;padding:9px}.skin.active{border-color:var(--accent);box-shadow:0 0 18px var(--accent)}.preview{width:72px;height:72px;border-radius:50%;display:grid;place-items:center;margin:auto;font-size:34px}
+.nav{position:fixed;z-index:20;bottom:0;left:0;right:0;background:#091020f2;border-top:1px solid #2b3d62;backdrop-filter:blur(16px)}.nav-inner{max-width:850px;margin:auto;display:flex;justify-content:space-around}.nav button{background:none;color:#9aaac9;padding:7px;font-size:10px}.nav i{display:block;font-style:normal;font-size:23px}.nav button.active{color:var(--accent)}
+.progress{height:10px;background:#060a14;border-radius:20px;overflow:hidden}.progress div{height:100%;background:linear-gradient(90deg,var(--accent),#9c62ff);border-radius:20px}.toast{position:fixed;top:15px;left:50%;transform:translate(-50%,-120px);z-index:100;background:#172748;border:1px solid #5077b8;border-radius:14px;padding:12px 18px;transition:.3s;font-weight:bold}.toast.show{transform:translate(-50%,0)}
+.account{display:flex;gap:8px;justify-content:center;align-items:center}.account input{padding:10px;border-radius:10px;border:1px solid #40577f;background:#0a1020;color:#fff}
+@media(max-width:600px){.stats{grid-template-columns:repeat(2,1fr)}.arena{min-height:420px}.logo{font-size:17px}.currency{padding:7px;font-size:12px}.nav button{font-size:9px}.nav i{font-size:20px}}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="topbar">
+<div class="logo">ULTRA <span>CLICKER</span></div>
+<div class="wallet"><div class="currency">⚡ <span id="energy">0</span></div><div class="currency">💎 <span id="gems">0</span></div></div>
+</header>
+
+<section id="home" class="page active">
+<div class="hero"><h1>⚡ CLIQUE. ÉVOLUE. DOMINE. ⚡</h1><p>Construis ta puissance et deviens une légende.</p></div>
+<div class="stats"><div class="stat"><small>PUISSANCE</small><b id="power">1</b></div><div class="stat"><small>/ SECONDE</small><b id="eps">0</b></div><div class="stat"><small>NIVEAU</small><b id="level">1</b></div><div class="stat"><small>PRESTIGE</small><b id="prestigeCount">0</b></div></div>
+<div class="arena"><div class="ring" id="ring"><button id="clickBtn" aria-label="Cliquer">⚡</button></div><div class="click-help">TAPE LE BOUTON POUR GAGNER ⚡</div></div>
+<div class="section"><h2>🚀 Améliorations rapides</h2><div class="grid" id="quick"></div></div>
+</section>
+
+<section id="shop" class="page"><div class="hero"><h1>🛒 BOUTIQUE</h1><p>Achète des générateurs et augmente tes gains.</p></div><div class="section"><div class="grid" id="shopGrid"></div></div></section>
+<section id="worlds" class="page"><div class="hero"><h1>🌍 MONDES</h1><p>Chaque monde augmente énormément tes gains.</p></div><div class="section"><div class="grid" id="worldGrid"></div></div></section>
+<section id="pets" class="page"><div class="hero"><h1>🐾 PETS</h1><p>Ouvre des œufs et équipe jusqu'à 3 pets.</p></div><div class="section"><h2>🥚 Œufs</h2><div class="grid" id="eggGrid"></div></div><div class="section"><h2>🎒 Inventaire</h2><div class="grid" id="petGrid"></div></div></section>
+<section id="skins" class="page"><div class="hero"><h1>🎨 BOUTONS</h1><p>20 boutons complètement différents à collectionner.</p></div><div class="section"><div class="skin-grid" id="skinGrid"></div></div></section>
+<section id="quests" class="page"><div class="hero"><h1>🎯 QUÊTES</h1><p>Gagne des gemmes en jouant.</p></div><div class="section"><div class="grid" id="questGrid"></div></div><div class="section"><h2>👹 Boss</h2><div class="card"><div class="icon">👹</div><h3>Titan du Néon</h3><p id="bossText"></p><div class="progress"><div id="bossBar"></div></div><br><button class="action" onclick="attackBoss()">⚔️ ATTAQUER LE BOSS</button></div></div></section>
+<section id="profile" class="page"><div class="hero"><h1>👤 TON PROFIL</h1></div><div class="section"><div class="account"><input id="nameInput" maxlength="16" placeholder="Ton pseudo"><button class="action" onclick="saveName()">SAUVEGARDER</button></div></div><div class="section"><div class="grid"><div class="card"><div class="icon">🎁</div><h3>Récompense quotidienne</h3><button class="action" onclick="daily()">RÉCUPÉRER</button></div><div class="card"><div class="icon">👑</div><h3>Prestige</h3><p>Réinitialise ta progression pour un bonus permanent.</p><button class="action" onclick="doPrestige()">PRESTIGE · 50 000 ⚡</button></div><div class="card"><div class="icon">💾</div><h3>Sauvegarde locale</h3><p>Ta progression reste sur cet appareil.</p><button class="action" onclick="exportSave()">COPIER LA SAUVEGARDE</button></div></div></div></section>
+</div>
+
+<nav class="nav"><div class="nav-inner">
+<button class="active" data-page="home"><i>⚡</i>JOUER</button>
+<button data-page="shop"><i>🛒</i>SHOP</button>
+<button data-page="worlds"><i>🌍</i>MONDES</button>
+<button data-page="pets"><i>🐾</i>PETS</button>
+<button data-page="skins"><i>🎨</i>BOUTONS</button>
+<button data-page="quests"><i>🎯</i>QUÊTES</button>
+<button data-page="profile"><i>👤</i>PROFIL</button>
+</div></nav>
+<div id="toast" class="toast"></div>
+
+<script>
+const SAVE_KEY='ultra_clicker_complete_v1';
+const SKINS=[
+['⚡','Électrique','#55eaff','#1c4ed8'],['🔥','Inferno','#ffb14d','#a81212'],['💎','Cristal','#7effff','#5146e8'],['🌙','Lunaire','#e7e9ff','#424b85'],['☀️','Solaire','#fff58c','#ff8300'],['❄️','Glacier','#eaffff','#2389e8'],['🌋','Volcan','#ff652c','#72100f'],['🪐','Galaxie','#d38cff','#37146f'],['👾','Alien','#98ff7d','#127c48'],['❤️','Amour','#ff9bc8','#b00d5b'],['⭐','Étoile','#fff3a1','#e38b00'],['⚙️','Mecha','#eef3ff','#3f4e67'],['🐉','Dragon','#ffc05b','#963014'],['🌊','Océan','#72f1ff','#1162b3'],['☁️','Nuage','#ffffff','#6e86aa'],['🍀','Nature','#b8ff7b','#21853b'],['👑','Royal','#ffe47c','#9c6410'],['💀','Ombre','#e4e4e4','#1a1a22'],['🌀','Cosmique','#a0f7ff','#7039df'],['🌹','Rose Néon','#ff9dcc','#b30b60']
+];
+const GENERATORS=[
+{id:'finger',icon:'👆',name:'Doigt puissant',base:25,click:1,auto:0},
+{id:'bot',icon:'🤖',name:'Click Bot',base:100,click:0,auto:2},
+{id:'factory',icon:'🏭',name:'Usine',base:700,click:0,auto:12},
+{id:'reactor',icon:'⚛️',name:'Réacteur',base:5000,click:5,auto:80},
+{id:'quantum',icon:'🧬',name:'Noyau quantique',base:30000,click:20,auto:450},
+{id:'galaxy',icon:'🌌',name:'Générateur galaxie',base:200000,click:100,auto:3000}
+];
+const WORLDS=[['🌃','Néon City',0,1],['🌋','Volcan',10000,2],['❄️','Royaume Glacé',50000,4],['☁️','Îles du Ciel',250000,8],['🪐','Galaxie',1000000,16],['🕳️','Le Vide',5000000,32],['🔥','Dimension du Feu',25000000,64],['🌈','Arc-en-ciel',100000000,128]];
+const PETS=[['🐶','Cyber Dog',1.1,'Commun'],['🐱','Neko Neon',1.2,'Rare'],['🦊','Fox Volt',1.4,'Rare'],['🐲','Dragon Plasma',1.8,'Épique'],['🦄','Unicorn Nova',2.5,'Légendaire'],['👾','Void King',5,'Secret']];
+const EGGS=[['🥚','Œuf Néon',100,3],['🌋','Œuf Volcan',1000,4],['🌌','Œuf Cosmique',10000,6]];
+const QUESTS=[['Premier cent',100,50],['Clicker confirmé',1000,200],['Machine à cliquer',10000,1000],['Légende',100000,5000],['Dieu du clic',1000000,25000]];
+function fresh(){return {energy:0,gems:100,clicks:0,power:1,auto:0,skin:0,world:0,prestige:0,pets:[],equipped:[],bought:{},claimed:[],daily:'',name:'Joueur',boss:10000}}
+let D=fresh();try{D=Object.assign(fresh(),JSON.parse(localStorage.getItem(SAVE_KEY)||'{}'))}catch(e){}
+const $=id=>document.getElementById(id);
+function fmt(n){return Math.floor(n).toLocaleString('fr-FR')}
+function save(){localStorage.setItem(SAVE_KEY,JSON.stringify(D))}
+function toast(t){$('toast').textContent=t;$('toast').classList.add('show');setTimeout(()=>$('toast').classList.remove('show'),1800)}
+function multiplier(){let pet=D.equipped.reduce((m,i)=>m*(D.pets[i]?.m||1),1);return WORLDS[D.world][3]*pet*(1+D.prestige*.1)}
+function generatorCost(g){return Math.floor(g.base*Math.pow(1.7,D.bought[g.id]||0))}
+function render(){
+$('energy').textContent=fmt(D.energy);$('gems').textContent=fmt(D.gems);$('power').textContent=fmt(D.power*multiplier());$('eps').textContent=fmt(D.auto*multiplier());$('level').textContent=Math.max(1,Math.floor(Math.sqrt(D.clicks/25))+1);$('prestigeCount').textContent=D.prestige;
+let s=SKINS[D.skin];let btn=$('clickBtn');btn.textContent=s[0];btn.style.background=`radial-gradient(circle at 35% 20%,#fff,${s[1]} 25%,${s[2]} 67%,#080b20)`;$('ring').style.boxShadow=`0 0 38px ${s[1]}`;document.documentElement.style.setProperty('--accent',s[1]);
+$('quick').innerHTML=GENERATORS.slice(0,3).map(generatorCard).join('');$('shopGrid').innerHTML=GENERATORS.map(generatorCard).join('');
+$('worldGrid').innerHTML=WORLDS.map((w,i)=>`<div class="card ${i>D.world+1?'locked':''}"><div class="icon">${w[0]}</div><h3>${w[1]}</h3><p>Multiplicateur x${w[3]}</p><button class="buy" onclick="travel(${i})">${i===D.world?'ACTUEL':i<=D.world?'VOYAGER':'DÉBLOQUER · '+fmt(w[2])+' ⚡'}</button></div>`).join('');
+$('eggGrid').innerHTML=EGGS.map((e,i)=>`<div class="card"><div class="icon">${e[0]}</div><h3>${e[1]}</h3><p>Obtiens un nouveau pet.</p><button class="buy" onclick="openEgg(${i})">OUVRIR · ${fmt(e[2])} 💎</button></div>`).join('');
+$('petGrid').innerHTML=D.pets.length?D.pets.map((p,i)=>`<div class="card"><div class="icon">${p.i}</div><h3>${p.n}</h3><p>${p.r} · x${p.m}</p><button class="buy" onclick="equipPet(${i})">${D.equipped.includes(i)?'DÉSÉQUIPER':'ÉQUIPER'}</button></div>`).join(''):'<div class="card"><div class="icon">🥚</div><h3>Aucun pet</h3><p>Ouvre un œuf !</p></div>';
+$('skinGrid').innerHTML=SKINS.map((x,i)=>`<button class="skin ${i===D.skin?'active':''}" onclick="selectSkin(${i})"><div class="preview" style="background:radial-gradient(circle at 35% 20%,#fff,${x[1]} 30%,${x[2]})">${x[0]}</div><b>${x[1]}</b><p>${x[2]}</p><small>${x[1]}</small></button>`).join('');
+$('questGrid').innerHTML=QUESTS.map((q,i)=>{let done=D.claimed.includes(i),pct=Math.min(100,D.clicks/q[1]*100);return `<div class="card"><div class="icon">🎯</div><h3>${q[0]}</h3><p>${fmt(D.clicks)} / ${fmt(q[1])} clics</p><div class="progress"><div style="width:${pct}%"></div></div><p>Récompense : ${fmt(q[2])} 💎</p><button class="buy" onclick="claimQuest(${i})">${done?'RÉCUPÉRÉ':'RÉCUPÉRER'}</button></div>`}).join('');
+$('bossText').textContent=`${fmt(Math.max(0,D.boss))} PV`;$('bossBar').style.width=Math.max(0,Math.min(100,D.boss/10000*100))+'%';$('nameInput').value=D.name;save();
+}
+function generatorCard(g){let count=D.bought[g.id]||0;return `<div class="card"><div class="icon">${g.icon}</div><h3>${g.name}</h3><p>+${g.click} clic · +${g.auto}/sec</p><p>Niveau ${count}</p><button class="buy" onclick="buyGenerator('${g.id}')">ACHETER · ${fmt(generatorCost(g))} ⚡</button></div>`}
+function gameClick(e){let gain=D.power*multiplier();D.energy+=gain;D.clicks++;let btn=$('clickBtn');btn.classList.add('clicking');setTimeout(()=>btn.classList.remove('clicking'),90);let f=document.createElement('div');f.className='float';f.textContent='+'+fmt(gain)+' ⚡';let x=e?.clientX||innerWidth/2,y=e?.clientY||innerHeight/2;f.style.left=x+'px';f.style.top=y+'px';document.body.appendChild(f);setTimeout(()=>f.remove(),800);render()}
+$('clickBtn').addEventListener('pointerdown',e=>{e.preventDefault();gameClick(e)});
+function buyGenerator(id){let g=GENERATORS.find(x=>x.id===id),cost=generatorCost(g);if(D.energy<cost)return toast('⚠️ Pas assez d’énergie !');D.energy-=cost;D.bought[id]=(D.bought[id]||0)+1;D.power+=g.click;D.auto+=g.auto;toast('✨ '+g.name+' amélioré !');render()}
+function travel(i){let w=WORLDS[i];if(i>D.world){if(D.energy<w[2])return toast('🔒 Il faut '+fmt(w[2])+' ⚡');D.energy-=w[2]}D.world=i;toast('🚀 Bienvenue dans '+w[1]+' !');render()}
+function selectSkin(i){D.skin=i;toast('🎨 Bouton '+SKINS[i][1]+' sélectionné !');render()}
+function openEgg(i){let e=EGGS[i];if(D.gems<e[2])return toast('💎 Pas assez de gemmes !');D.gems-=e[2];let pool=PETS.slice(0,e[3]);let p=pool[Math.floor(Math.pow(Math.random(),1.8)*pool.length)];D.pets.push({i:p[0],n:p[1],m:p[2],r:p[3]});toast('🎉 Tu as obtenu '+p[1]+' !');render()}
+function equipPet(i){if(D.equipped.includes(i))D.equipped=D.equipped.filter(x=>x!==i);else{if(D.equipped.length>=3)return toast('Maximum 3 pets équipés !');D.equipped.push(i)}render()}
+function claimQuest(i){let q=QUESTS[i];if(D.claimed.includes(i))return toast('Déjà récupérée !');if(D.clicks<q[1])return toast('Continue à cliquer !');D.claimed.push(i);D.gems+=q[2];toast('🎁 +'+q[2]+' gemmes !');render()}
+function attackBoss(){let dmg=D.power*multiplier()*20;D.boss-=dmg;if(D.boss<=0){D.gems+=500;D.energy+=10000;D.boss=10000*(D.prestige+1);toast('🏆 BOSS VAINCU ! +500 💎')}else toast('⚔️ -'+fmt(dmg)+' PV');render()}
+function daily(){let day=new Date().toDateString();if(D.daily===day)return toast('⏳ Déjà récupérée aujourd’hui !');D.daily=day;D.gems+=250;D.energy+=1000;toast('🎁 +250 💎 et +1000 ⚡ !');render()}
+function doPrestige(){if(D.energy<50000)return toast('Il faut 50 000 ⚡ !');let name=D.name,skin=D.skin,pets=D.pets;D=fresh();D.name=name;D.skin=skin;D.pets=pets;D.prestige=(JSON.parse(localStorage.getItem(SAVE_KEY)||'{}').prestige||0)+1;toast('👑 PRESTIGE RÉUSSI !');render()}
+function saveName(){D.name=$('nameInput').value.trim()||'Joueur';toast('👤 Profil sauvegardé !');render()}
+function exportSave(){navigator.clipboard?.writeText(JSON.stringify(D)).then(()=>toast('💾 Sauvegarde copiée !')).catch(()=>toast('Sauvegarde automatique active !'))}
+setInterval(()=>{if(D.auto>0){D.energy+=D.auto*multiplier();render()}},1000);
+document.querySelectorAll('[data-page]').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('[data-page]').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));b.classList.add('active');$(b.dataset.page).classList.add('active')}));
+render();
+</script>
+</body>
+</html>
