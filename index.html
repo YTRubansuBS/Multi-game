@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Multi-game • Appels</title>
+<script src="https://meet.jit.si/external_api.js"></script>
 <style>
 *{box-sizing:border-box}html,body{margin:0;height:100%;font-family:Arial,sans-serif;background:#07111b;color:#fff}button,input{font:inherit}button{cursor:pointer}.hide{display:none!important}
 body{background:radial-gradient(circle at top,#24385d,#07111b 65%)}
@@ -11,18 +12,18 @@ body{background:radial-gradient(circle at top,#24385d,#07111b 65%)}
 #app{height:100%;display:flex;flex-direction:column}header{height:62px;display:flex;align-items:center;padding:10px 15px;background:#09121e;border-bottom:1px solid #ffffff10}.brand{font-weight:900;font-size:20px}.me{margin-left:auto;display:flex;align-items:center;gap:8px}.mini{width:34px;height:34px;margin:0}.quit,.back{border:1px solid #ffffff15;background:#142135;color:#fff;border-radius:10px;padding:9px 12px}.quit{margin-left:6px}
 main{flex:1;display:flex;min-height:0}.contacts{width:340px;background:#0a121e;border-right:1px solid #ffffff10;padding:14px;overflow:auto}.contact{width:100%;display:flex;align-items:center;gap:12px;border:1px solid #ffffff0d;background:#111c2b;color:#fff;border-radius:15px;padding:13px;margin-bottom:9px;text-align:left}.contact:hover{background:#1b2a40}.contact .avatar{width:45px;height:45px;margin:0}.info{flex:1}.info b{display:block;font-size:16px}.status{font-size:12px;color:#8190a5}.callbuttons{display:flex;gap:6px}.callbuttons button{border:0;border-radius:9px;padding:9px;background:#263a57;color:#fff}.callbuttons button:hover{background:#5865f2}
 .welcome{flex:1;display:grid;place-items:center;text-align:center;color:#8796aa}.welcome div{font-size:65px}.welcome h2{color:#fff}
-#callScreen{position:fixed;inset:0;background:#05080d;z-index:50;display:flex;flex-direction:column}.callbar{height:62px;display:flex;align-items:center;padding:9px 12px;background:#0b1421;border-bottom:1px solid #ffffff12}.calltitle{flex:1}.calltitle b{display:block}.calltitle span{font-size:12px;color:#8290a5}.call-actions{display:flex;gap:7px}.call-actions button{border:0;border-radius:10px;padding:10px 13px;background:#1d2d43;color:#fff}.call-actions .end{background:#d9365b}.framewrap{flex:1;position:relative}.framewrap iframe{width:100%;height:100%;border:0}.note{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);background:#101a29dd;padding:8px 12px;border-radius:9px;font-size:12px;color:#aab7c9;pointer-events:none}
+#callScreen{position:fixed;inset:0;background:#05080d;z-index:50;display:flex;flex-direction:column}.callbar{height:62px;display:flex;align-items:center;padding:9px 12px;background:#0b1421;border-bottom:1px solid #ffffff12}.calltitle{flex:1}.calltitle b{display:block}.calltitle span{font-size:12px;color:#8290a5}.call-actions{display:flex;gap:7px}.call-actions button{border:0;border-radius:10px;padding:10px 13px;background:#1d2d43;color:#fff}.call-actions .active{background:#5865f2}.call-actions .end{background:#d9365b}.framewrap{flex:1;position:relative;min-height:0}.jitsi-container{position:absolute;inset:0}.note{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);background:#101a29dd;padding:8px 12px;border-radius:9px;font-size:12px;color:#aab7c9;pointer-events:none}
 @media(max-width:700px){.contacts{width:100%;border:0}.welcome{display:none}.users{grid-template-columns:1fr 1fr}.contact{padding:11px}}
 </style>
 </head>
 <body>
 <div id="loginScreen"><div class="card"><div class="logo">📞 Multi-game</div><p class="muted">Choisis ton compte</p><div class="users" id="users"></div><div id="loginbox" class="loginbox hide"><b>Mot de passe de <span id="chosen"></span></b><input id="password" type="password" placeholder="Mot de passe"><button class="primary" id="loginBtn">Se connecter</button><div id="error" class="error"></div></div><p class="muted" style="font-size:12px">Mot de passe = nom du compte.</p></div></div>
 <div id="app" class="hide"><header><div class="brand">📞 Multi-game</div><div class="me"><span class="avatar mini" id="myAvatar"></span><b id="myName"></b><button class="quit" id="logout">Quitter</button></div></header><main><aside class="contacts"><p class="muted" style="margin:5px 4px 14px;font-weight:bold">APPELER</p><div id="contacts"></div></aside><section class="welcome"><div><div>📞</div><h2>Appels audio et vidéo</h2><p>Choisis quelqu'un puis appuie sur 📞 ou 📹.</p></div></section></main></div>
-<div id="callScreen" class="hide"><div class="callbar"><button class="back" id="closeCall">←</button><div class="calltitle" style="margin-left:10px"><b id="callName"></b><span id="callType"></span></div><div class="call-actions"><button id="mute">🎙️</button><button id="camera">📷</button><button class="end" id="end">☎️</button></div></div><div class="framewrap"><iframe id="jitsi" allow="camera; microphone; fullscreen; display-capture; autoplay" allowfullscreen></iframe><div class="note">Autorise le micro/caméra si le navigateur le demande.</div></div></div>
+<div id="callScreen" class="hide"><div class="callbar"><button class="back" id="closeCall">←</button><div class="calltitle" style="margin-left:10px"><b id="callName"></b><span id="callType"></span></div><div class="call-actions"><button id="mute">🎙️</button><button id="camera">📷</button><button class="end" id="end">☎️</button></div></div><div class="framewrap"><div id="jitsiContainer" class="jitsi-container"></div><div class="note">Si le navigateur demande l'accès au micro ou à la caméra, clique sur « Autoriser ».</div></div></div>
 <script>
 const USERS=['Naim','Ilan','Juul','Ruben'];
 const PASS={Naim:'Naim',Ilan:'Ilan',Juul:'Juul',Ruben:'Ruben'};
-let me='',selected='',current='',mode='audio';
+let me='',selected='',current='',mode='audio',jitsiApi=null,audioMuted=false,videoMuted=false;
 const $=id=>document.getElementById(id);
 const initials=n=>n.slice(0,2).toUpperCase();
 
@@ -39,16 +40,8 @@ function renderUsers(){
 }
 
 function doLogin(){
-  if(!selected){
-    $('error').textContent='❌ Choisis d’abord un compte';
-    return;
-  }
-  const password=$('password').value;
-  if(password!==PASS[selected]){
-    $('error').textContent='❌ Mot de passe incorrect';
-    $('password').select();
-    return;
-  }
+  if(!selected){$('error').textContent='❌ Choisis d’abord un compte';return;}
+  if($('password').value!==PASS[selected]){$('error').textContent='❌ Mot de passe incorrect';$('password').select();return;}
   me=selected;
   $('loginScreen').classList.add('hide');
   $('app').classList.remove('hide');
@@ -68,19 +61,56 @@ function roomFor(a,b){
   return 'MultiGameCall-'+Math.abs(h)+'-'+pair.replace(/[^a-z0-9-]/g,'');
 }
 
+function destroyJitsi(){
+  if(jitsiApi){try{jitsiApi.dispose();}catch(e){}jitsiApi=null;}
+  $('jitsiContainer').innerHTML='';
+  audioMuted=false;videoMuted=false;
+  $('mute').classList.remove('active');
+  $('camera').classList.remove('active');
+}
+
 function startCall(n,type){
-  current=n;
-  mode=type;
+  destroyJitsi();
+  current=n;mode=type;
   $('callName').textContent=n;
   $('callType').textContent=type==='video'?'Appel vidéo':'Appel audio';
-  const room=roomFor(me,n);
-  const params='#config.prejoinConfig.enabled=false&config.startWithAudioMuted=false&config.startWithVideoMuted='+(type==='audio'?'true':'false')+'&config.disableAP=true';
-  $('jitsi').src='https://meet.jit.si/'+room+params;
   $('callScreen').classList.remove('hide');
+  const room=roomFor(me,n);
+  const options={
+    roomName:room,
+    width:'100%',height:'100%',
+    parentNode:$('jitsiContainer'),
+    userInfo:{displayName:me},
+    lang:'fr',
+    configOverwrite:{
+      prejoinConfig:{enabled:false},
+      startWithAudioMuted:false,
+      startWithVideoMuted:type==='audio',
+      disableAP:true
+    },
+    interfaceConfigOverwrite:{
+      SHOW_JITSI_WATERMARK:false,
+      MOBILE_APP_PROMO:false
+    }
+  };
+  try{
+    jitsiApi=new JitsiMeetExternalAPI('meet.jit.si',options);
+    jitsiApi.addEventListener('videoConferenceJoined',()=>{
+      if(type==='audio'){
+        jitsiApi.executeCommand('toggleVideo');
+        videoMuted=true;
+        $('camera').classList.add('active');
+      }
+    });
+    jitsiApi.addEventListener('readyToClose',()=>closeCall());
+  }catch(e){
+    $('callType').textContent='Erreur de connexion à l’appel';
+    console.error(e);
+  }
 }
 
 function closeCall(){
-  $('jitsi').src='';
+  destroyJitsi();
   $('callScreen').classList.add('hide');
   current='';
 }
@@ -88,18 +118,26 @@ function closeCall(){
 $('loginBtn').onclick=doLogin;
 $('password').onkeydown=e=>{if(e.key==='Enter')doLogin()};
 $('closeCall').onclick=closeCall;
-$('end').onclick=closeCall;
-$('logout').onclick=()=>{
-  closeCall();
-  me='';selected='';
-  $('app').classList.add('hide');
-  $('loginScreen').classList.remove('hide');
-  $('loginbox').classList.add('hide');
-  $('password').value='';
-  $('error').textContent='';
+$('end').onclick=()=>{
+  if(jitsiApi){try{jitsiApi.executeCommand('hangup');}catch(e){closeCall();}}
+  else closeCall();
 };
-$('mute').onclick=()=>{const w=$('jitsi').contentWindow;try{w.postMessage({type:'toggleAudio'},'*')}catch(e){}};
-$('camera').onclick=()=>{const w=$('jitsi').contentWindow;try{w.postMessage({type:'toggleVideo'},'*')}catch(e){}};
+$('mute').onclick=()=>{
+  if(!jitsiApi)return;
+  jitsiApi.executeCommand('toggleAudio');
+  audioMuted=!audioMuted;
+  $('mute').classList.toggle('active',audioMuted);
+};
+$('camera').onclick=()=>{
+  if(!jitsiApi)return;
+  jitsiApi.executeCommand('toggleVideo');
+  videoMuted=!videoMuted;
+  $('camera').classList.toggle('active',videoMuted);
+};
+$('logout').onclick=()=>{
+  closeCall();me='';selected='';
+  $('app').classList.add('hide');$('loginScreen').classList.remove('hide');$('loginbox').classList.add('hide');$('password').value='';$('error').textContent='';
+};
 renderUsers();
 </script>
 </body>
