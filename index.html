@@ -62,7 +62,7 @@ function roomFor(a,b){
 }
 
 function destroyJitsi(){
-  if(jitsiApi){try{jitsiApi.dispose();}catch(e){}jitsiApi=null;}
+  if(jitsiApi){try{jitsiApi.dispose();}catch(e){console.error(e)}jitsiApi=null;}
   $('jitsiContainer').innerHTML='';
   audioMuted=false;videoMuted=false;
   $('mute').classList.remove('active');
@@ -70,6 +70,11 @@ function destroyJitsi(){
 }
 
 function startCall(n,type){
+  if(typeof JitsiMeetExternalAPI==='undefined'){
+    $('callType').textContent='Jitsi ne se charge pas. Recharge la page.';
+    $('callScreen').classList.remove('hide');
+    return;
+  }
   destroyJitsi();
   current=n;mode=type;
   $('callName').textContent=n;
@@ -85,8 +90,7 @@ function startCall(n,type){
     configOverwrite:{
       prejoinConfig:{enabled:false},
       startWithAudioMuted:false,
-      startWithVideoMuted:type==='audio',
-      disableAP:true
+      startWithVideoMuted:type==='audio'
     },
     interfaceConfigOverwrite:{
       SHOW_JITSI_WATERMARK:false,
@@ -97,15 +101,18 @@ function startCall(n,type){
     jitsiApi=new JitsiMeetExternalAPI('meet.jit.si',options);
     jitsiApi.addEventListener('videoConferenceJoined',()=>{
       if(type==='audio'){
-        jitsiApi.executeCommand('toggleVideo');
         videoMuted=true;
         $('camera').classList.add('active');
       }
     });
     jitsiApi.addEventListener('readyToClose',()=>closeCall());
+    jitsiApi.addEventListener('errorOccurred',e=>{
+      console.error('Jitsi error',e);
+      $('callType').textContent='Erreur Jitsi : vérifie les permissions micro/caméra.';
+    });
   }catch(e){
-    $('callType').textContent='Erreur de connexion à l’appel';
     console.error(e);
+    $('callType').textContent='Erreur de connexion à l’appel';
   }
 }
 
