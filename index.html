@@ -1,17 +1,219 @@
-<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Squid Game 3D</title><style>*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#071018;color:#fff;font-family:Arial,sans-serif;touch-action:none}canvas{display:block}#menu{position:fixed;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle,#26343d,#05080c 75%)}.panel{width:min(92vw,520px);padding:28px;border:2px solid #e31b52;border-radius:24px;background:#0a0e14f5;text-align:center;box-shadow:0 0 50px #e31b5255}.panel h1{font-size:42px;color:#ff315f;margin:0 0 8px}.panel p{color:#cbd3d9}.games{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px}.btn{border:0;border-radius:14px;padding:16px;font-weight:900;font-size:16px;color:#fff;background:#e31b52;cursor:pointer}.btn.alt{background:#27333e}.btn:hover{filter:brightness(1.15)}#hud{position:fixed;z-index:5;left:14px;top:14px;display:none;flex-direction:column;gap:7px}.badge{background:#071018dd;border:1px solid #ffffff33;border-radius:11px;padding:8px 12px;font-weight:800}#back{position:fixed;right:14px;top:14px;z-index:7;display:none}.hidden{display:none!important}#touch{position:fixed;inset:0;z-index:6;display:none;pointer-events:none}.joy{position:absolute;left:20px;bottom:20px;width:145px;height:145px;border-radius:50%;background:#ffffff18;border:2px solid #ffffff44;pointer-events:auto}.knob{position:absolute;left:50%;top:50%;width:60px;height:60px;transform:translate(-50%,-50%);border-radius:50%;background:#ffffff55;border:2px solid #fff8}.jump,.attack{position:absolute;border-radius:50%;color:white;font-weight:900;pointer-events:auto}.jump{right:22px;bottom:28px;width:105px;height:105px;background:#e31b52dd;border:3px solid #fff8}.attack{right:145px;bottom:27px;width:78px;height:78px;background:#202c38dd;border:2px solid #fff8}.dalgona{position:fixed;inset:0;z-index:20;background:#160e08f5;display:flex;align-items:center;justify-content:center}.cookie{width:min(78vw,420px);height:min(78vw,420px);border-radius:50%;background:#d99a45;box-shadow:inset 0 0 0 12px #b8782d;position:relative;overflow:hidden}.shape{position:absolute;inset:18%;border:5px dashed #5b3517;border-radius:50%;clip-path:polygon(50% 0,61% 34%,98% 35%,69% 57%,79% 100%,50% 72%,21% 100%,31% 57%,2% 35%,39% 34%);pointer-events:none}.dalgona h2{position:absolute;top:20px;text-align:center;width:100%;font-size:22px}.progress{position:absolute;left:12%;right:12%;bottom:25px;height:16px;background:#fff4;border-radius:10px;overflow:hidden}.fill{height:100%;width:100%;background:#4be18a;transform-origin:left}.toast{position:fixed;z-index:30;left:50%;bottom:18px;transform:translateX(-50%);background:#071018ed;padding:12px 18px;border-radius:12px;font-weight:900;display:none}</style></head><body><div id="game"></div><div id="menu"><div class="panel"><h1>🦑 SQUID GAME 3D</h1><p>Choisis ton épreuve. Déplacement clavier ou joystick tactile + saut.</p><div class="games"><button class="btn" onclick="start('sun')">🟢 1, 2, 3 Soleil</button><button class="btn" onclick="start('glass')">🌉 Pont en verre</button><button class="btn" onclick="start('dalgona')">🍪 Dalgona</button><button class="btn" onclick="start('pvp')">⚔️ PvP</button></div></div></div><div id="hud"><div class="badge" id="stage">Épreuve</div><div class="badge" id="info">Prêt</div><div class="badge" id="light">🟢 BOUGE</div></div><button id="back" class="btn alt" onclick="lobby()">☰ Lobby</button><div id="touch"><div class="joy" id="joy"><div class="knob" id="knob"></div></div><button class="attack" onclick="attack()">⚔️</button><button class="jump" onclick="jump()">SAUT</button></div><div id="toast" class="toast"></div><script src="https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.min.js"></script><script>
-let scene,camera,renderer,player,mode='';let keys={},velY=0,onGround=true,alive=true,finished=false;let lightGreen=true,round=0;let enemies=[];const clock=new THREE.Clock();
-function init(){scene=new THREE.Scene();scene.background=new THREE.Color(0x8fb8d1);scene.fog=new THREE.Fog(0x8fb8d1,35,100);camera=new THREE.PerspectiveCamera(60,innerWidth/innerHeight,.1,300);renderer=new THREE.WebGLRenderer({antialias:true});renderer.setSize(innerWidth,innerHeight);renderer.shadowMap.enabled=true;document.getElementById('game').appendChild(renderer.domElement);scene.add(new THREE.HemisphereLight(0xffffff,0x445566,2));let sun=new THREE.DirectionalLight(0xffffff,2.2);sun.position.set(20,35,15);sun.castShadow=true;scene.add(sun);window.addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight)});window.addEventListener('keydown',e=>{keys[e.key.toLowerCase()]=true;if(e.code==='Space')jump()});window.addEventListener('keyup',e=>keys[e.key.toLowerCase()]=false);animate()}
-function mat(c){return new THREE.MeshStandardMaterial({color:c})}function box(w,h,d,c,x,y,z){let m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat(c));m.position.set(x,y,z);m.castShadow=m.receiveShadow=true;scene.add(m);return m}
-function makePlayer(c=0x22cc88){let g=new THREE.Group();let body=new THREE.Mesh(new THREE.BoxGeometry(1,1.5,.65),mat(c));body.position.y=1.25;body.castShadow=true;g.add(body);let head=new THREE.Mesh(new THREE.BoxGeometry(.75,.75,.75),mat(0xffc59b));head.position.y=2.4;head.castShadow=true;g.add(head);for(let x of [-.25,.25]){let l=new THREE.Mesh(new THREE.BoxGeometry(.2,.8,.25),mat(0x20252b));l.position.set(x,.4,0);l.castShadow=true;g.add(l)}return g}
-function clear(){while(scene.children.length>2)scene.remove(scene.children[2]);enemies=[]}function base(){box(100,.5,100,0x39434c,0,-.3,0);for(let i=-5;i<=5;i++){box(1,6,1,0xeeeeee,-18,3,i*7);box(1,6,1,0xeeeeee,18,3,i*7)}}
-function start(m){mode=m;document.getElementById('menu').classList.add('hidden');document.getElementById('hud').style.display='flex';document.getElementById('back').style.display='block';document.getElementById('touch').style.display='block';clear();alive=true;finished=false;round=0;player=makePlayer();scene.add(player);player.position.set(0,0,18);document.getElementById('stage').textContent={sun:'🟢 1, 2, 3 Soleil',glass:'🌉 Pont en verre',dalgona:'🍪 Dalgona',pvp:'⚔️ PvP'}[m];if(m==='sun')sunGame();if(m==='glass')glassGame();if(m==='pvp')pvpGame();if(m==='dalgona')dalgonaGame()}
-function sunGame(){base();box(42,.2,1,0xffffff,0,.1,-30);box(42,.2,1,0xff315f,0,.1,30);let doll=makePlayer(0xffd7c1);doll.scale.set(1.3,1.3,1.3);doll.position.set(0,0,-32);scene.add(doll);lightGreen=true;setTimeout(()=>{if(mode==='sun')toggleSun()},2500)}
-function toggleSun(){lightGreen=!lightGreen;document.getElementById('light').textContent=lightGreen?'🟢 BOUGE':'🔴 STOP';if(!lightGreen)round++;if(mode==='sun')setTimeout(toggleSun,3000)}
-function glassGame(){scene.background=new THREE.Color(0x0b1020);for(let i=0;i<10;i++){let z=-i*5;box(3,.35,4,0x4aa3c7,-2,0,z);box(3,.35,4,0x4aa3c7,2,0,z)}box(10,.5,5,0x777777,0,0,7);toast('Choisis gauche ou droite : une seule dalle est sûre !')}
-function dalgonaGame(){let ui=document.createElement('div');ui.className='dalgona';ui.innerHTML='<div class="cookie"><h2>🍪 Trace la forme sans sortir !</h2><div class="shape"></div><div class="progress"><div class="fill"></div></div></div>';document.body.appendChild(ui);let fill=ui.querySelector('.fill'),cookie=ui.querySelector('.cookie'),startT=Date.now(),p=0,draw=e=>{let r=cookie.getBoundingClientRect(),x=(e.touches?e.touches[0].clientX:e.clientX)-r.left,y=(e.touches?e.touches[0].clientY:e.clientY)-r.top,c=r.width/2,dx=x-c,dy=y-c;if(Math.sqrt(dx*dx+dy*dy)<r.width*.42){p=Math.min(1,p+.018);fill.style.width=(100*p)+'%';if(p>=1){ui.remove();toast('🍪 Dalgona réussie !');mode='sun';start('sun')}}};cookie.addEventListener('pointermove',draw);cookie.addEventListener('pointerdown',draw);setTimeout(()=>{if(document.body.contains(ui)){ui.remove();toast('💀 Temps écoulé !');lobby()}},15000)}
-function pvpGame(){base();player.position.set(0,0,12);for(let i=0;i<4;i++){let e=makePlayer(0xe31b52);e.position.set((i-1.5)*5,0,-8-i*5);e.userData.hp=3;scene.add(e);enemies.push(e)}toast('⚔️ Approche les adversaires et attaque !')}
-function attack(){if(mode!=='pvp'||!alive)return;for(let e of enemies){if(e.position.distanceTo(player.position)<3){e.userData.hp--;e.position.z-=2;if(e.userData.hp<=0){scene.remove(e);enemies=enemies.filter(x=>x!==e);toast('💥 Adversaire éliminé !')}}}}
-function jump(){if(onGround&&alive){velY=9;onGround=false}}
-function movement(dt){if(!player||!alive)return;let x=(keys.d||keys.arrowright?1:0)-(keys.a||keys.arrowleft?1:0);let z=(keys.s||keys.arrowdown?1:0)-(keys.w||keys.arrowup?1:0);x+=joyX;z+=joyY;let len=Math.hypot(x,z);if(len>1){x/=len;z/=len}player.position.x+=x*8*dt;player.position.z+=z*8*dt;velY-=22*dt;player.position.y+=velY*dt;if(player.position.y<=0){player.position.y=0;velY=0;onGround=true}if(mode==='sun'&&!lightGreen&&(Math.abs(x)+Math.abs(z)>.12)){alive=false;toast('💀 ÉLIMINÉ ! Tu as bougé au feu rouge.');setTimeout(lobby,1800)}if(mode==='sun'&&player.position.z<-28&&!finished){finished=true;toast('🏆 VICTOIRE !');setTimeout(lobby,1800)}if(mode==='glass'){let row=Math.round(-player.position.z/5),side=player.position.x<0?-1:1;if(row>=1&&row<=10&&Math.abs(player.position.x)<4){let safe=(row%2===0?1:-1);if(side===safe){player.position.x=safe*2}else{alive=false;player.position.y=-8;toast('💀 Mauvaise vitre !');setTimeout(lobby,1800)}}}if(mode==='pvp')enemies.forEach(e=>{let d=e.position.distanceTo(player.position);if(d<8){e.position.lerp(player.position,dt*.18);if(d<1.6&&Math.random()<dt*.8){toast('💥 Tu prends un coup !')}}})}
-let joyX=0,joyY=0,joyActive=false;const joy=document.getElementById('joy'),knob=document.getElementById('knob');function joyMove(e){let r=joy.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2,x=(e.touches?e.touches[0].clientX:e.clientX)-cx,y=(e.touches?e.touches[0].clientY:e.clientY)-cy,max=55,d=Math.hypot(x,y);if(d>max){x=x/d*max;y=y/d*max}joyX=x/max;joyY=y/max;knob.style.transform='translate(calc(-50% + '+x+'px),calc(-50% + '+y+'px))'}joy.addEventListener('pointerdown',e=>{joyActive=true;joyMove(e)});window.addEventListener('pointermove',e=>{if(joyActive)joyMove(e)});window.addEventListener('pointerup',()=>{joyActive=false;joyX=joyY=0;knob.style.transform='translate(-50%,-50%)'});
-function toast(t){let el=document.getElementById('toast');el.textContent=t;el.style.display='block';clearTimeout(el._t);el._t=setTimeout(()=>el.style.display='none',2200)}function lobby(){mode='';document.getElementById('menu').classList.remove('hidden');document.getElementById('hud').style.display='none';document.getElementById('back').style.display='none';document.getElementById('touch').style.display='none';if(player)scene.remove(player);clear()}function animate(){requestAnimationFrame(animate);let dt=Math.min(clock.getDelta(),.05);movement(dt);if(player){let target=new THREE.Vector3(player.position.x,player.position.y+4,player.position.z+9);camera.position.lerp(target,.08);camera.lookAt(player.position.x,player.position.y+1,player.position.z-2)}renderer.render(scene,camera)}init();</script></body></html>
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Squid Game 3D - Multi Game</title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#111;color:#fff;font-family:Arial,Helvetica,sans-serif;touch-action:none}
+#game{position:fixed;inset:0;z-index:1}
+canvas{display:block;width:100%;height:100%}
+#menu{position:fixed;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;background:linear-gradient(145deg,#101820,#29111a 55%,#080b10);padding:18px}
+.panel{width:min(94vw,620px);max-height:92vh;overflow:auto;background:rgba(9,13,19,.97);border:2px solid #ff2d61;border-radius:26px;padding:30px;text-align:center;box-shadow:0 0 60px rgba(255,45,97,.3)}
+.logo{font-size:52px;font-weight:1000;letter-spacing:2px;color:#ff315f;text-shadow:0 5px 0 #551025;margin:0}
+.sub{color:#cbd5dc;margin:8px 0 22px;font-size:17px}
+.games{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.btn{appearance:none;border:0;border-radius:15px;padding:17px 12px;color:#fff;background:#e91e56;font-size:16px;font-weight:900;cursor:pointer;box-shadow:0 5px 0 #8c1034;transition:.12s;user-select:none;-webkit-tap-highlight-color:transparent}
+.btn:active{transform:translateY(4px);box-shadow:0 1px 0 #8c1034}
+.btn.dark{background:#27333d;box-shadow:0 5px 0 #111820}
+.help{margin-top:20px;padding:13px;border-radius:13px;background:#17212a;color:#b9c5cc;font-size:14px;line-height:1.5}
+#hud{position:fixed;z-index:10;left:14px;top:14px;display:none;flex-direction:column;gap:7px;pointer-events:none}
+.badge{background:rgba(5,10,15,.86);border:1px solid rgba(255,255,255,.2);border-radius:12px;padding:9px 13px;font-weight:900;backdrop-filter:blur(5px)}
+#light{font-size:19px}
+#back{position:fixed;right:14px;top:14px;z-index:12;display:none}
+#touch{position:fixed;inset:0;z-index:11;display:none;pointer-events:none}
+#joy{position:absolute;left:20px;bottom:22px;width:150px;height:150px;border-radius:50%;background:rgba(255,255,255,.12);border:2px solid rgba(255,255,255,.35);pointer-events:auto}
+#knob{position:absolute;left:50%;top:50%;width:64px;height:64px;margin:-32px;border-radius:50%;background:rgba(255,255,255,.5);border:2px solid rgba(255,255,255,.8)}
+.touchBtn{position:absolute;border:2px solid rgba(255,255,255,.7);color:#fff;font-weight:1000;border-radius:50%;cursor:pointer;pointer-events:auto;user-select:none;-webkit-tap-highlight-color:transparent}
+#jump{right:22px;bottom:30px;width:110px;height:110px;background:rgba(233,30,86,.9);font-size:18px}
+#attack{right:145px;bottom:28px;width:78px;height:78px;background:rgba(35,47,58,.92);font-size:24px}
+#toast{position:fixed;z-index:30;left:50%;bottom:190px;transform:translateX(-50%);display:none;background:rgba(5,10,15,.94);border:1px solid #fff4;border-radius:13px;padding:13px 18px;font-weight:900;text-align:center;max-width:90vw}
+#loading{position:fixed;z-index:100;inset:0;background:#071018;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:900}
+.hidden{display:none!important}
+#dalgona{position:fixed;inset:0;z-index:40;background:rgba(20,10,5,.97);display:flex;align-items:center;justify-content:center}
+.cookie{position:relative;width:min(78vw,430px);height:min(78vw,430px);border-radius:50%;background:#d99b45;box-shadow:inset 0 0 0 12px #a96728,0 15px 40px #000;touch-action:none}
+.cookie h2{position:absolute;top:-65px;width:100%;left:0;text-align:center;font-size:20px}
+.shape{position:absolute;inset:18%;border:6px dashed #5d3516;border-radius:50%;clip-path:polygon(50% 0,61% 34%,98% 35%,69% 57%,79% 100%,50% 72%,21% 100%,31% 57%,2% 35%,39% 34%);pointer-events:none}
+.dbar{position:absolute;left:10%;right:10%;bottom:-55px;height:15px;border-radius:10px;background:#fff3;overflow:hidden}.dfill{height:100%;width:0;background:#4be18a}
+#crosshair{position:fixed;z-index:9;left:50%;top:50%;width:12px;height:12px;border:2px solid #fff;border-radius:50%;transform:translate(-50%,-50%);display:none;pointer-events:none}
+@media(max-width:600px){.logo{font-size:38px}.games{grid-template-columns:1fr}.panel{padding:22px}.sub{font-size:15px}#attack{right:135px}.badge{font-size:13px}}
+</style>
+</head>
+<body>
+<div id="loading">🦑 Chargement du jeu 3D...</div>
+<div id="game"></div>
+<div id="menu">
+ <div class="panel">
+  <h1 class="logo">🦑 SQUID GAME</h1>
+  <div class="sub">Version 3D — choisis ton épreuve</div>
+  <div class="games">
+   <button class="btn" data-mode="sun">🟢 1, 2, 3 Soleil</button>
+   <button class="btn" data-mode="glass">🌉 Pont en verre</button>
+   <button class="btn" data-mode="dalgona">🍪 Dalgona</button>
+   <button class="btn" data-mode="pvp">⚔️ PvP</button>
+  </div>
+  <div class="help">💻 PC : <b>WASD</b> ou flèches + <b>Espace</b> pour sauter<br>📱 Mobile : <b>joystick</b> + bouton <b>SAUT</b><br>⚔️ En PvP, utilise le bouton d'attaque.</div>
+ </div>
+</div>
+<div id="hud">
+ <div class="badge" id="stage">Épreuve</div>
+ <div class="badge" id="info">Prêt</div>
+ <div class="badge" id="light">🟢 BOUGE</div>
+</div>
+<button id="back" class="btn dark">☰ LOBBY</button>
+<div id="crosshair"></div>
+<div id="touch">
+ <div id="joy"><div id="knob"></div></div>
+ <button id="attack" class="touchBtn">⚔️</button>
+ <button id="jump" class="touchBtn">SAUT</button>
+</div>
+<div id="toast"></div>
+<script src="https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.min.js"></script>
+<script>
+'use strict';
+let scene,camera,renderer,player,mode='';
+let keys={},velY=0,onGround=true,alive=true,won=false;
+let moveX=0,moveZ=0,enemies=[],glassRows=[];
+let sunGreen=true,sunTimer=null,clock=new THREE.Clock();
+const $=id=>document.getElementById(id);
+function material(color,rough=.8){return new THREE.MeshStandardMaterial({color,roughness:rough,metalness:.05});}
+function cube(w,h,d,color,x,y,z,opts={}){
+ const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),material(color));
+ m.position.set(x,y,z);m.castShadow=true;m.receiveShadow=true;
+ if(opts.transparent){m.material.transparent=true;m.material.opacity=opts.opacity||.45}
+ if(opts.name)m.name=opts.name;
+ scene.add(m);return m;
+}
+function init(){
+ scene=new THREE.Scene();scene.background=new THREE.Color(0x86b9d4);scene.fog=new THREE.Fog(0x86b9d4,35,120);
+ camera=new THREE.PerspectiveCamera(62,innerWidth/innerHeight,.1,400);
+ renderer=new THREE.WebGLRenderer({antialias:true});renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.setSize(innerWidth,innerHeight);renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+ $('game').appendChild(renderer.domElement);
+ scene.add(new THREE.HemisphereLight(0xffffff,0x334455,2.4));
+ const sun=new THREE.DirectionalLight(0xffffff,3);sun.position.set(25,45,20);sun.castShadow=true;sun.shadow.mapSize.width=2048;sun.shadow.mapSize.height=2048;scene.add(sun);
+ window.addEventListener('resize',resize);
+ window.addEventListener('keydown',e=>{keys[e.key.toLowerCase()]=true;if(e.code==='Space'){e.preventDefault();jump();}});
+ window.addEventListener('keyup',e=>keys[e.key.toLowerCase()]=false);
+ document.querySelectorAll('[data-mode]').forEach(b=>b.addEventListener('click',()=>start(b.dataset.mode)));
+ $('back').addEventListener('click',lobby);$('jump').addEventListener('pointerdown',e=>{e.preventDefault();jump()});$('attack').addEventListener('pointerdown',e=>{e.preventDefault();attack()});
+ setupJoystick();
+ $('loading').remove();animate();
+}
+function resize(){camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight)}
+function makePlayer(color=0x21c981){
+ const g=new THREE.Group();
+ const body=new THREE.Mesh(new THREE.BoxGeometry(1,1.35,.7),material(color));body.position.y=1.25;body.castShadow=true;g.add(body);
+ const head=new THREE.Mesh(new THREE.SphereGeometry(.43,16,12),material(0xffc59b));head.position.y=2.35;head.castShadow=true;g.add(head);
+ const hair=new THREE.Mesh(new THREE.BoxGeometry(.78,.2,.78),material(0x22252a));hair.position.y=2.72;hair.castShadow=true;g.add(hair);
+ for(const x of [-.26,.26]){const leg=new THREE.Mesh(new THREE.BoxGeometry(.22,.85,.25),material(0x20252b));leg.position.set(x,.43,0);leg.castShadow=true;g.add(leg)}
+ return g;
+}
+function makeDoll(){
+ const g=makePlayer(0xf2b44a);g.scale.set(1.5,1.5,1.5);return g;
+}
+function clearWorld(){
+ for(let i=scene.children.length-1;i>=0;i--){const o=scene.children[i];if(o.type==='Mesh'||o.type==='Group')scene.remove(o)}
+ enemies=[];glassRows=[];if(sunTimer){clearTimeout(sunTimer);sunTimer=null}
+}
+function ground(color=0x38444d){cube(120,.6,120,color,0,-.35,0)}
+function arenaWalls(){cube(1,7,90,0xeeeeee,-22,3,0);cube(1,7,90,0xeeeeee,22,3,0);cube(44,7,1,0xeeeeee,0,3,45);}
+function start(m){
+ mode=m;alive=true;won=false;velY=0;onGround=true;sunGreen=true;clearWorld();
+ $('menu').classList.add('hidden');$('hud').style.display='flex';$('back').style.display='block';$('touch').style.display='block';$('crosshair').style.display=m==='pvp'?'block':'none';
+ player=makePlayer();scene.add(player);player.position.set(0,0,18);
+ $('stage').textContent={sun:'🟢 1, 2, 3 Soleil',glass:'🌉 Pont en verre',dalgona:'🍪 Dalgona',pvp:'⚔️ PvP'}[m];
+ $('info').textContent='Bonne chance !';
+ if(m==='sun')setupSun();if(m==='glass')setupGlass();if(m==='pvp')setupPvP();if(m==='dalgona')setupDalgona();
+}
+function setupSun(){
+ scene.background=new THREE.Color(0x91c3dc);scene.fog.color.set(0x91c3dc);ground(0x65746e);arenaWalls();
+ cube(44,.25,1,0xff315f,0,.1,-38);cube(44,.25,1,0x32d66f,0,.1,25);
+ const doll=makeDoll();doll.position.set(0,0,-42);scene.add(doll);player.position.z=20;
+ $('light').textContent='🟢 BOUGE';toast('Avance quand le feu est VERT !');
+ scheduleSun();
+}
+function scheduleSun(){
+ if(mode!=='sun')return;
+ sunTimer=setTimeout(()=>{sunGreen=!sunGreen;$('light').textContent=sunGreen?'🟢 BOUGE':'🔴 STOP';scheduleSun()},sunGreen?2800:2400);
+}
+function setupGlass(){
+ scene.background=new THREE.Color(0x07101e);scene.fog.color.set(0x07101e);ground(0x151b22);
+ cube(12,.7,5,0x777b80,0,.1,22);cube(12,.7,5,0x777b80,0,.1,-32);
+ for(let i=0;i<11;i++){
+  const z=17-i*4.4;
+  const left=cube(3.5,.35,3.7,0x4cb8d9,-2.25,.15,z,{transparent:true,opacity:.52});
+  const right=cube(3.5,.35,3.7,0x4cb8d9,2.25,.15,z,{transparent:true,opacity:.52});
+  glassRows.push({z,left,right,safe:i%2===0?-1:1,done:false});
+ }
+ toast('À chaque rangée, une seule vitre est sûre !');
+}
+function setupPvP(){
+ scene.background=new THREE.Color(0x202936);scene.fog.color.set(0x202936);ground(0x39434c);arenaWalls();
+ for(let i=0;i<5;i++){
+  const e=makePlayer(0xe91e56);e.position.set((i-2)*5,-0.0,-5-i*4);e.userData.hp=3;e.userData.cool=0;scene.add(e);enemies.push(e);
+ }
+ toast('Élimine les adversaires avec ⚔️ !');
+}
+function setupDalgona(){
+ $('touch').style.display='none';
+ const ui=document.createElement('div');ui.id='dalgona';ui.innerHTML='<div class="cookie"><h2>🍪 Trace la forme avec ton doigt ou la souris</h2><div class="shape"></div><div class="dbar"><div class="dfill"></div></div></div>';
+ document.body.appendChild(ui);const cookie=ui.querySelector('.cookie'),fill=ui.querySelector('.dfill');let progress=0,last=0;
+ function trace(e){const r=cookie.getBoundingClientRect();const x=e.clientX-r.left,y=e.clientY-r.top;const cx=r.width/2,cy=r.height/2;const d=Math.hypot(x-cx,y-cy);if(d<r.width*.43){progress=Math.min(1,progress+.025);fill.style.width=(progress*100)+'%';if(progress>=1)finishDalgona(ui)}}
+ cookie.addEventListener('pointerdown',e=>{last=Date.now();trace(e)});cookie.addEventListener('pointermove',trace);
+ setTimeout(()=>{if(document.body.contains(ui)){ui.remove();toast('💀 Dalgona ratée !');setTimeout(lobby,1400)}},18000);
+}
+function finishDalgona(ui){if(!document.body.contains(ui))return;ui.remove();toast('🍪 Dalgona réussie !');setTimeout(()=>{if(mode==='dalgona')lobby()},1400)}
+function attack(){
+ if(mode!=='pvp'||!alive)return;
+ let hit=false;for(const e of [...enemies]){if(e.position.distanceTo(player.position)<3.4){e.userData.hp--;e.position.z-=1.5;hit=true;if(e.userData.hp<=0){scene.remove(e);enemies=enemies.filter(x=>x!==e);}}}
+ if(hit)toast('💥 COUP RÉUSSI !');if(enemies.length===0){won=true;toast('🏆 VICTOIRE PvP !');setTimeout(lobby,1800)}
+}
+function jump(){if(player&&alive&&onGround){velY=10;onGround=false}}
+function move(dt){
+ if(!player||!alive)return;
+ let x=(keys.d||keys.arrowright?1:0)-(keys.a||keys.arrowleft?1:0);
+ let z=(keys.s||keys.arrowdown?1:0)-(keys.w||keys.arrowup?1:0);
+ x+=moveX;z+=moveZ;const len=Math.hypot(x,z);if(len>1){x/=len;z/=len}
+ const speed=8;player.position.x+=x*speed*dt;player.position.z+=z*speed*dt;
+ player.position.x=Math.max(-20,Math.min(20,player.position.x));
+ velY-=24*dt;player.position.y+=velY*dt;if(player.position.y<=0){player.position.y=0;velY=0;onGround=true}
+ if(mode==='sun')sunRules(x,z);
+ if(mode==='glass')glassRules();
+ if(mode==='pvp')pvpRules(dt);
+}
+function sunRules(x,z){
+ const moving=Math.abs(x)+Math.abs(z)>.12;
+ if(!sunGreen&&moving&&!won){alive=false;toast('💀 ÉLIMINÉ ! Tu as bougé au feu rouge.');setTimeout(lobby,1700);return}
+ if(player.position.z<-37&&!won){won=true;toast('🏆 TU AS GAGNÉ 1, 2, 3 SOLEIL !');setTimeout(lobby,1900)}
+}
+function glassRules(){
+ for(const row of glassRows){if(row.done)continue;if(Math.abs(player.position.z-row.z)<2.1){const side=player.position.x<0?-1:1;if(side===row.safe){row.done=true;toast('✅ Bonne vitre !')}else{alive=false;player.position.y=-9;toast('💀 LA VITRE CASSE !');setTimeout(lobby,1800)}break}}
+ if(player.position.z<-31&&!won){won=true;toast('🏆 PONT TRAVERSÉ !');setTimeout(lobby,1900)}
+}
+function pvpRules(dt){
+ for(const e of enemies){const d=e.position.distanceTo(player.position);if(d<11)e.position.lerp(new THREE.Vector3(player.position.x,0,player.position.z),Math.min(.55,dt*.9));e.userData.cool=Math.max(0,e.userData.cool-dt);if(d<1.7&&e.userData.cool===0){e.userData.cool=1.2;toast('💥 TU AS PRIS UN COUP !')}}
+}
+function setupJoystick(){
+ const joy=$('joy'),knob=$('knob');let active=false;
+ function update(e){const r=joy.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;let x=e.clientX-cx,y=e.clientY-cy;const max=55,d=Math.hypot(x,y);if(d>max){x=x/d*max;y=y/d*max}moveX=x/max;moveZ=y/max;knob.style.transform='translate('+x+'px,'+y+'px)'}
+ joy.addEventListener('pointerdown',e=>{active=true;joy.setPointerCapture(e.pointerId);update(e)});
+ joy.addEventListener('pointermove',e=>{if(active)update(e)});
+ joy.addEventListener('pointerup',()=>{active=false;moveX=moveZ=0;knob.style.transform='translate(0,0)'});
+ joy.addEventListener('pointercancel',()=>{active=false;moveX=moveZ=0;knob.style.transform='translate(0,0)'})
+}
+function toast(text){const el=$('toast');el.textContent=text;el.style.display='block';clearTimeout(el._timer);el._timer=setTimeout(()=>el.style.display='none',2600)}
+function lobby(){
+ mode='';alive=false;if(sunTimer){clearTimeout(sunTimer);sunTimer=null}clearWorld();
+ $('menu').classList.remove('hidden');$('hud').style.display='none';$('back').style.display='none';$('touch').style.display='none';$('crosshair').style.display='none';
+ const d=$('dalgona');if(d)d.remove();
+}
+function animate(){
+ requestAnimationFrame(animate);const dt=Math.min(clock.getDelta(),.05);move(dt);
+ if(player){const desired=new THREE.Vector3(player.position.x,player.position.y+4.2,player.position.z+9.5);camera.position.lerp(desired,.09);camera.lookAt(player.position.x,player.position.y+1,player.position.z-2.5)}
+ renderer.render(scene,camera);
+}
+if(typeof THREE==='undefined'){$('loading').textContent='⚠️ Three.js ne se charge pas. Recharge la page.'}else{init()}
+</script>
+</body>
+</html>
