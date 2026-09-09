@@ -1,51 +1,334 @@
 <!doctype html>
-<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Multi Game - Ultra Clicker</title><style>
-:root{--bg:#070b18;--panel:#101a31;--panel2:#162444;--line:#2d4778;--cyan:#55eaff;--blue:#4f6fff;--gold:#ffe06a;--muted:#a9b7d5}*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 50% -20%,#253f82,transparent 42%),var(--bg);color:white;font-family:Arial,sans-serif;min-height:100vh}button,input{font:inherit}button{border:0;color:#fff;cursor:pointer;touch-action:manipulation}.app{max-width:1050px;margin:auto;padding:12px 14px 100px}.top{display:flex;justify-content:space-between;align-items:center;gap:10px}.logo{font-size:23px;font-weight:900}.logo b{color:var(--cyan)}.wallet{display:flex;gap:7px}.pill{padding:9px 12px;background:#14203b;border:1px solid var(--line);border-radius:14px;font-weight:bold}.page{display:none}.page.active{display:block}.hero{text-align:center;padding:10px}.hero h1{margin:5px;font-size:clamp(25px,5vw,45px)}.hero p{color:var(--muted)}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:12px 0}.stat,.section,.card{background:linear-gradient(145deg,#172542,#0e152a);border:1px solid var(--line);border-radius:18px}.stat{padding:11px;text-align:center}.stat small{display:block;color:var(--muted);font-size:10px}.arena{min-height:470px;display:grid;place-items:center;position:relative;overflow:hidden;border:1px solid #2b426f;border-radius:35px;background:radial-gradient(circle,#1d3679,transparent 42%),#080d1c}.ring{width:min(360px,78vw);aspect-ratio:1;border-radius:50%;padding:15px;background:#1b2c50;box-shadow:0 0 35px var(--cyan);position:relative}.ring:before{content:'';position:absolute;inset:-28px;border:2px dashed var(--cyan);border-radius:50%;animation:spin 12s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}#clickBtn{width:100%;height:100%;border-radius:50%;font-size:clamp(80px,18vw,145px);background:radial-gradient(circle at 35% 22%,#fff,#59eaff 25%,#2565d8 62%,#101a58);box-shadow:inset 0 12px 25px #fff8,inset 0 -22px 35px #0009,0 15px 0 #050921}.help{position:absolute;bottom:25px;color:var(--cyan);font-weight:bold}.section{margin-top:15px;padding:15px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}.card{padding:14px;text-align:center;background:#0a1020}.card .icon{font-size:40px}.card p{color:var(--muted);font-size:12px}.action{width:100%;padding:11px;border-radius:12px;background:linear-gradient(90deg,#356cff,#7a5cff);font-weight:bold;margin-top:5px}.action.danger{background:linear-gradient(90deg,#db3d64,#ff6d54)}.nav{position:fixed;bottom:0;left:0;right:0;background:#091020f2;border-top:1px solid #2b3d62;backdrop-filter:blur(15px);z-index:20}.navin{max-width:900px;margin:auto;display:flex;justify-content:space-around}.nav button{background:none;color:#9aaac9;padding:7px;font-size:10px}.nav i{display:block;font-style:normal;font-size:22px}.nav .active{color:var(--cyan)}input{width:100%;padding:12px;border-radius:11px;border:1px solid #3b527c;background:#090f20;color:#fff;margin:5px 0}.authbox{max-width:460px;margin:25px auto}.tabs{display:flex;gap:8px;margin-bottom:10px}.tabs button{flex:1;padding:10px;border-radius:10px;background:#1b2948}.tabs .selected{background:#356cff}.friend{display:flex;justify-content:space-between;align-items:center;padding:10px;border-bottom:1px solid #25365a;text-align:left;gap:8px}.friend:last-child{border:0}.friend button{padding:7px 9px;border-radius:8px;background:#263c69;margin-left:4px}.chat{height:300px;overflow:auto;background:#080d1a;border-radius:12px;padding:10px;text-align:left}.msg{padding:8px 10px;border-radius:10px;background:#172542;margin:6px 0;max-width:80%;word-break:break-word}.msg.me{background:#273f8c;margin-left:auto}.chatrow{display:flex;gap:6px;margin-top:8px}.chatrow input{margin:0}.float{position:fixed;pointer-events:none;color:var(--gold);font-size:24px;font-weight:bold;animation:f .7s forwards}@keyframes f{to{transform:translateY(-100px);opacity:0}}.toast{position:fixed;top:15px;left:50%;transform:translate(-50%,-100px);background:#172748;padding:12px 18px;border:1px solid #5077b8;border-radius:14px;transition:.3s;z-index:100}.toast.show{transform:translate(-50%,0)}.hint{font-size:12px;color:var(--muted)}.status{padding:8px;border-radius:10px;background:#111d35;color:var(--muted);font-size:12px}@media(max-width:600px){.stats{grid-template-columns:repeat(2,1fr)}.arena{min-height:420px}.nav button{font-size:8px}.nav i{font-size:18px}.logo{font-size:17px}}
-</style></head><body><div class="app"><header class="top"><div class="logo">MULTI <b>GAME</b></div><div class="wallet"><div class="pill">⚡ <span id="energy">0</span></div><div class="pill">💎 <span id="gems">0</span></div></div></header>
-<section id="auth" class="page active"><div class="authbox section"><div class="hero"><h1>👤 TON COMPTE</h1><p>Ton ID sera utilisé pour que tes amis puissent te trouver.</p></div><div class="tabs"><button id="loginTab" class="selected">CONNEXION</button><button id="registerTab">CRÉER UN COMPTE</button></div><input id="accountId" placeholder="ID unique (3 à 20 caractères)" maxlength="20"><input id="accountPass" type="password" placeholder="Mot de passe (6 caractères minimum)"><button class="action" id="authBtn">SE CONNECTER</button><p class="hint">Connexion sécurisée avec Supabase. L'ID sert de pseudo et le mot de passe n'est jamais stocké dans le jeu.</p></div></section>
-<section id="home" class="page"><div class="hero"><h1>⚡ ULTRA CLICKER ⚡</h1><p id="welcome"></p></div><div class="stats"><div class="stat"><small>PUISSANCE</small><b id="power">1</b></div><div class="stat"><small>/ SECONDE</small><b id="eps">0</b></div><div class="stat"><small>NIVEAU</small><b id="level">1</b></div><div class="stat"><small>CLICS</small><b id="clicks">0</b></div></div><div class="arena"><div class="ring"><button id="clickBtn" aria-label="Cliquer">⚡</button></div><div class="help">TAPE LE BOUTON POUR GAGNER ⚡</div></div><div class="section"><h2>🚀 Améliorations</h2><div class="grid" id="upgrades"></div></div></section>
-<section id="social" class="page"><div class="hero"><h1>👥 AMIS & MESSAGES</h1><p>Ajoute un ami avec son ID.</p></div><div class="section"><h2>➕ Ajouter un ami</h2><input id="friendId" placeholder="ID exact de ton ami"><button class="action" id="addFriend">ENVOYER UNE DEMANDE</button><p class="hint">Ton ami devra accepter la demande.</p></div><div class="section"><h2>📨 Demandes reçues</h2><div id="requestList"></div></div><div class="section"><h2>💚 Mes amis</h2><div id="friendList"></div></div><div class="section"><h2>💬 Conversation</h2><p id="chatTitle" class="status">Choisis un ami pour discuter.</p><div id="messages" class="chat"></div><div class="chatrow"><input id="messageInput" placeholder="Écris un message..." maxlength="1000"><button class="action" id="sendMessage" style="width:130px">ENVOYER</button></div></div><div class="section"><h2>🎙️ Vocal & 📷 Caméra</h2><p class="hint">Les boutons ci-dessous activent ton micro ou ta caméra. Pour un véritable appel entre deux appareils, il faudra ajouter la signalisation WebRTC et éventuellement un serveur TURN.</p><button class="action" id="voiceBtn">🎙️ ACTIVER MON MICRO</button><button class="action" id="cameraBtn">📷 ACTIVER MA CAMÉRA</button><button class="action danger" id="stopMedia">⏹️ ARRÊTER MICRO / CAMÉRA</button><p id="mediaStatus" class="status">Micro et caméra désactivés.</p></div></section>
-<section id="profile" class="page"><div class="hero"><h1>👤 PROFIL</h1><p>ID : <b id="profileId"></b></p></div><div class="section"><p class="status">Ta progression est sauvegardée automatiquement dans ton compte Supabase.</p><button class="action danger" id="logout">SE DÉCONNECTER</button></div></section></div>
-<nav class="nav"><div class="navin"><button class="active" data-page="home"><i>⚡</i>JOUER</button><button data-page="social"><i>👥</i>SOCIAL</button><button data-page="profile"><i>👤</i>PROFIL</button></div></nav><div id="toast" class="toast"></div>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Multi Game - Pet Simulator Ultra</title>
+<style>
+:root{--bg:#060816;--panel:#0d1530;--panel2:#142047;--line:#2c4a86;--cyan:#57eaff;--blue:#5577ff;--pink:#ff62cf;--gold:#ffe36d;--green:#61ffb0;--muted:#aab8d8;--danger:#ff5f75}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:radial-gradient(circle at 50% -10%,#29469a 0,#101a42 24%,transparent 48%),var(--bg);color:#fff;font-family:Arial,Helvetica,sans-serif;min-height:100vh}
+button,input,select{font:inherit}
+button{border:0;cursor:pointer;color:#fff;touch-action:manipulation}
+button:disabled{opacity:.45;cursor:not-allowed}
+.app{max-width:1180px;margin:auto;padding:12px 14px 100px}
+.top{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 0;background:#060816d9;backdrop-filter:blur(15px)}
+.logo{font-weight:1000;font-size:24px;letter-spacing:-1px}.logo b{color:var(--cyan)}
+.wallet{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end}.pill{padding:9px 12px;border:1px solid var(--line);background:#111d3a;border-radius:14px;font-weight:900}
+.page{display:none}.page.active{display:block}.hero{text-align:center;padding:18px 8px}.hero h1{margin:4px 0;font-size:clamp(27px,6vw,52px)}.hero p{color:var(--muted)}
+.stats{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin:10px 0}.stat{padding:11px;border:1px solid var(--line);border-radius:17px;background:linear-gradient(145deg,#172753,#0c1329);text-align:center}.stat small{display:block;color:var(--muted);font-size:10px}.stat b{font-size:18px}
+.section{margin-top:14px;padding:16px;border:1px solid var(--line);border-radius:20px;background:linear-gradient(145deg,#111d3b,#0a1125)}
+.section h2{margin:0 0 12px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:10px}.card{padding:14px;border:1px solid #294575;border-radius:17px;background:#0a1227;text-align:center;overflow:hidden}.card .icon{font-size:43px}.card h3{margin:8px 0 4px}.card p{color:var(--muted);font-size:12px;line-height:1.4}.action{width:100%;padding:11px;border-radius:12px;background:linear-gradient(90deg,#396dff,#7a5bff);font-weight:900;margin-top:6px}.action.green{background:linear-gradient(90deg,#168e67,#4edb91)}.action.gold{background:linear-gradient(90deg,#a87413,#f0d44e);color:#16100a}.action.danger{background:linear-gradient(90deg,#bd3156,#ff5f69)}
+.arena{min-height:500px;display:grid;place-items:center;position:relative;overflow:hidden;border:1px solid #35558d;border-radius:32px;background:radial-gradient(circle,#253e87 0,#111c47 25%,#070b19 65%)}
+.stars{position:absolute;inset:0;opacity:.5;background-image:radial-gradient(#fff 1px,transparent 1px);background-size:42px 42px;animation:stars 8s linear infinite}@keyframes stars{to{background-position:42px 42px}}
+.click-ring{width:min(380px,78vw);aspect-ratio:1;border-radius:50%;padding:16px;position:relative;background:#172951;box-shadow:0 0 55px var(--cyan),inset 0 0 30px #0008}.click-ring:before{content:"";position:absolute;inset:-25px;border:2px dashed var(--cyan);border-radius:50%;animation:spin 10s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+#clickBtn{width:100%;height:100%;border-radius:50%;font-size:clamp(80px,17vw,145px);background:radial-gradient(circle at 35% 20%,#fff,#7df4ff 18%,#3785ff 55%,#171b74 100%);box-shadow:inset 0 14px 28px #fff9,inset 0 -25px 35px #0008,0 16px 0 #030614;transition:transform .06s}
+#clickBtn:active{transform:translateY(10px) scale(.97);box-shadow:inset 0 10px 20px #fff8,inset 0 -18px 30px #0008,0 6px 0 #030614}
+.arena-help{position:absolute;bottom:24px;color:var(--cyan);font-weight:900;text-align:center}.bar{height:11px;background:#050914;border-radius:20px;overflow:hidden;border:1px solid #30466f}.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--pink));transition:.2s}
+.float{position:fixed;z-index:100;pointer-events:none;color:var(--gold);font-size:25px;font-weight:1000;animation:floatUp .75s forwards;text-shadow:0 2px 10px #000}@keyframes floatUp{to{transform:translateY(-105px) scale(1.1);opacity:0}}
+.tabs{display:flex;gap:7px;overflow:auto;margin-bottom:10px}.tabs button{white-space:nowrap;padding:10px 14px;border-radius:11px;background:#18284d}.tabs .selected{background:#456eff}
+input,select{width:100%;padding:12px;border-radius:11px;border:1px solid #38517f;background:#070d1d;color:#fff;margin:5px 0;outline:none}input:focus,select:focus{border-color:var(--cyan)}
+.authbox{max-width:480px;margin:35px auto}.notice{padding:12px;border-radius:13px;background:#111f3d;border:1px solid #2e4c82;color:var(--muted);font-size:12px}
+.pet{position:relative}.pet .rarity{position:absolute;top:8px;right:8px;padding:4px 7px;border-radius:9px;font-size:10px;font-weight:900;background:#263e6e}.pet .power{font-weight:1000;color:var(--gold)}
+.rare{border-color:#48d9ff}.epic{border-color:#c56bff}.legendary{border-color:#ffd84f}.mythic{border-color:#ff5e8e}.secret{border-color:#fff;box-shadow:0 0 18px #fff5}.locked{filter:grayscale(1);opacity:.6}
+.shop-price{font-weight:1000;color:var(--gold)}
+.modal{position:fixed;inset:0;display:none;place-items:center;background:#02040bd9;z-index:200;padding:15px}.modal.open{display:grid}.modalbox{width:min(620px,100%);max-height:90vh;overflow:auto;padding:20px;border-radius:22px;background:#0b1430;border:1px solid #3b5f9e}.modalbox h2{margin-top:0}
+.eggbox{text-align:center;padding:20px}.egg{font-size:120px;display:inline-block;animation:egg 1s ease-in-out infinite alternate}@keyframes egg{to{transform:translateY(-10px) rotate(4deg)}}
+.result{font-size:24px;font-weight:1000;padding:20px;border-radius:18px;background:#111f42}.result .big{font-size:70px}
+.nav{position:fixed;bottom:0;left:0;right:0;z-index:80;background:#070d1cf5;border-top:1px solid #2b416c;backdrop-filter:blur(16px)}.navin{max-width:1000px;margin:auto;display:flex;justify-content:space-around}.nav button{background:none;color:#9ba9c9;padding:7px 9px;font-size:10px}.nav i{display:block;font-style:normal;font-size:22px;margin-bottom:2px}.nav .active{color:var(--cyan)}
+.toast{position:fixed;top:16px;left:50%;z-index:300;transform:translate(-50%,-130px);background:#17284d;border:1px solid #4b72b4;padding:12px 18px;border-radius:14px;font-weight:900;transition:.25s;text-align:center}.toast.show{transform:translate(-50%,0)}
+.list-row{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:11px 4px;border-bottom:1px solid #22365e}.list-row:last-child{border-bottom:0}.mini{padding:7px 9px;border-radius:9px;background:#263c69}.friend-actions{display:flex;gap:5px}
+.badge{display:inline-block;padding:4px 8px;border-radius:99px;background:#1b315a;color:var(--cyan);font-size:11px;font-weight:900}.quest{display:flex;gap:12px;align-items:center}.quest-icon{font-size:32px}.quest.done{opacity:.55}.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}.three{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+#inventoryCount{color:var(--cyan)}.tiny{font-size:11px;color:var(--muted)}.center{text-align:center}.hidden{display:none!important}
+@media(max-width:850px){.stats{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:560px){.app{padding-left:9px;padding-right:9px}.stats{grid-template-columns:repeat(2,1fr)}.arena{min-height:430px}.nav button{font-size:8px}.nav i{font-size:19px}.two,.three{grid-template-columns:1fr}.wallet{max-width:55%}.pill{padding:7px 8px;font-size:12px}.click-ring{width:min(330px,76vw)}}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="top">
+<div class="logo">🐾 MULTI <b>PET</b></div>
+<div class="wallet"><div class="pill">🪙 <span id="coins">0</span></div><div class="pill">💎 <span id="gems">0</span></div><div class="pill">🔥 <span id="streak">0</span></div></div>
+</header>
+
+<section id="auth" class="page active">
+<div class="authbox section">
+<div class="hero"><h1>🐾 PET SIMULATOR ULTRA</h1><p>Collectionne des pets, ouvre des œufs, débloque des mondes et deviens le meilleur.</p></div>
+<div class="tabs"><button id="loginTab" class="selected">CONNEXION</button><button id="registerTab">CRÉER UN COMPTE</button></div>
+<input id="accountId" maxlength="20" placeholder="ID unique (3 à 20 caractères)">
+<input id="accountPass" type="password" placeholder="Mot de passe (6 caractères minimum)">
+<button id="authBtn" class="action">SE CONNECTER</button>
+<div class="notice">🔐 Connexion via Supabase. Le mot de passe n'est jamais enregistré dans le jeu. Utilise uniquement la clé ANON/PUBLISHABLE dans le code.</div>
+</div>
+</section>
+
+<section id="home" class="page">
+<div class="hero"><h1>🐾 PET SIMULATOR ULTRA</h1><p id="welcome">Bienvenue !</p></div>
+<div class="stats">
+<div class="stat"><small>🪙 COINS</small><b id="coins2">0</b></div>
+<div class="stat"><small>💎 GEMMES</small><b id="gems2">0</b></div>
+<div class="stat"><small>⚡ PUISSANCE</small><b id="power">1</b></div>
+<div class="stat"><small>👆 CLICS</small><b id="clicks">0</b></div>
+<div class="stat"><small>⭐ NIVEAU</small><b id="level">1</b></div>
+<div class="stat"><small>♻️ REBIRTH</small><b id="rebirth">0</b></div>
+</div>
+<div class="section"><div class="two"><div><b>XP</b><div class="bar"><i id="xpBar"></i></div><span class="tiny" id="xpText">0 / 100</span></div><div><b>ZONE</b><div id="worldLabel" class="badge">🌱 Meadow</div></div></div></div>
+<div class="arena">
+<div class="stars"></div>
+<div class="click-ring"><button id="clickBtn" aria-label="Gagner des coins">🐾</button></div>
+<div class="arena-help">👆 CLIQUE POUR GAGNER DES COINS • TES PETS TE BOOSTENT !</div>
+</div>
+<div class="section"><h2>🚀 Boosts rapides</h2><div class="grid" id="quickBoosts"></div></div>
+<div class="section"><h2>⚙️ Améliorations</h2><div class="grid" id="upgrades"></div></div>
+</section>
+
+<section id="pets" class="page">
+<div class="hero"><h1>🐶 MES PETS</h1><p>Équipe tes meilleurs compagnons. Les multipliers s'additionnent.</p></div>
+<div class="section"><div class="two"><div><b>Inventaire</b><br><span id="inventoryCount">0 / 50</span></div><div class="center"><b>Équipés</b><br><span id="equipCount">0 / 4</span></div></div></div>
+<div class="section"><h2>✨ Collection</h2><div id="petGrid" class="grid"></div></div>
+</section>
+
+<section id="eggs" class="page">
+<div class="hero"><h1>🥚 OEUFS</h1><p>Chaque œuf peut cacher un pet rare, légendaire, mythique ou SECRET.</p></div>
+<div class="section"><div class="tabs" id="eggTabs"></div><div id="eggGrid" class="grid"></div></div>
+</section>
+
+<section id="worlds" class="page">
+<div class="hero"><h1>🌎 MONDES</h1><p>Plus le monde est loin, plus les récompenses deviennent folles.</p></div>
+<div class="section"><div id="worldGrid" class="grid"></div></div>
+</section>
+
+<section id="quests" class="page">
+<div class="hero"><h1>🎯 QUÊTES & SUCCÈS</h1><p>Termine des missions pour gagner coins, gemmes et récompenses spéciales.</p></div>
+<div class="section"><h2>🎯 Quêtes</h2><div id="questList"></div></div>
+<div class="section"><h2>🏆 Succès</h2><div id="achievementList" class="grid"></div></div>
+</section>
+
+<section id="social" class="page">
+<div class="hero"><h1>👥 SOCIAL</h1><p>Ajoute tes amis et discute avec eux.</p></div>
+<div class="section"><h2>➕ Ajouter un ami</h2><input id="friendId" placeholder="ID exact de ton ami"><button id="addFriend" class="action">ENVOYER LA DEMANDE</button></div>
+<div class="section"><h2>📨 Demandes reçues</h2><div id="requestList"></div></div>
+<div class="section"><h2>💚 Mes amis</h2><div id="friendList"></div></div>
+<div class="section"><h2>💬 Chat</h2><div id="chatTitle" class="notice">Sélectionne un ami.</div><div id="messages" style="height:280px;overflow:auto;background:#050a16;border-radius:13px;padding:10px;margin-top:8px"></div><div class="chatrow two"><input id="messageInput" placeholder="Écris un message..." maxlength="1000"><button id="sendMessage" class="action">ENVOYER</button></div></div>
+</section>
+
+<section id="shop" class="page">
+<div class="hero"><h1>🛒 BOUTIQUE</h1><p>Des boosts, des slots et des objets pour accélérer ta progression.</p></div>
+<div class="section"><div id="shopGrid" class="grid"></div></div>
+</section>
+
+<section id="profile" class="page">
+<div class="hero"><h1>👤 PROFIL</h1><p>ID : <b id="profileId"></b></p></div>
+<div class="section"><div class="three"><div class="stat"><small>CLICS TOTAUX</small><b id="profileClicks">0</b></div><div class="stat"><small>PETS DÉCOUVERTS</small><b id="profilePets">0</b></div><div class="stat"><small>MONDES</small><b id="profileWorlds">1</b></div></div></div>
+<div class="section"><h2>🔥 Série quotidienne</h2><p id="dailyText" class="notice"></p><button id="dailyBtn" class="action gold">RÉCUPÉRER LA RÉCOMPENSE</button></div>
+<div class="section"><h2>🎵 Réglages</h2><div class="two"><button id="musicBtn" class="action">🎵 MUSIQUE : ON</button><button id="soundBtn" class="action">🔊 SONS : ON</button></div></div>
+<div class="section"><button id="logout" class="action danger">SE DÉCONNECTER</button></div>
+</section>
+</div>
+
+<nav class="nav"><div class="navin">
+<button class="active" data-page="home"><i>🏠</i>JOUER</button>
+<button data-page="pets"><i>🐾</i>PETS</button>
+<button data-page="eggs"><i>🥚</i>OEUFS</button>
+<button data-page="worlds"><i>🌎</i>MONDES</button>
+<button data-page="quests"><i>🎯</i>QUÊTES</button>
+<button data-page="social"><i>👥</i>SOCIAL</button>
+<button data-page="shop"><i>🛒</i>BOUTIQUE</button>
+<button data-page="profile"><i>👤</i>PROFIL</button>
+</div></nav>
+
+<div id="toast" class="toast"></div>
+<div id="eggModal" class="modal"><div class="modalbox eggbox"><h2>🥚 OUVERTURE</h2><div id="eggAnimation" class="egg">🥚</div><div id="eggResult"></div><button id="closeEgg" class="action">CONTINUER</button></div></div>
+
 <script type="module">
-/* ======================================================
-   METS TES IDENTIFIANTS SUPABASE ICI
-   Utilise uniquement l'URL et la clé ANON/PUBLISHABLE.
-   Ne mets JAMAIS la clé service_role dans un site public.
-   ====================================================== */
-const SUPABASE_URL = 'https://mtwwjhgjgurzvjzscttw.supabase.co/rest/v1/';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im10d3dqaGdqZ3VyenZqenNjdHR3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg2OTg0MzAsImV4cCI6MjEwNDI3NDQzMH0.bXNZq9YnhL9Ge4wmFqvTLeOGS3XDp9rPljaWanQLil0';
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+/* ==========================================================
+   SUPABASE
+   IMPORTANT : mets ici l'URL racine de ton projet, SANS /rest/v1/
+   Exemple : https://xxxxxxxx.supabase.co
+   Utilise uniquement la clé anon/publishable.
+   ========================================================== */
+const SUPABASE_URL='https://mtwwjhgjgurzvjzscttw.supabase.co';
+const SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im10d3dqaGdqZ3VyenZqenNjdHR3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg2OTg0MzAsImV4cCI6MjEwNDI3NDQzMH0.bXNZq9YnhL9Ge4wmFqvTLeOGS3XDp9rPljaWanQLil0';
+import{createClient}from'https://esm.sh/@supabase/supabase-js@2';
 const $=id=>document.getElementById(id);
-let sb=null,me=null,mode='login',selectedFriend=null,messageChannel=null,mediaStream=null;
-let D={energy:0,gems:100,clicks:0,power:1,auto:0};
-const upgrades=[['👆','Doigt puissant',25,'power',1],['🤖','Click Bot',150,'auto',2],['🏭','Usine',1000,'auto',15],['⚛️','Réacteur',7500,'auto',100]];
-function toast(t){$('toast').textContent=t;$('toast').classList.add('show');setTimeout(()=>$('toast').classList.remove('show'),1800)}
-function fmt(n){return Math.floor(n).toLocaleString('fr-FR')}
+const sb=createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
+let me=null,profile=null,authMode='login',selectedFriend=null,saveTimer=null;
+let musicOn=true,soundOn=true;
+
+const DEFAULT={coins:250,gems:100,clicks:0,rebirth:0,level:1,xp:0,power:1,auto:0,world:0,equipped:[],pets:[],boost2x:0,boostLuck:0,inventory:50,streak:0,lastDaily:null,quests:{clicks:0,eggs:0,coins:0,worlds:0},achievements:[]};
+let D=structuredClone(DEFAULT);
+
+const PETS=[
+{id:'dog',name:'Doggo',icon:'🐶',rarity:'Commun',mult:1.15},
+{id:'cat',name:'Kitty',icon:'🐱',rarity:'Commun',mult:1.25},
+{id:'bunny',name:'Bunny',icon:'🐰',rarity:'Rare',mult:1.5},
+{id:'fox',name:'Fox',icon:'🦊',rarity:'Rare',mult:1.8},
+{id:'penguin',name:'Penguin',icon:'🐧',rarity:'Epic',mult:2.3},
+{id:'dragon',name:'Dragon',icon:'🐉',rarity:'Légendaire',mult:3.5},
+{id:'unicorn',name:'Licorne',icon:'🦄',rarity:'Légendaire',mult:4.5},
+{id:'phoenix',name:'Phoenix',icon:'🔥',rarity:'Mythique',mult:7},
+{id:'galaxy',name:'Galaxy Fox',icon:'🌌',rarity:'Secret',mult:15},
+{id:'cosmic',name:'Cosmic Dragon',icon:'🌠',rarity:'Secret',mult:30}
+];
+const EGGS=[
+{id:'basic',name:'Œuf Herbe',icon:'🥚',world:0,cost:100,odds:[['dog',55],['cat',30],['bunny',12],['fox',3]]},
+{id:'forest',name:'Œuf Forêt',icon:'🥚',world:1,cost:1000,odds:[['cat',40],['bunny',30],['fox',20],['penguin',9],['dragon',1]]},
+{id:'lava',name:'Œuf Inferno',icon:'🥚',world:2,cost:10000,odds:[['fox',35],['penguin',30],['dragon',25],['unicorn',9],['phoenix',1]]},
+{id:'galaxy',name:'Œuf Galaxy',icon:'🥚',world:3,cost:100000,odds:[['dragon',35],['unicorn',35],['phoenix',25],['galaxy',4.5],['cosmic',.5]]}
+];
+const WORLDS=[
+{name:'Meadow',icon:'🌱',cost:0,mult:1},
+{name:'Forest',icon:'🌲',cost:5000,mult:3},
+{name:'Volcano',icon:'🌋',cost:50000,mult:10},
+{name:'Galaxy',icon:'🌌',cost:500000,mult:30},
+{name:'Void',icon:'🌀',cost:5000000,mult:100}
+];
+const UPGRADES=[
+{id:'power1',icon:'💪',name:'Main puissante',cost:50,type:'power',value:1},
+{id:'power2',icon:'⚡',name:'Poing électrique',cost:500,type:'power',value:5},
+{id:'power3',icon:'☄️',name:'Impact cosmique',cost:5000,type:'power',value:30},
+{id:'auto1',icon:'🤖',name:'Auto Clicker',cost:1000,type:'auto',value:2},
+{id:'auto2',icon:'🏭',name:'Usine à coins',cost:10000,type:'auto',value:25},
+{id:'auto3',icon:'🛰️',name:'Satellite',cost:100000,type:'auto',value:250}
+];
+const BOOSTS=[
+{id:'double',icon:'🔥',name:'2X Coins',cost:500,duration:60,type:'coins'},
+{id:'luck',icon:'🍀',name:'2X Chance',cost:750,duration:60,type:'luck'},
+{id:'mega',icon:'💥',name:'MEGA BOOST',cost:2000,duration:30,type:'mega'}
+];
+const QUESTS=[
+{id:'qclick',icon:'👆',name:'Cliqueur fou',goal:100,reward:500,type:'clicks'},
+{id:'qegg',icon:'🥚',name:'Collectionneur',goal:5,reward:1000,type:'eggs'},
+{id:'qcoins',icon:'🪙',name:'Millionnaire en herbe',goal:10000,reward:2500,type:'coins'},
+{id:'qworld',icon:'🌎',name:'Explorateur',goal:3,reward:5000,type:'worlds'}
+];
+const ACH=[
+['first','🌟','Premier clic',1],['hundred','💯','100 clics',100],['thousand','🔥','1000 clics',1000],['collector','🐾','5 pets',5],['rich','💰','100 000 coins',100000],['rebirth','♻️','Premier rebirth',1]
+];
+
+function fmt(n){return Math.floor(Number(n)||0).toLocaleString('fr-FR')}
+function toast(t){const el=$('toast');el.textContent=t;el.classList.add('show');clearTimeout(window.__toast);window.__toast=setTimeout(()=>el.classList.remove('show'),1900)}
+function validId(id){return/^[A-Za-z0-9_]{3,20}$/.test(id)}
 function userEmail(id){return id.toLowerCase().replace(/[^a-z0-9_]/g,'')+'@multigame.local'}
-function validId(id){return /^[A-Za-z0-9_]{3,20}$/.test(id)}
-function render(){energy.textContent=fmt(D.energy);gems.textContent=fmt(D.gems);power.textContent=D.power;eps.textContent=D.auto;clicks.textContent=fmt(D.clicks);level.textContent=Math.max(1,Math.floor(Math.sqrt(D.clicks/25))+1);$('upgrades').innerHTML=upgrades.map((u,i)=>`<div class="card"><div class="icon">${u[0]}</div><h3>${u[1]}</h3><p>+${u[4]} ${u[3]==='power'?'puissance':'⚡ / seconde'}</p><button class="action" data-buy="${i}">ACHETER · ${fmt(u[2])} ⚡</button></div>`).join('');document.querySelectorAll('[data-buy]').forEach(b=>b.onclick=()=>buy(+b.dataset.buy))}
-async function saveGame(){if(!sb||!me)return;const{error}=await sb.from('game_saves').upsert({user_id:me.id,energy:D.energy,gems:D.gems,clicks:D.clicks,power:D.power,auto_click:D.auto,updated_at:new Date().toISOString()});if(error)console.warn(error)}
-function buy(i){let u=upgrades[i];if(D.energy<u[2])return toast('⚠️ Pas assez d’énergie !');D.energy-=u[2];if(u[3]==='power')D.power+=u[4];else D.auto+=u[4];render();saveGame()}
-$('clickBtn').addEventListener('click',e=>{D.energy+=D.power;D.clicks++;render();saveGame();const f=document.createElement('div');f.className='float';f.textContent='+'+D.power+' ⚡';f.style.left=(e.clientX||innerWidth/2)+'px';f.style.top=(e.clientY||innerHeight/2)+'px';document.body.append(f);setTimeout(()=>f.remove(),700)});
-setInterval(()=>{if(D.auto>0){D.energy+=D.auto;render();saveGame()}},1000);
-function setMode(m){mode=m;$('loginTab').classList.toggle('selected',m==='login');$('registerTab').classList.toggle('selected',m==='register');$('authBtn').textContent=m==='login'?'SE CONNECTER':'CRÉER MON COMPTE'}
-$('loginTab').onclick=()=>setMode('login');$('registerTab').onclick=()=>setMode('register');
-$('authBtn').onclick=async()=>{if(!sb)return toast('⚠️ Configure Supabase en haut du code.');let id=$('accountId').value.trim(),pass=$('accountPass').value;if(!validId(id))return toast('ID : 3-20 caractères, lettres/chiffres/_ uniquement.');if(pass.length<6)return toast('Mot de passe trop court.');let email=userEmail(id);try{if(mode==='register'){let{data,error}=await sb.auth.signUp({email,password:pass,options:{data:{username:id}}});if(error)throw error;if(!data.user)return toast('Vérifie ta configuration Supabase.');let{error:pe}=await sb.from('profiles').upsert({id:data.user.id,username:id.toLowerCase(),display_name:id});if(pe)throw pe;toast('🎉 Compte créé !');await loadSession()}else{let{error}=await sb.auth.signInWithPassword({email,password:pass});if(error)throw error;await loadSession()}}catch(e){console.error(e);toast(e.message||'Erreur de connexion')}};
-async function loadSession(){let{data:{session}}=await sb.auth.getSession();if(!session){show('auth');return}me=session.user;let{data:profile}=await sb.from('profiles').select('*').eq('id',me.id).single();if(!profile){show('auth');return}$('welcome').textContent='Bienvenue, '+profile.display_name+' !';$('profileId').textContent=profile.display_name;let{data:save}=await sb.from('game_saves').select('*').eq('user_id',me.id).maybeSingle();if(save)D={energy:Number(save.energy)||0,gems:Number(save.gems)||0,clicks:Number(save.clicks)||0,power:Number(save.power)||1,auto:Number(save.auto_click)||0};render();show('home');loadFriends();loadRequests()}
-function show(id){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));$(id).classList.add('active')}
-document.querySelectorAll('[data-page]').forEach(b=>b.onclick=()=>{if(!me)return;document.querySelectorAll('[data-page]').forEach(x=>x.classList.remove('active'));b.classList.add('active');show(b.dataset.page);if(b.dataset.page==='social'){loadFriends();loadRequests()}});
-$('logout').onclick=async()=>{if(sb)await sb.auth.signOut();me=null;selectedFriend=null;if(messageChannel)sb.removeChannel(messageChannel);show('auth')};
-$('addFriend').onclick=async()=>{let username=$('friendId').value.trim().toLowerCase();if(!username)return;let{data:target,error}=await sb.from('profiles').select('id,display_name').eq('username',username).maybeSingle();if(error||!target)return toast('❌ Aucun joueur trouvé.');if(target.id===me.id)return toast('😂 Tu ne peux pas t’ajouter toi-même.');let{data:existing}=await sb.from('friendships').select('id,status').or(`and(sender_id.eq.${me.id},receiver_id.eq.${target.id}),and(sender_id.eq.${target.id},receiver_id.eq.${me.id})`).maybeSingle();if(existing)return toast(existing.status==='accepted'?'Vous êtes déjà amis !':'Une demande existe déjà.');let{error:e}=await sb.from('friendships').insert({sender_id:me.id,receiver_id:target.id,status:'pending'});if(e){console.error(e);return toast('Erreur : '+e.message)}$('friendId').value='';toast('📨 Demande envoyée !')};
-async function loadRequests(){if(!me)return;let{data,error}=await sb.from('friendships').select('id,sender_id,profiles!friendships_sender_id_fkey(display_name)').eq('receiver_id',me.id).eq('status','pending');if(error){$('requestList').textContent='Erreur de chargement';return}$('requestList').innerHTML=data?.length?data.map(r=>`<div class="friend"><span>👤 <b>${r.profiles?.display_name||'Joueur'}</b></span><span><button data-accept="${r.id}">✅</button><button data-refuse="${r.id}">❌</button></span></div>`).join(''):'<p class="hint">Aucune demande.</p>';document.querySelectorAll('[data-accept]').forEach(b=>b.onclick=()=>answerRequest(b.dataset.accept,true));document.querySelectorAll('[data-refuse]').forEach(b=>b.onclick=()=>answerRequest(b.dataset.refuse,false))}
-async function answerRequest(id,ok){if(ok)await sb.from('friendships').update({status:'accepted'}).eq('id',id);else await sb.from('friendships').delete().eq('id',id);toast(ok?'💚 Nouvel ami !':'Demande refusée');loadRequests();loadFriends()}
-async function loadFriends(){if(!me)return;let{data,error}=await sb.from('friendships').select('id,sender_id,receiver_id').eq('status','accepted').or(`sender_id.eq.${me.id},receiver_id.eq.${me.id}`);if(error)return console.warn(error);let ids=(data||[]).map(f=>f.sender_id===me.id?f.receiver_id:f.sender_id);if(!ids.length){$('friendList').innerHTML='<p class="hint">Ajoute ton premier ami !</p>';return}let{data:profiles}=await sb.from('profiles').select('id,display_name').in('id',ids);$('friendList').innerHTML=(profiles||[]).map(p=>`<div class="friend"><span>👤 <b>${p.display_name}</b></span><span><button data-chat="${p.id}" data-name="${p.display_name}">💬 CHAT</button></span></div>`).join('');document.querySelectorAll('[data-chat]').forEach(b=>b.onclick=()=>selectFriend(b.dataset.chat,b.dataset.name))}
-function roomId(a,b){return[a,b].sort().join('_')}
-async function selectFriend(id,name){selectedFriend={id,name};$('chatTitle').textContent='Discussion avec '+name;await loadMessages();if(messageChannel)sb.removeChannel(messageChannel);let rid=roomId(me.id,id);messageChannel=sb.channel('messages-'+rid).on('postgres_changes',{event:'INSERT',schema:'public',table:'messages',filter:'room_id=eq.'+rid},()=>loadMessages()).subscribe();}
-async function loadMessages(){if(!selectedFriend)return;let rid=roomId(me.id,selectedFriend.id);let{data}=await sb.from('messages').select('*').eq('room_id',rid).order('created_at',{ascending:true}).limit(200);$('messages').innerHTML=(data||[]).map(m=>`<div class="msg ${m.sender_id===me.id?'me':''}">${escapeHtml(m.content)}</div>`).join('');$('messages').scrollTop=$('messages').scrollHeight}
-function escapeHtml(s){let d=document.createElement('div');d.textContent=s;return d.innerHTML}
-$('sendMessage').onclick=async()=>{let content=$('messageInput').value.trim();if(!selectedFriend)return toast('Choisis un ami.');if(!content)return;let rid=roomId(me.id,selectedFriend.id);let{error}=await sb.from('messages').insert({room_id:rid,sender_id:me.id,receiver_id:selectedFriend.id,content});if(error)return toast('Erreur : '+error.message);$('messageInput').value='';loadMessages()};$('messageInput').addEventListener('keydown',e=>{if(e.key==='Enter')$('sendMessage').click()});
-async function getMedia(video){try{if(mediaStream)mediaStream.getTracks().forEach(t=>t.stop());mediaStream=await navigator.mediaDevices.getUserMedia(video?{audio:true,video:true}:{audio:true,video:false});$('mediaStatus').textContent=video?'📷 Caméra et micro activés.':'🎙️ Micro activé.';toast('Autorisation média réussie.')}catch(e){toast('Impossible d’utiliser le micro/caméra : '+e.message)}}
-$('voiceBtn').onclick=()=>getMedia(false);$('cameraBtn').onclick=()=>getMedia(true);$('stopMedia').onclick=()=>{if(mediaStream)mediaStream.getTracks().forEach(t=>t.stop());mediaStream=null;$('mediaStatus').textContent='Micro et caméra désactivés.'};
-try{if(!SUPABASE_URL.startsWith('http')||SUPABASE_ANON_KEY.startsWith('MET_'))throw new Error('Identifiants Supabase manquants');sb=createClient(SUPABASE_URL,SUPABASE_ANON_KEY);await loadSession()}catch(e){console.warn(e);toast('⚙️ Mets ton URL et ta clé anon Supabase en haut du code.');show('auth')}
-</script></body></html>
+function levelFromXP(){return Math.max(1,Math.floor(D.xp/100)+1)}
+function petById(id){return PETS.find(p=>p.id===id)}
+function equippedPower(){return D.equipped.reduce((s,id)=>s+(petById(id)?.mult||1),0)||1}
+function totalMultiplier(){let m=equippedPower()*WORLDS[D.world].mult;if(D.boost2x>0)m*=2;if(D.boostLuck>0)m*=1.15;return m}
+function coinPerClick(){return Math.max(1,Math.floor(D.power*totalMultiplier()))}
+function addXP(x){D.xp+=x;const old=D.level;D.level=levelFromXP();if(D.level>old)toast('⭐ NIVEAU '+D.level+' !')}
+function cloneData(){return JSON.parse(JSON.stringify(D))}
+
+function renderWallet(){
+$('coins').textContent=fmt(D.coins);$('gems').textContent=fmt(D.gems);$('streak').textContent=D.streak;
+$('coins2').textContent=fmt(D.coins);$('gems2').textContent=fmt(D.gems);$('power').textContent=fmt(D.power);$('clicks').textContent=fmt(D.clicks);$('level').textContent=D.level;$('rebirth').textContent=D.rebirth;
+$('xpText').textContent=fmt(D.xp%100)+' / 100';$('xpBar').style.width=(D.xp%100)+'%';$('worldLabel').textContent=WORLDS[D.world].icon+' '+WORLDS[D.world].name;
+$('inventoryCount').textContent=D.pets.length+' / '+D.inventory;$('equipCount').textContent=D.equipped.length+' / 4';
+$('profileClicks').textContent=fmt(D.clicks);$('profilePets').textContent=D.pets.length;$('profileWorlds').textContent=D.world+1;
+}
+
+function renderUpgrades(){
+$('upgrades').innerHTML=UPGRADES.map(u=>`<div class="card"><div class="icon">${u.icon}</div><h3>${u.name}</h3><p>+${u.value} ${u.type==='power'?'puissance':'coins/sec'}</p><div class="shop-price">${fmt(u.cost)} 🪙</div><button class="action" data-upgrade="${u.id}">ACHETER</button></div>`).join('');
+document.querySelectorAll('[data-upgrade]').forEach(b=>b.onclick=()=>buyUpgrade(b.dataset.upgrade));
+}
+function renderBoosts(){
+$('quickBoosts').innerHTML=BOOSTS.map(b=>{let active=b.type==='coins'?D.boost2x:D.boostLuck;return `<div class="card"><div class="icon">${b.icon}</div><h3>${b.name}</h3><p>${b.duration}s de boost</p><div class="shop-price">${fmt(b.cost)} 💎</div><button class="action" data-boost="${b.id}">${active>0?'ACTIF · '+active+'s':'ACTIVER'}</button></div>`}).join('');
+document.querySelectorAll('[data-boost]').forEach(b=>b.onclick=()=>buyBoost(b.dataset.boost));
+}
+function renderPets(){
+$('petGrid').innerHTML=PETS.map(p=>{let owned=D.pets.includes(p.id),eq=D.equipped.includes(p.id);return `<div class="card pet ${p.rarity.toLowerCase().replace('é','e')} ${owned?'':'locked'}"><span class="rarity">${p.rarity}</span><div class="icon">${owned?p.icon:'❓'}</div><h3>${owned?p.name:'???'}</h3><p class="power">x${p.mult}</p>${owned?`<button class="action ${eq?'danger':'green'}" data-equip="${p.id}">${eq?'RETIRER':'ÉQUIPER'}</button>`:`<p>Ouvre des œufs pour le découvrir.</p>`}</div>`}).join('');
+document.querySelectorAll('[data-equip]').forEach(b=>b.onclick=()=>toggleEquip(b.dataset.equip));
+}
+function renderEggs(){
+$('eggTabs').innerHTML=EGGS.map(e=>`<button class="${D.world>=e.world?'':'locked'}" data-egg-tab="${e.id}">${e.icon} ${e.name}</button>`).join('');
+$('eggGrid').innerHTML=EGGS.map(e=>{let locked=D.world<e.world;let odds=e.odds.map(o=>`${petById(o[0]).icon} ${petById(o[0]).name}: ${o[1]}%`).join('<br>');return `<div class="card ${locked?'locked':''}"><div class="icon">${e.icon}</div><h3>${e.name}</h3><p>${odds}</p><div class="shop-price">${fmt(e.cost)} 🪙</div><button class="action" ${locked?'disabled':''} data-openegg="${e.id}">${locked?'🔒 MONDE '+(e.world+1):'OUVRIR'}</button></div>`}).join('');
+document.querySelectorAll('[data-openegg]').forEach(b=>b.onclick=()=>openEgg(b.dataset.openegg));
+}
+function renderWorlds(){
+$('worldGrid').innerHTML=WORLDS.map((w,i)=>{let unlocked=D.world>=i;let current=D.world===i;return `<div class="card ${unlocked?'':'locked'}"><div class="icon">${w.icon}</div><h3>${w.name}</h3><p>x${w.mult} multiplicateur</p><div class="shop-price">${i===0?'GRATUIT':fmt(w.cost)+' 🪙'}</div><button class="action ${current?'green':''}" ${current?'disabled':''} data-world="${i}">${current?'✓ ACTUEL':unlocked?'VOYAGER':'DÉBLOQUER'}</button></div>`}).join('');
+document.querySelectorAll('[data-world]').forEach(b=>b.onclick=()=>travel(+b.dataset.world));
+}
+function renderQuests(){
+$('questList').innerHTML=QUESTS.map(q=>{let value=D.quests[q.type]||0;let done=value>=q.goal;return `<div class="list-row quest ${done?'done':''}"><div class="quest-icon">${q.icon}</div><div style="flex:1"><b>${q.name}</b><div class="tiny">${Math.min(value,q.goal)} / ${q.goal} · Récompense ${fmt(q.reward)} 🪙</div><div class="bar"><i style="width:${Math.min(100,value/q.goal*100)}%"></i></div></div><span>${done?'✅':'🎯'}</span></div>`}).join('');
+$('achievementList').innerHTML=ACH.map(a=>{let val=a[0]==='first'?D.clicks:a[0]==='hundred'?D.clicks:a[0]==='thousand'?D.clicks:a[0]==='collector'?D.pets.length:a[0]==='rich'?D.coins:D.rebirth;let done=D.achievements.includes(a[0]);return `<div class="card ${done?'':'locked'}"><div class="icon">${a[1]}</div><h3>${a[2]}</h3><p>${done?'DÉBLOQUÉ':'Objectif : '+fmt(a[3])}</p></div>`}).join('');
+}
+function renderShop(){
+const items=[['🎒','+25 slots',250,'inventory',25],['💎','+500 gemmes',0,'gems',500],['⚡','+100 puissance',5000,'power',100],['♻️','Rebirth token',10000,'rebirth',1]];
+$('shopGrid').innerHTML=items.map((x,i)=>`<div class="card"><div class="icon">${x[0]}</div><h3>${x[1]}</h3><p>${x[3]==='gems'?'Récompense spéciale':'Objet permanent'}</p><div class="shop-price">${x[2]===0?'CADEAU':fmt(x[2])+' 💎'}</div><button class="action" data-shop="${i}">${x[2]===0?'RÉCUPÉRER':'ACHETER'}</button></div>`).join('');
+document.querySelectorAll('[data-shop]').forEach(b=>b.onclick=()=>buyShop(+b.dataset.shop));
+}
+function renderDaily(){
+const today=new Date().toISOString().slice(0,10);let claimed=D.lastDaily===today;$('dailyText').textContent=claimed?'🎁 Récompense déjà récupérée aujourd’hui. Reviens demain !':'🎁 Ta récompense quotidienne est prête : '+(100*D.streak+100)+' gemmes.';$('dailyBtn').disabled=claimed;
+}
+function renderAll(){renderWallet();renderUpgrades();renderBoosts();renderPets();renderEggs();renderWorlds();renderQuests();renderShop();renderDaily();}
+
+function buyUpgrade(id){let u=UPGRADES.find(x=>x.id===id);if(!u)return;if(D.coins<u.cost)return toast('❌ Pas assez de coins !');D.coins-=u.cost;if(u.type==='power')D.power+=u.value;else D.auto+=u.value;toast('🚀 Amélioration achetée !');renderAll();saveGame()}
+function buyBoost(id){let b=BOOSTS.find(x=>x.id===id);if(!b)return;if(D.gems<b.cost)return toast('💎 Pas assez de gemmes !');D.gems-=b.cost;if(b.type==='coins')D.boost2x=b.duration;if(b.type==='luck')D.boostLuck=b.duration;if(b.type==='mega'){D.boost2x=b.duration;D.power*=2}toast('🔥 BOOST ACTIVÉ !');renderAll();saveGame()}
+function buyShop(i){let items=[['inventory',25,250],['gems',500,0],['power',100,5000],['rebirth',1,10000]];let x=items[i];if(!x)return;if(x[2]>0&&D.gems<x[2])return toast('💎 Pas assez de gemmes !');if(x[2])D.gems-=x[2];if(x[0]==='inventory')D.inventory+=x[1];if(x[0]==='gems')D.gems+=x[1];if(x[0]==='power')D.power+=x[1];if(x[0]==='rebirth')D.rebirth+=x[1];toast('🛒 Achat effectué !');renderAll();saveGame()}
+
+function clickGame(ev){
+let gain=coinPerClick();D.coins+=gain;D.clicks++;addXP(1);D.quests.clicks++;D.quests.coins+=gain;if(D.clicks===1)D.gems+=1;
+const f=document.createElement('div');f.className='float';f.textContent='+'+fmt(gain)+' 🪙';f.style.left=(ev.clientX||innerWidth/2)+'px';f.style.top=(ev.clientY||innerHeight/2)+'px';document.body.appendChild(f);setTimeout(()=>f.remove(),750);
+checkAchievements();renderWallet();renderQuests();queueSave();
+}
+$('clickBtn').addEventListener('pointerdown',e=>{e.preventDefault();clickGame(e)});
+
+function checkAchievements(){
+for(const a of ACH){let val=a[0]==='first'?D.clicks:a[0]==='hundred'?D.clicks:a[0]==='thousand'?D.clicks:a[0]==='collector'?D.pets.length:a[0]==='rich'?D.coins:D.rebirth;if(val>=a[3]&&!D.achievements.includes(a[0])){D.achievements.push(a[0]);D.gems+=50;toast('🏆 SUCCÈS : '+a[2]+' +50 💎')}}
+}
+function buyRebirth(){let cost=100000*(D.rebirth+1);if(D.coins<cost)return toast('♻️ Il faut '+fmt(cost)+' coins pour rebirth.');D.coins=0;D.power=1;D.auto=0;D.rebirth++;D.gems+=250;D.xp=0;toast('♻️ REBIRTH ! +250 💎');renderAll();saveGame()}
+
+async function openEgg(id){
+let egg=EGGS.find(e=>e.id===id);if(!egg||D.world<egg.world)return;if(D.coins<egg.cost)return toast('❌ Pas assez de coins !');if(D.pets.length>=D.inventory)return toast('🎒 Inventaire plein !');D.coins-=egg.cost;D.quests.eggs++;
+let odds=[...egg.odds];if(D.boostLuck>0){odds=odds.map(x=>[x[0],x[1]*(x[1]<5?1.8:1)]);}
+let total=odds.reduce((s,x)=>s+x[1],0),r=Math.random()*total,chosen=odds[0][0];for(const x of odds){r-=x[1];if(r<=0){chosen=x[0];break}}
+$('eggModal').classList.add('open');$('eggResult').innerHTML='';let n=0;const anim=setInterval(()=>{n++;$('eggAnimation').textContent=['🥚','✨','💥','🥚','🌟'][n%5];if(n>12){clearInterval(anim);givePet(chosen)}},90);saveGame();
+}
+function givePet(id){let p=petById(id);D.pets.push(id);$('eggAnimation').textContent=p.icon;$('eggResult').innerHTML=`<div class="result"><div class="big">${p.icon}</div>🎉 <b>${p.name}</b><br><span class="badge">${p.rarity}</span> · x${p.mult}</div>`;renderAll();saveGame();}
+$('closeEgg').onclick=()=>$('eggModal').classList.remove('open');
+function toggleEquip(id){let index=D.equipped.indexOf(id);if(index>=0){D.equipped.splice(index,1);toast('🐾 Pet retiré !')}else{if(D.equipped.length>=4)return toast('🐾 Tu peux équiper seulement 4 pets.');D.equipped.push(id);toast('🔥 Pet équipé !')}renderAll();saveGame()}
+function travel(i){if(i>D.world){if(i!==D.world+1)return toast('🔒 Débloque les mondes dans l’ordre.');if(D.coins<WORLDS[i].cost)return toast('❌ Il faut '+fmt(WORLDS[i].cost)+' coins.');D.coins-=WORLDS[i].cost;D.world=i;D.quests.worlds=Math.max(D.quests.worlds,i+1);toast('🌎 Nouveau monde : '+WORLDS[i].name+' !')}else D.world=i;renderAll();saveGame()}
+
+async function saveGame(){if(!me)return;clearTimeout(saveTimer);saveTimer=setTimeout(async()=>{try{let payload={user_id:me.id,energy:D.coins,gems:D.gems,clicks:D.clicks,power:D.power,auto_click:D.auto,updated_at:new Date().toISOString()};let{error}=await sb.from('game_saves').upsert(payload,{onConflict:'user_id'});if(error)console.warn('game_saves:',error.message);localStorage.setItem('pet_sim_backup_'+me.id,JSON.stringify(D))}catch(e){localStorage.setItem('pet_sim_backup_'+me.id,JSON.stringify(D))}},350)}
+async function loadGame(){
+let local=null;try{local=JSON.parse(localStorage.getItem('pet_sim_backup_'+me.id)||'null')}catch{}
+let remote=null;try{let q=await sb.from('game_saves').select('*').eq('user_id',me.id).maybeSingle();if(q.data)remote=q.data}catch(e){}
+if(local)D={...structuredClone(DEFAULT),...local};
+if(remote){D.coins=Number(remote.energy)||D.coins;D.gems=Number(remote.gems)||D.gems;D.clicks=Number(remote.clicks)||D.clicks;D.power=Number(remote.power)||D.power;D.auto=Number(remote.auto_click)||D.auto}
+D.level=levelFromXP();renderAll();
+}
+
+function show(page){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));$(page).classList.add('active');document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===page));window.scrollTo({top:0,behavior:'smooth'})}
+document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>show(b.dataset.page));
+$('loginTab').onclick=()=>{authMode='login';$('loginTab').classList.add('selected');$('registerTab').classList.remove('selected');$('authBtn').textContent='SE CONNECTER'};
+$('registerTab').onclick=()=>{authMode='register';$('registerTab').classList.add('selected');$('loginTab').classList.remove('selected');$('authBtn').textContent='CRÉER MON COMPTE'};
+
+$('authBtn').onclick=async()=>{let id=$('accountId').value.trim(),pass=$('accountPass').value;if(!validId(id))return toast('ID invalide : 3 à 20 caractères.');if(pass.length<6)return toast('Mot de passe trop court.');let email=userEmail(id);try{if(authMode==='register'){let{data,error}=await sb.auth.signUp({email,password:pass,options:{data:{username:id}}});if(error)throw error;if(!data.user)throw new Error('Création impossible. Vérifie les réglages Supabase.');let{error:pe}=await sb.from('profiles').upsert({id:data.user.id,username:id.toLowerCase(),display_name:id});if(pe)throw pe;toast('🎉 Compte créé !');await startSession()}else{let{error}=await sb.auth.signInWithPassword({email,password:pass});if(error)throw error;await startSession()}}catch(e){console.error(e);toast(e.message||'Erreur Supabase')}};
+
+async function startSession(){let{data:{session}}=await sb.auth.getSession();if(!session)return;me=session.user;let{data:p}=await sb.from('profiles').select('*').eq('id',me.id).maybeSingle();profile=p||{display_name:me.user_metadata?.username||'Joueur'};$('welcome').textContent='Bienvenue, '+profile.display_name+' 👋';$('profileId').textContent=profile.display_name;await loadGame();show('home')}
+
+$('logout').onclick=async()=>{await saveGame();await sb.auth.signOut();me=null;D=structuredClone(DEFAULT);show('auth');toast('👋 À bientôt !')};
+$('dailyBtn').onclick=()=>{let today=new Date().toISOString().slice(0,10);if(D.lastDaily===today)return;if(D.lastDaily){let d=(Date.now()-new Date(D.lastDaily).getTime())/86400000;if(d<2)D.streak++;else D.streak=1}else D.streak=1;D.lastDaily=today;D.gems+=100*D.streak+100;toast('🎁 Récompense quotidienne !');renderAll();saveGame()};
+$('musicBtn').onclick=()=>{musicOn=!musicOn;$('musicBtn').textContent='🎵 MUSIQUE : '+(musicOn?'ON':'OFF')};
+$('soundBtn').onclick=()=>{soundOn=!soundOn;$('soundBtn').textContent='🔊 SONS : '+(soundOn?'ON':'OFF')};
+
+$('addFriend').onclick=async()=>{if(!me)return;let id=$('friendId').value.trim().toLowerCase();if(!id)return toast('Entre un ID.');if(id===profile.username?.toLowerCase())return toast('❌ Tu ne peux pas t’ajouter toi-même.');try{let{data:target}=await sb.from('profiles').select('id,username,display_name').eq('username',id).maybeSingle();if(!target)return toast('❌ Joueur introuvable.');let{error}=await sb.from('friend_requests').insert({sender_id:me.id,receiver_id:target.id,status:'pending'});if(error)throw error;$('friendId').value='';toast('📨 Demande envoyée !');loadSocial()}catch(e){toast(e.message||'Erreur demande')}};
+
+async function loadSocial(){if(!me)return;try{let{data:req}=await sb.from('friend_requests').select('id,sender_id,profiles!friend_requests_sender_id_fkey(username,display_name)').eq('receiver_id',me.id).eq('status','pending');$('requestList').innerHTML=(req||[]).map(r=>`<div class="list-row"><span>👤 ${r.profiles?.display_name||r.profiles?.username||'Joueur'}</span><div class="friend-actions"><button class="mini" data-accept="${r.id}">✅</button><button class="mini" data-decline="${r.id}">❌</button></div></div>`).join('')||'<p class="tiny">Aucune demande.</p>';document.querySelectorAll('[data-accept]').forEach(b=>b.onclick=()=>answerRequest(b.dataset.accept,'accepted'));document.querySelectorAll('[data-decline]').forEach(b=>b.onclick=()=>answerRequest(b.dataset.decline,'declined'));
+let{data:friends}=await sb.from('friendships').select('*').or(`user_a.eq.${me.id},user_b.eq.${me.id}`);let ids=(friends||[]).map(f=>f.user_a===me.id?f.user_b:f.user_a);if(ids.length){let{data:people}=await sb.from('profiles').select('id,username,display_name').in('id',ids);$('friendList').innerHTML=(people||[]).map(p=>`<div class="list-row"><span>💚 ${p.display_name||p.username}</span><button class="mini" data-chat="${p.id}">💬 PARLER</button></div>`).join('');document.querySelectorAll('[data-chat]').forEach(b=>b.onclick=()=>selectFriend(b.dataset.chat))}else $('friendList').innerHTML='<p class="tiny">Ajoute ton premier ami !</p>';
+}catch(e){console.warn(e)}}
+async function answerRequest(id,status){let{data:req}=await sb.from('friend_requests').select('*').eq('id',id).single();if(!req)return;if(status==='accepted'){await sb.from('friendships').insert({user_a:req.sender_id,user_b:req.receiver_id});}await sb.from('friend_requests').update({status}).eq('id',id);toast(status==='accepted'?'💚 Ami ajouté !':'Demande refusée.');loadSocial()}
+async function selectFriend(id){selectedFriend=id;let{data:p}=await sb.from('profiles').select('display_name,username').eq('id',id).single();$('chatTitle').textContent='💬 Conversation avec '+(p?.display_name||p?.username||'Joueur');await loadMessages()}
+async function loadMessages(){if(!me||!selectedFriend)return;let{data}=await sb.from('messages').select('*').or(`and(sender_id.eq.${me.id},receiver_id.eq.${selectedFriend}),and(sender_id.eq.${selectedFriend},receiver_id.eq.${me.id})`).order('created_at',{ascending:true}).limit(100);$('messages').innerHTML=(data||[]).map(m=>`<div style="padding:8px 10px;border-radius:11px;background:${m.sender_id===me.id?'#29458e':'#172642'};margin:6px 0;max-width:80%;margin-left:${m.sender_id===me.id?'auto':'0'}">${escapeHTML(m.content)}</div>`).join('');$('messages').scrollTop=$('messages').scrollHeight}
+function escapeHTML(s){return String(s).replace(/[&<>\"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#039;'}[c]))}
+$('sendMessage').onclick=async()=>{if(!me||!selectedFriend)return toast('Choisis un ami.');let input=$('messageInput'),content=input.value.trim();if(!content)return;let{error}=await sb.from('messages').insert({sender_id:me.id,receiver_id:selectedFriend,content});if(error)return toast(error.message);input.value='';loadMessages()};
+
+setInterval(()=>{if(!me)return;if(D.auto>0){let gain=Math.floor(D.auto*totalMultiplier());D.coins+=gain;D.quests.coins+=gain;renderWallet();queueSave()}if(D.boost2x>0)D.boost2x--;if(D.boostLuck>0)D.boostLuck--;renderBoosts()},1000);
+function queueSave(){clearTimeout(window.__saveQueue);window.__saveQueue=setTimeout(saveGame,900)}
+
+sb.auth.onAuthStateChange((event,session)=>{if(event==='SIGNED_OUT'){show('auth');return}if(event==='SIGNED_IN'&&session&&!me)startSession()});
+renderAll();
+loadSocial();
+</script>
+</body>
+</html>
