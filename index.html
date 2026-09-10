@@ -2,208 +2,1002 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#080b14">
-<title>CHAOS SHIFT — Last 4</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AFK Vault — Idle Rewards</title>
 <style>
-:root{--bg:#060812;--panel:#101728;--panel2:#172139;--line:#ffffff16;--text:#f6f7fb;--muted:#93a0ba;--cyan:#57e6ff;--purple:#8b5cf6;--gold:#ffd84d;--red:#ff5573;--green:#55e39b;--shadow:0 24px 80px #0009}*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:radial-gradient(circle at 50% -10%,#1d2450 0,#090c18 38%,#04050a 100%);color:var(--text);font-family:Inter,Arial,sans-serif}button,input{font:inherit}button{border:0;border-radius:14px;padding:13px 16px;background:linear-gradient(135deg,var(--purple),#5d4be8);color:#fff;font-weight:900;cursor:pointer;transition:.15s transform,.15s filter;box-shadow:0 8px 24px #0004}button:hover{transform:translateY(-2px);filter:brightness(1.08)}button:active{transform:scale(.97)}button.alt{background:#202a40;box-shadow:none}button.danger{background:#7d2038}.hidden{display:none!important}.screen{min-height:100vh;display:grid;place-items:center;padding:20px}.panel{width:min(900px,96vw);background:linear-gradient(145deg,#11192b,#0c1220);border:1px solid var(--line);border-radius:28px;padding:26px;box-shadow:var(--shadow);backdrop-filter:blur(18px)}.logo{font-size:clamp(38px,8vw,74px);font-weight:1000;letter-spacing:-4px;text-shadow:0 0 35px #8b5cf677}.sub{color:var(--muted);line-height:1.6}.grid{display:grid;gap:12px}.cols{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.input{width:100%;background:#080d17;border:1px solid var(--line);color:#fff;padding:15px;border-radius:13px;outline:none}.input:focus{border-color:var(--cyan)}.tiny{font-size:12px;color:var(--muted)}.topbar{position:fixed;top:0;left:0;right:0;z-index:20;display:flex;justify-content:space-between;gap:10px;padding:12px 16px;background:#070a13d9;border-bottom:1px solid var(--line);backdrop-filter:blur(15px)}.stats{display:flex;gap:8px;flex-wrap:wrap}.pill{padding:9px 12px;border:1px solid var(--line);background:#11192a;border-radius:999px;font-weight:900}.gold{color:var(--gold)}.cyan{color:var(--cyan)}.green{color:var(--green)}.red{color:var(--red)}.main{padding:88px 14px 35px;max-width:1200px;margin:auto}.nav{display:flex;gap:8px;overflow:auto;margin-bottom:15px}.nav button{white-space:nowrap}.hero{display:grid;grid-template-columns:1.5fr 1fr;gap:15px}.card{background:#10182a;border:1px solid var(--line);border-radius:20px;padding:18px}.bigbtn{min-height:64px;font-size:17px}.code{font-size:42px;letter-spacing:10px;font-weight:1000;text-align:center;color:var(--cyan);margin:10px}.rows{display:grid;gap:8px}.row{display:flex;align-items:center;justify-content:space-between;gap:10px;background:#182239;border:1px solid var(--line);padding:12px;border-radius:13px}.avatar{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,var(--purple),var(--cyan));font-weight:1000}.player{display:flex;align-items:center;gap:10px}.badge{padding:5px 8px;border-radius:8px;background:#252f49;color:var(--muted);font-size:11px;font-weight:900}.arena{height:min(68vh,700px);min-height:470px;position:relative;overflow:hidden;border-radius:28px;border:2px solid #ffffff18;background:radial-gradient(circle at 50% 45%,#29365e,#11182a 42%,#070a12 80%);box-shadow:inset 0 0 90px #0009}.arena:before{content:"";position:absolute;inset:0;background-image:linear-gradient(#ffffff06 1px,transparent 1px),linear-gradient(90deg,#ffffff06 1px,transparent 1px);background-size:40px 40px;pointer-events:none}.entity{position:absolute;transform:translate(-50%,-50%);z-index:4}.me{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,#6f5bff,#43d9ff);border:3px solid #fff;box-shadow:0 0 28px #57e6ff99;font-weight:1000}.other{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:#ff5573;border:2px solid #fff;font-size:11px}.orb{width:27px;height:27px;border-radius:50%;display:grid;place-items:center;background:var(--gold);color:#4a3200;box-shadow:0 0 24px #ffd84daa;font-weight:1000}.orb.epic{background:#d78bff;box-shadow:0 0 28px #d78bffaa;color:#26112e}.dangerzone{border-radius:50%;background:#ff315044;border:2px solid #ff557399;box-shadow:0 0 30px #ff315055}.safezone{border-radius:50%;background:#55e39b22;border:2px solid #55e39b88}.eventBanner{position:absolute;z-index:10;top:15px;left:50%;transform:translateX(-50%);padding:11px 18px;border-radius:999px;background:#0c1220ee;border:1px solid #ffffff22;font-weight:1000;white-space:nowrap;box-shadow:0 10px 30px #0006}.hud{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:10px}.hud .pill{text-align:center}.health{height:7px;background:#222b3f;border-radius:9px;overflow:hidden}.health>i{display:block;height:100%;background:linear-gradient(90deg,var(--red),#ff9b6a);width:100%}.mobile{display:none;position:absolute;bottom:12px;left:0;right:0;z-index:15}.mobile button{width:58px;height:58px;border-radius:50%;padding:0;margin:3px}.toast{position:fixed;right:18px;bottom:18px;z-index:100;background:#151f34;border:1px solid #ffffff22;padding:14px 18px;border-radius:15px;box-shadow:var(--shadow);font-weight:800;animation:pop .25s ease}@keyframes pop{from{transform:translateY(15px);opacity:0}to{transform:none;opacity:1}}.progress{height:9px;background:#222b3f;border-radius:10px;overflow:hidden}.progress i{display:block;height:100%;background:linear-gradient(90deg,var(--purple),var(--cyan));width:0}.rewardGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.reward{padding:15px;border-radius:17px;background:#141e32;border:1px solid var(--line);text-align:center}.reward.locked{opacity:.42}.reward.claimed{border-color:#55e39b66}.shopGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.shopItem{background:#131d31;border:1px solid var(--line);padding:16px;border-radius:18px}.rarity-common{border-color:#7d8ba7}.rarity-rare{border-color:#4db8ff}.rarity-epic{border-color:#bd6dff}.rarity-mythic{border-color:#ff9d4d}.quest{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;background:#151f34;border:1px solid var(--line);border-radius:15px;padding:14px}.modal{position:fixed;inset:0;background:#000b;display:grid;place-items:center;z-index:80;padding:20px}.modal .panel{max-height:90vh;overflow:auto}.timer{font-size:34px;font-weight:1000}.dangerText{color:var(--red)}@media(max-width:850px){.hero{grid-template-columns:1fr}.shopGrid{grid-template-columns:1fr 1fr}.rewardGrid{grid-template-columns:1fr 1fr}}@media(max-width:650px){.cols{grid-template-columns:1fr}.hud{grid-template-columns:repeat(3,1fr)}.hud .pill:nth-child(4),.hud .pill:nth-child(5){display:none}.arena{min-height:430px;height:70vh}.mobile{display:block}.main{padding-left:8px;padding-right:8px}.panel{padding:18px}.shopGrid{grid-template-columns:1fr}.logo{letter-spacing:-2px}}
+:root{--bg:#070911;--panel:#111827;--panel2:#172033;--text:#f8fafc;--muted:#94a3b8;--gold:#ffd84d;--green:#4ade80;--blue:#60a5fa;--purple:#a78bfa;--red:#fb7185;--cyan:#22d3ee;--border:#ffffff14}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:radial-gradient(circle at 50% -10%,#253152 0,#0a0e19 38%,#05070d 100%);color:var(--text);font-family:Inter,Arial,sans-serif;min-height:100vh}
+button{font:inherit;border:0;cursor:pointer}
+.hidden{display:none!important}
+#app{max-width:1250px;margin:auto;padding:18px}
+.topbar{position:sticky;top:10px;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:12px;background:#0d1320eF;backdrop-filter:blur(18px);border:1px solid var(--border);padding:12px 16px;border-radius:18px;box-shadow:0 15px 50px #0008}
+.logo{font-weight:1000;letter-spacing:.5px;font-size:22px}
+.logo span{color:var(--gold)}
+.stats{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.stat{background:#ffffff08;border:1px solid var(--border);padding:8px 11px;border-radius:12px;font-weight:800;font-size:13px}
+.stat b{color:var(--gold)}
+.hero{margin-top:18px;padding:34px 20px;border-radius:26px;background:linear-gradient(135deg,#151e34,#0d1320);border:1px solid var(--border);text-align:center;box-shadow:0 25px 80px #0008}
+.hero h1{font-size:clamp(38px,8vw,76px);margin:0 0 8px;font-weight:1000;line-height:.95}
+.hero h1 span{color:var(--gold)}
+.hero p{color:var(--muted);font-size:17px}
+.timer{font-size:clamp(48px,10vw,96px);font-weight:1000;margin:25px 0 5px;text-shadow:0 0 35px #ffd84d55}
+.timer small{display:block;font-size:12px;color:var(--muted);letter-spacing:2px}
+.progress{height:15px;background:#0008;border-radius:99px;overflow:hidden;border:1px solid var(--border);max-width:700px;margin:18px auto}
+.progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--purple),var(--cyan),var(--gold));transition:width .25s}
+.actions{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:20px}
+.btn{padding:13px 17px;border-radius:13px;background:var(--gold);color:#231b00;font-weight:1000;box-shadow:0 8px 25px #ffd84d22}
+.btn.alt{background:#24304a;color:white}
+.btn.red{background:#4a1d2a;color:#fecdd3}
+.btn.green{background:#163b28;color:#bbf7d0}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px;margin-top:14px}
+.card{background:linear-gradient(180deg,#121a2a,#0d1421);border:1px solid var(--border);border-radius:20px;padding:18px;box-shadow:0 12px 35px #0005}
+.span3{grid-column:span 3}.span4{grid-column:span 4}.span6{grid-column:span 6}.span8{grid-column:span 8}.span12{grid-column:span 12}
+.card h2,.card h3{margin:0 0 12px}
+.muted{color:var(--muted)}
+.big{font-size:30px;font-weight:1000}
+.reward{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px;background:#ffffff06;border:1px solid var(--border);border-radius:14px;margin:8px 0}
+.reward .icon{font-size:30px}
+.reward small{color:var(--muted)}
+.tabs{display:flex;gap:8px;overflow:auto;margin:18px 0 4px;padding-bottom:4px}
+.tab{white-space:nowrap;padding:11px 15px;border-radius:12px;background:#111a2a;color:#b8c4d9;border:1px solid var(--border);font-weight:800}
+.tab.active{background:#283653;color:white;border-color:#ffffff30}
+.section{display:none}.section.active{display:block}
+.item{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px;border:1px solid var(--border);background:#ffffff05;border-radius:16px;margin:9px 0}
+.item h3{margin:0 0 4px}
+.item p{margin:0;color:var(--muted);font-size:13px}
+.level{height:9px;background:#0008;border-radius:99px;overflow:hidden;margin-top:8px}
+.level i{display:block;height:100%;width:0;background:var(--purple)}
+.badge{display:inline-flex;padding:5px 8px;border-radius:8px;background:#ffffff0b;border:1px solid var(--border);font-size:11px;font-weight:900}
+.badge.gold{color:var(--gold)}.badge.green{color:var(--green)}.badge.blue{color:var(--blue)}.badge.purple{color:var(--purple)}
+.quest{padding:14px;border:1px solid var(--border);border-radius:15px;margin:8px 0;background:#ffffff05}
+.quest .row{display:flex;justify-content:space-between;gap:10px}
+.meter{height:8px;background:#0008;border-radius:99px;overflow:hidden;margin-top:10px}.meter i{display:block;height:100%;background:var(--green);width:0}
+.log{height:230px;overflow:auto;background:#070b13;border-radius:13px;padding:10px;font-family:monospace;font-size:12px;text-align:left}
+.log div{padding:4px 0;border-bottom:1px solid #ffffff08}
+.modal{position:fixed;inset:0;background:#000b;z-index:100;display:grid;place-items:center;padding:18px}
+.modalbox{width:min(520px,100%);background:#121a2a;border:1px solid #ffffff20;border-radius:24px;padding:24px;box-shadow:0 30px 100px #000}
+.choice{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:15px}.choice button{padding:18px;border-radius:15px;background:#202c43;color:white;border:1px solid var(--border);font-weight:900}
+.toast{position:fixed;right:18px;bottom:18px;z-index:200;max-width:330px;background:#182338;border:1px solid #ffffff22;border-radius:15px;padding:13px 16px;box-shadow:0 20px 60px #000;transform:translateY(20px);opacity:0;pointer-events:none;transition:.25s}
+.toast.show{transform:translateY(0);opacity:1}
+.rare{color:#f0abfc}.epic{color:#a78bfa}.legendary{color:#ffd84d}
+.footer{text-align:center;color:#64748b;padding:30px 0}
+/* =========================================================
+   EXTRA UI TOKENS — AFK VAULT
+   ========================================================= */
+.glow{box-shadow:0 0 30px #ffffff18}
+.center{text-align:center}
+.row-flex{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.w100{width:100%}
+.mt10{margin-top:10px}
+.mt20{margin-top:20px}
+.pill{border-radius:999px;padding:5px 10px;background:#ffffff08;border:1px solid var(--border)}
+.success{color:var(--green)}
+.warning{color:var(--gold)}
+.danger{color:var(--red)}
+.info{color:var(--cyan)}
+.separator{height:1px;background:var(--border);margin:18px 0}
+.card:hover{border-color:#ffffff24;transform:translateY(-1px);transition:.2s}
+.btn:hover:not(:disabled){filter:brightness(1.08);transform:translateY(-1px)}
+.tab:hover{color:white;background:#18243a}
+.reward:hover,.item:hover,.quest:hover{background:#ffffff08}
+::-webkit-scrollbar{width:8px;height:8px}
+::-webkit-scrollbar-track{background:#080b12}
+::-webkit-scrollbar-thumb{background:#26334b;border-radius:99px}
+::selection{background:#ffd84d55;color:white}
+button:focus-visible,input:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+hr{border:0;border-top:1px solid var(--border);margin:18px 0}
+small{line-height:1.35}
+b{font-weight:900}
+a{color:var(--cyan)}
+ul{margin:8px 0;padding-left:20px}
+li{margin:5px 0}
+kbd{background:#050810;border:1px solid var(--border);border-bottom-width:2px;border-radius:6px;padding:2px 6px;font-family:monospace}
+input::placeholder{color:#64748b}
+@media(prefers-reduced-motion:reduce){
+*{scroll-behavior:auto!important}
+.card,.btn,.tab{transition:none!important}
+}
+@media(max-width:900px){.span3,.span4,.span6,.span8{grid-column:span 6}.stats{max-width:60%}}
+@media(max-width:620px){#app{padding:9px}.topbar{position:relative}.span3,.span4,.span6,.span8,.span12{grid-column:span 12}.hero{padding:25px 14px}.timer{font-size:58px}.item{align-items:flex-start;flex-direction:column}.item .btn{width:100%}.stats{display:none}.choice{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
-<section id="home" class="screen">
-<div class="panel">
-<div class="logo">⚡ CHAOS SHIFT</div>
-<h2>LAST 4</h2>
-<p class="sub">Un jeu de survie chaotique pour 1 à 4 joueurs. Les règles changent, les événements tombent au hasard et personne ne sait ce qui arrive ensuite.</p>
-<div class="cols">
-<div class="card"><b>🎮 Solo</b><p class="tiny">Entraîne-toi, gagne de l'XP et des récompenses.</p><button class="bigbtn" id="solo">JOUER EN SOLO</button></div>
-<div class="card"><b>👥 Multijoueur</b><p class="tiny">Crée une salle et invite jusqu'à 3 amis avec un code.</p><button class="bigbtn" id="create">CRÉER UNE SALLE</button></div>
+<div id="app">
+<header class="topbar">
+<div class="logo">🛌 <span>AFK</span> VAULT</div>
+<div class="stats">
+<div class="stat">🪙 <b id="coins">0</b></div>
+<div class="stat">💎 <b id="gems">0</b></div>
+<div class="stat">⭐ Niv. <b id="level">1</b></div>
+<div class="stat">🔥 <b id="streak">0</b></div>
 </div>
-<div class="card" style="margin-top:12px"><div class="grid"><input id="name" class="input" maxlength="14" placeholder="Ton pseudo"><div class="cols"><button class="alt" id="join">🔑 Rejoindre avec un code</button><input id="room" class="input" maxlength="6" placeholder="CODE"></div><div id="homeMsg" class="tiny"></div></div></div>
-<div class="tiny" style="margin-top:14px">💡 Toutes les 10 minutes de jeu actif : une récompense. Plus tu joues, plus les récompenses deviennent intéressantes.</div>
+</header>
+
+<section class="hero">
+<div class="badge gold">MODE AFK • SOLO</div>
+<h1>Tu pars.<br><span>Le jeu travaille.</span></h1>
+<p>Reste AFK, accumule du temps, réclame tes récompenses et construis ton compte.</p>
+<div class="timer" id="timer">00:00:00<small>TEMPS AFK DE LA SESSION</small></div>
+<div class="progress"><i id="cycleProgress"></i></div>
+<div class="actions">
+<button class="btn" id="claimBtn">🎁 RÉCLAMER LA RÉCOMPENSE</button>
+<button class="btn alt" id="boostBtn">⚡ BOOSTER +25%</button>
+<button class="btn red" id="resetBtn">♻️ RESET</button>
+</div>
+<p class="muted" id="nextReward">Prochaine récompense : 10:00</p>
+</section>
+
+<div class="tabs">
+<button class="tab active" data-tab="home">🏠 AFK</button>
+<button class="tab" data-tab="rewards">🎁 Récompenses</button>
+<button class="tab" data-tab="upgrades">⚙️ Améliorations</button>
+<button class="tab" data-tab="missions">📜 Missions</button>
+<button class="tab" data-tab="inventory">🎒 Inventaire</button>
+<button class="tab" data-tab="profile">👤 Profil</button>
+</div>
+
+<section id="home" class="section active">
+<div class="grid">
+<div class="card span4"><h3>🪙 Richesse</h3><div class="big" id="coinBig">0</div><p class="muted">Coins gagnés pendant ton AFK.</p></div>
+<div class="card span4"><h3>💎 Premium</h3><div class="big" id="gemBig">0</div><p class="muted">Gems pour les gros bonus.</p></div>
+<div class="card span4"><h3>⏱️ Temps total</h3><div class="big" id="totalTime">0m</div><p class="muted">Temps AFK cumulé.</p></div>
+<div class="card span8">
+<h2>🎯 Comment ça marche ?</h2>
+<div class="reward"><span class="icon">1️⃣</span><div><b>Laisse le jeu ouvert</b><br><small>Le compteur continue pendant ta session.</small></div></div>
+<div class="reward"><span class="icon">2️⃣</span><div><b>Chaque cycle de 10 minutes</b><br><small>Une récompense AFK devient disponible.</small></div></div>
+<div class="reward"><span class="icon">3️⃣</span><div><b>Améliore ton rendement</b><br><small>Monte les upgrades pour gagner davantage.</small></div></div>
+</div>
+<div class="card span4"><h2>🔥 Série</h2><div class="big" id="streakBig">0</div><p class="muted">Cycles réclamés à la suite.</p><button class="btn green" id="dailyBtn">🎁 BONUS JOURNALIER</button></div>
+<div class="card span6"><h2>📈 Progression</h2><p>Niveau <b id="levelText">1</b> • <span id="xpText">0/100 XP</span></p><div class="level"><i id="xpBar"></i></div><p class="muted" id="rankText">Débutant AFK</p></div>
+<div class="card span6"><h2>🏆 Record</h2><div class="big" id="bestTime">0m</div><p class="muted">Ta plus longue session AFK.</p></div>
+<div class="card span12"><h2>📡 Journal</h2><div class="log" id="log"></div></div>
 </div>
 </section>
 
-<section id="lobby" class="screen hidden"><div class="panel">
-<h1>👥 SALLE DE CHAOS</h1><p class="sub">Donne le code à tes amis. Maximum 4 joueurs.</p><div id="roomCode" class="code">------</div>
-<div id="lobbyPlayers" class="rows"></div>
-<div class="cols" style="margin-top:15px"><button id="launch">🚀 LANCER LA PARTIE</button><button class="alt" id="copyCode">📋 COPIER LE CODE</button></div>
-<button class="alt" id="leaveLobby" style="margin-top:10px;width:100%">← Quitter</button>
-</div></section>
-
-<section id="app" class="hidden">
-<header class="topbar"><div class="stats"><div class="pill">🪙 <span id="coins">0</span></div><div class="pill">⭐ LVL <span id="level">1</span></div><div class="pill">💎 <span id="rolls">0</span></div></div><div class="stats"><div class="pill">🔥 <span id="streak">0</span></div><button class="alt" id="profileBtn">Profil</button></div></header>
-<main class="main">
-<nav class="nav"><button id="tabPlay">🎮 Jouer</button><button class="alt" id="tabRewards">🎁 Récompenses</button><button class="alt" id="tabQuests">📜 Missions</button><button class="alt" id="tabShop">🛒 Boutique</button></nav>
-<div id="pagePlay">
-<div class="hero">
-<div class="card"><h2>⚡ Prochaine récompense</h2><div class="timer" id="rewardTimer">10:00</div><div class="progress"><i id="rewardProgress"></i></div><p id="rewardText" class="tiny">Joue activement pour débloquer ton prochain cadeau.</p><button id="openRewards" class="alt">Voir les récompenses</button></div>
-<div class="card"><h2>🏆 Ta progression</h2><div class="rows"><div class="row"><span>Niveau</span><b id="profileLevel">1</b></div><div class="row"><span>XP</span><b id="xpText">0 / 100</b></div><div class="row"><span>Victoires</span><b id="wins">0</b></div><div class="row"><span>Parties</span><b id="games">0</b></div></div></div>
+<section id="rewards" class="section">
+<div class="grid">
+<div class="card span8">
+<h2>🎁 Paliers AFK</h2>
+<p class="muted">Les récompenses sont inspirées des systèmes de progression idle, sans reprendre exactement les récompenses d'un jeu tiers.</p>
+<div id="rewardList"></div>
 </div>
-<div class="card" style="margin-top:15px"><h2>🔥 Prêt à survivre ?</h2><p class="sub">Chaque partie dure jusqu'à 5 minutes. Ramasse les orbes, évite les zones rouges et adapte-toi aux événements.</p><div class="cols"><button id="solo2">🎮 Partie solo</button><button class="alt" id="multi2">👥 Partie avec amis</button></div></div>
+<div class="card span4">
+<h2>🎲 Tirages</h2>
+<p>Tu peux utiliser tes Power Rolls pour tenter d'obtenir un bonus instantané.</p>
+<div class="reward"><span>🎲 Power Roll</span><b id="rolls">0</b></div>
+<button class="btn" id="rollBtn">LANCER UN TIRAGE</button>
+<hr>
+<div id="rollResult" class="muted">Aucun tirage.</div>
 </div>
-<div id="pageRewards" class="hidden card"><h2>🎁 RÉCOMPENSES DE TEMPS</h2><p class="sub">Récompenses originales inspirées des systèmes de récompenses programmées : monnaie, XP, revives et tickets de pouvoir.</p><div id="rewardGrid" class="rewardGrid"></div></div>
-<div id="pageQuests" class="hidden card"><h2>📜 MISSIONS</h2><p class="sub">Termine des objectifs pour gagner des pièces et de l'XP.</p><div id="quests" class="rows"></div></div>
-<div id="pageShop" class="hidden card"><h2>🛒 BOUTIQUE</h2><p class="sub">Utilise tes pièces pour débloquer des bonus et des apparences.</p><div id="shop" class="shopGrid"></div></div>
-</main></section>
+</div>
+</section>
 
-<section id="game" class="hidden"><div class="main" style="padding-top:78px"><div class="hud"><div class="pill">⭐ <span id="gScore">0</span></div><div class="pill">❤️ <span id="gHp">100</span></div><div class="pill">⏱️ <span id="gTime">300</span></div><div class="pill">🏆 <span id="gRank">1</span></div><div class="pill">⚡ <span id="gEvent">NORMAL</span></div></div><div class="health"><i id="hpBar"></i></div><div id="arena" class="arena"><div id="eventBanner" class="eventBanner">⚡ NORMAL</div><div class="mobile"><button data-k="ArrowLeft">←</button><button data-k="ArrowDown">↓</button><button data-k="ArrowUp">↑</button><button data-k="ArrowRight">→</button></div></div><div class="cols"><button class="alt" id="leaveGame">Quitter</button><button id="dash">💨 DASH</button></div></div></section>
+<section id="upgrades" class="section">
+<div class="grid">
+<div class="card span8"><h2>⚙️ Améliorations</h2><div id="upgradeList"></div></div>
+<div class="card span4"><h2>📊 Rendement</h2><div class="reward"><span>🪙 Coins / min</span><b id="rateCoins">1</b></div><div class="reward"><span>💎 Gems / cycle</span><b id="rateGems">1</b></div><div class="reward"><span>⚡ Multiplicateur</span><b id="multiplier">1x</b></div></div>
+</div>
+</section>
 
-<section id="result" class="screen hidden"><div class="panel"><div class="logo">🏆 FIN</div><h2 id="resultTitle">Résultat</h2><p id="resultStats" class="sub"></p><div id="ranking" class="rows"></div><div class="cols" style="margin-top:15px"><button id="again">🔄 Rejouer</button><button class="alt" id="backHome">🏠 Menu</button></div></div></section>
+<section id="missions" class="section">
+<div class="grid">
+<div class="card span8"><h2>📜 Missions</h2><div id="questList"></div></div>
+<div class="card span4"><h2>🏅 Titres</h2><div id="titleList"></div></div>
+</div>
+</section>
 
-<div id="profileModal" class="modal hidden"><div class="panel"><h2>👤 PROFIL</h2><div class="rows"><div class="row"><span>Pseudo</span><b id="mName"></b></div><div class="row"><span>Niveau</span><b id="mLevel"></b></div><div class="row"><span>XP total</span><b id="mXp"></b></div><div class="row"><span>Pièces</span><b id="mCoins"></b></div><div class="row"><span>Victoires</span><b id="mWins"></b></div><div class="row"><span>Meilleur score</span><b id="mBest"></b></div></div><button id="closeProfile" style="margin-top:15px;width:100%">Fermer</button></div></div>
-<div id="toastHolder"></div>
+<section id="inventory" class="section">
+<div class="grid">
+<div class="card span8"><h2>🎒 Inventaire</h2><div id="inventoryList"></div></div>
+<div class="card span4"><h2>✨ Effets actifs</h2><div id="effectList"></div></div>
+</div>
+</section>
 
-<script type="module">
-const CFG={
- apiKey:"AIzaSyBgtk06yhT02V1BK1mgle3hIMC3Iv7fMKc",
- authDomain:"multi-game-95bfc.firebaseapp.com",
- databaseURL:"REMPLACE_TON_DATABASE_URL",
- projectId:"multi-game-95bfc",
- storageBucket:"multi-game-95bfc.firebasestorage.app",
- messagingSenderId:"276458455031",
- appId:"1:276458455031:web:3c903925a37418f5bf38f2",
- measurementId:"G-RSEKBZHPNX"
+<section id="profile" class="section">
+<div class="grid">
+<div class="card span6"><h2>👤 Profil</h2><div class="reward"><span>Nom</span><b id="profileName">Joueur AFK</b></div><div class="reward"><span>Niveau</span><b id="profileLevel">1</b></div><div class="reward"><span>Rang</span><b id="profileRank">Débutant</b></div><div class="reward"><span>Prestiges</span><b id="prestiges">0</b></div></div>
+<div class="card span6"><h2>📊 Statistiques</h2><div class="reward"><span>Temps total</span><b id="statTime">0</b></div><div class="reward"><span>Cycles</span><b id="statCycles">0</b></div><div class="reward"><span>Coins gagnés</span><b id="statCoins">0</b></div><div class="reward"><span>Récompenses</span><b id="statRewards">0</b></div></div>
+<div class="card span12"><h2>♻️ Prestige</h2><p class="muted">À haut niveau, tu peux recommencer ta progression pour obtenir un multiplicateur permanent.</p><button class="btn" id="prestigeBtn">PRESTIGE</button><span id="prestigeInfo" class="muted"></span></div>
+</div>
+</section>
+
+<div class="footer">AFK Vault • Jeu solo • Sauvegarde locale automatique</div>
+</div>
+
+<div class="modal hidden" id="modal">
+<div class="modalbox">
+<h2 id="modalTitle">🎁 Récompense</h2>
+<p id="modalText"></p>
+<div class="choice" id="modalChoices"></div>
+</div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+"use strict";
+
+/* =========================================================
+   AFK VAULT — CORE DATA
+   ========================================================= */
+
+const SAVE_KEY = "afk_vault_save_v2";
+const CYCLE_SECONDS = 600;
+
+const DEFAULT = {
+    name:"Joueur AFK",
+    coins:0,
+    gems:0,
+    xp:0,
+    level:1,
+    totalSeconds:0,
+    sessionSeconds:0,
+    bestSeconds:0,
+    claimedCycles:0,
+    streak:0,
+    lastClaimCycle:0,
+    dailyClaimed:"",
+    powerRolls:3,
+    revives:0,
+    guards:0,
+    boosts:0,
+    prestiges:0,
+    multiplier:1,
+    upgrades:{
+        coinRate:0,
+        gemRate:0,
+        luck:0,
+        offline:0,
+        streak:0
+    },
+    inventory:{
+        common:0,
+        rare:0,
+        epic:0,
+        legendary:0,
+        tokens:0
+    },
+    stats:{
+        coinsEarned:0,
+        gemsEarned:0,
+        rewards:0,
+        rolls:0,
+        missions:0,
+        daily:0
+    },
+    missions:{
+        minutes:0,
+        cycles:0,
+        coins:0,
+        rolls:0,
+        gems:0
+    },
+    achievements:[],
+    logs:[],
+    lastSeen:Date.now()
 };
 
-const $=id=>document.getElementById(id);
-const pages=["pagePlay","pageRewards","pageQuests","pageShop"];
-const state={
- name:"",room:"",host:false,solo:false,started:false,online:false,db:null,fb:null,roomRef:null,playerId:"",players:{},
- x:.5,y:.8,score:0,hp:100,time:300,keys:{},orbs:[],hazards:[],safeZones:[],event:"NORMAL",eventTime:0,last:0,dashCooldown:0,
- activeSeconds:0,rewardIndex:0,roundCollected:0,roundDamage:0
+let state = loadState();
+let running = true;
+let lastTick = Date.now();
+let saveAccumulator = 0;
+
+/* =========================================================
+   DOM HELPERS
+   ========================================================= */
+
+const $ = id => document.getElementById(id);
+
+function fmtNumber(n){
+    n = Math.floor(Number(n)||0);
+    if(n < 1000) return String(n);
+    const units = ["K","M","B","T","Qa"];
+    let value = n;
+    let u = -1;
+    while(value >= 1000 && u < units.length-1){
+        value /= 1000;
+        u++;
+    }
+    return value.toFixed(value >= 100 ? 0 : value >= 10 ? 1 : 2) + units[u];
+}
+
+function fmtTime(seconds){
+    seconds = Math.max(0,Math.floor(seconds));
+    const h = Math.floor(seconds/3600);
+    const m = Math.floor((seconds%3600)/60);
+    const s = seconds%60;
+    return [h,m,s].map(v=>String(v).padStart(2,"0")).join(":");
+}
+
+function fmtDuration(seconds){
+    seconds = Math.floor(seconds);
+    const d = Math.floor(seconds/86400);
+    const h = Math.floor((seconds%86400)/3600);
+    const m = Math.floor((seconds%3600)/60);
+    if(d) return d+"j "+h+"h";
+    if(h) return h+"h "+m+"m";
+    return m+"m";
+}
+
+function saveState(){
+    state.lastSeen = Date.now();
+    localStorage.setItem(SAVE_KEY,JSON.stringify(state));
+}
+
+function loadState(){
+    try{
+        const raw = localStorage.getItem(SAVE_KEY);
+        if(!raw) return structuredClone(DEFAULT);
+        const parsed = JSON.parse(raw);
+        return mergeDefaults(structuredClone(DEFAULT),parsed);
+    }catch(e){
+        return structuredClone(DEFAULT);
+    }
+}
+
+function mergeDefaults(base,extra){
+    Object.keys(extra||{}).forEach(k=>{
+        if(extra[k] && typeof extra[k]==="object" && !Array.isArray(extra[k]) && base[k] && typeof base[k]==="object"){
+            base[k]=mergeDefaults(base[k],extra[k]);
+        }else{
+            base[k]=extra[k];
+        }
+    });
+    return base;
+}
+
+function log(message){
+    const stamp = new Date().toLocaleTimeString("fr-FR");
+    state.logs.unshift("["+stamp+"] "+message);
+    state.logs = state.logs.slice(0,80);
+    const box = $("log");
+    if(box) box.innerHTML = state.logs.map(x=>"<div>"+escapeHtml(x)+"</div>").join("");
+}
+
+function escapeHtml(text){
+    return String(text).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
+}
+
+function toast(text){
+    const t=$("toast");
+    t.textContent=text;
+    t.classList.add("show");
+    clearTimeout(toast.timer);
+    toast.timer=setTimeout(()=>t.classList.remove("show"),3000);
+}
+
+/* =========================================================
+   XP / LEVEL / RANK
+   ========================================================= */
+
+function xpNeeded(level){
+    return Math.floor(100 + Math.pow(level-1,1.35)*55);
+}
+
+function rankForLevel(level){
+    if(level>=100) return "👑 Légende AFK";
+    if(level>=75) return "🌌 Maître du Vide";
+    if(level>=50) return "💎 AFK Diamant";
+    if(level>=35) return "🟣 AFK Élite";
+    if(level>=25) return "🔵 AFK Expert";
+    if(level>=15) return "🟢 AFK Confirmé";
+    if(level>=8) return "🟡 AFK Habitué";
+    if(level>=3) return "⚪ AFK Débutant+";
+    return "🌱 Débutant AFK";
+}
+
+function addXP(amount){
+    state.xp += Math.floor(amount);
+    while(state.xp >= xpNeeded(state.level)){
+        state.xp -= xpNeeded(state.level);
+        state.level++;
+        state.gems += 2 + Math.floor(state.level/10);
+        state.powerRolls++;
+        log("⭐ Niveau "+state.level+" atteint ! +gems et +1 Power Roll.");
+        toast("⭐ Niveau "+state.level+" !");
+    }
+}
+
+/* =========================================================
+   ECONOMY
+   ========================================================= */
+
+function getMultiplier(){
+    let m = state.multiplier;
+    m *= 1 + state.upgrades.coinRate*0.15;
+    m *= 1 + state.upgrades.streak*0.05;
+    if(state.boosts>0) m *= 1.25;
+    return m;
+}
+
+function coinPerMinute(){
+    return Math.max(1,Math.floor(5 * getMultiplier()));
+}
+
+function gemsPerCycle(){
+    return Math.max(1,Math.floor((2 + state.upgrades.gemRate*2) * state.multiplier));
+}
+
+function luckPercent(){
+    return Math.min(80,state.upgrades.luck*7 + state.level*0.2);
+}
+
+function awardCoins(amount,reason){
+    amount=Math.floor(amount);
+    state.coins += amount;
+    state.stats.coinsEarned += amount;
+    state.missions.coins += amount;
+    log("🪙 +"+fmtNumber(amount)+" coins — "+reason);
+}
+
+function awardGems(amount,reason){
+    amount=Math.floor(amount);
+    state.gems += amount;
+    state.stats.gemsEarned += amount;
+    state.missions.gems += amount;
+    log("💎 +"+amount+" gems — "+reason);
+}
+
+/* =========================================================
+   TEN MINUTE REWARD SYSTEM
+   ========================================================= */
+
+const rewardTiers = [
+    {cycle:1,icon:"🎁",name:"Premier palier",coins:100,gems:2,xp:25,rarity:"common"},
+    {cycle:2,icon:"🪙",name:"Bronze",coins:180,gems:2,xp:30,rarity:"common"},
+    {cycle:3,icon:"💎",name:"Cristal",coins:250,gems:4,xp:40,rarity:"rare"},
+    {cycle:5,icon:"🎲",name:"Power",coins:400,gems:5,xp:55,rolls:1,rarity:"rare"},
+    {cycle:7,icon:"🛡️",name:"Protection",coins:650,gems:7,xp:70,guards:1,rarity:"rare"},
+    {cycle:10,icon:"🔥",name:"Série",coins:1000,gems:10,xp:100,rolls:1,rarity:"epic"},
+    {cycle:15,icon:"✨",name:"Élite",coins:1800,gems:15,xp:140,revives:1,rarity:"epic"},
+    {cycle:20,icon:"👑",name:"Royal",coins:3000,gems:25,xp:200,rolls:2,rarity:"legendary"},
+    {cycle:30,icon:"🌌",name:"Mythique",coins:6000,gems:50,xp:350,revives:2,rarity:"legendary"}
+];
+
+function getRewardTier(cycle){
+    let tier=rewardTiers[0];
+    for(const r of rewardTiers){
+        if(cycle>=r.cycle) tier=r;
+    }
+    return tier;
+}
+
+function claimAvailable(){
+    const cycle = Math.floor(state.sessionSeconds / CYCLE_SECONDS);
+    if(cycle <= state.lastClaimCycle){
+        toast("⏳ Aucune récompense disponible.");
+        return;
+    }
+    const amount = cycle - state.lastClaimCycle;
+    for(let i=1;i<=amount;i++){
+        const target=state.lastClaimCycle+i;
+        grantCycleReward(target);
+    }
+    state.lastClaimCycle=cycle;
+    state.claimedCycles=cycle;
+    state.streak++;
+    state.missions.cycles++;
+    state.stats.rewards += amount;
+    addXP(25*amount + state.streak);
+    saveState();
+    render();
+    openModal("🎁 Récompenses récupérées",amount+" palier(s) AFK récupéré(s).",[
+        {text:"🔥 Continuer AFK",action:closeModal}
+    ]);
+}
+
+function grantCycleReward(cycle){
+    const tier=getRewardTier(cycle);
+    const streakBonus=1+Math.min(state.streak,25)*0.02;
+    const coins=Math.floor(tier.coins*streakBonus*getMultiplier());
+    awardCoins(coins,"récompense AFK "+cycle);
+    awardGems(Math.floor(tier.gems*state.multiplier),"récompense AFK");
+    if(tier.rolls) state.powerRolls+=tier.rolls;
+    if(tier.revives) state.revives+=tier.revives;
+    if(tier.guards) state.guards+=tier.guards;
+    state.inventory[tier.rarity]++;
+    log(tier.icon+" Palier "+cycle+" : "+tier.name+" ("+tier.rarity+")");
+    toast(tier.icon+" Palier "+cycle+" récupéré !");
+}
+
+/* =========================================================
+   UPGRADES
+   ========================================================= */
+
+const upgrades = [
+    {id:"coinRate",icon:"🪙",name:"Mine à coins",desc:"+15% coins gagnés.",base:50,growth:1.65,max:25},
+    {id:"gemRate",icon:"💎",name:"Cristallisation",desc:"+2 gems par palier de 10 min.",base:120,growth:1.8,max:15},
+    {id:"luck",icon:"🍀",name:"Chance",desc:"Augmente les chances de rareté.",base:90,growth:1.7,max:20},
+    {id:"offline",icon:"🌙",name:"Mode veille",desc:"Améliore le calcul des longues absences.",base:200,growth:2,max:10},
+    {id:"streak",icon:"🔥",name:"Multiplicateur de série",desc:"+5% rendement par niveau.",base:150,growth:1.9,max:15}
+];
+
+function upgradeCost(u){
+    return Math.floor(u.base*Math.pow(u.growth,state.upgrades[u.id]));
+}
+
+function buyUpgrade(id){
+    const u=upgrades.find(x=>x.id===id);
+    if(!u) return;
+    const level=state.upgrades[id];
+    if(level>=u.max){toast("Niveau maximum.");return;}
+    const cost=upgradeCost(u);
+    if(state.coins<cost){toast("❌ Pas assez de coins.");return;}
+    state.coins-=cost;
+    state.upgrades[id]++;
+    log("⚙️ Upgrade "+u.name+" niveau "+state.upgrades[id]);
+    addXP(20);
+    saveState();
+    render();
+}
+
+/* =========================================================
+   POWER ROLLS
+   ========================================================= */
+
+function roll(){
+    if(state.powerRolls<=0){toast("🎲 Aucun Power Roll.");return;}
+    state.powerRolls--;
+    state.stats.rolls++;
+    state.missions.rolls++;
+    const r=Math.random()*100;
+    const luck=luckPercent();
+    let result;
+    if(r < 1+luck/12) result={name:"MYTHIQUE",icon:"🌌",coins:5000,gems:25,rarity:"legendary"};
+    else if(r < 7+luck/5) result={name:"LÉGENDAIRE",icon:"👑",coins:2000,gems:12,rarity:"legendary"};
+    else if(r < 22+luck/2) result={name:"ÉPIQUE",icon:"🟣",coins:800,gems:5,rarity:"epic"};
+    else if(r < 50+luck) result={name:"RARE",icon:"🔵",coins:300,gems:2,rarity:"rare"};
+    else result={name:"COMMUN",icon:"⚪",coins:100,gems:1,rarity:"common"};
+    awardCoins(result.coins,"Power Roll "+result.name);
+    awardGems(result.gems,"Power Roll");
+    state.inventory[result.rarity]++;
+    $("rollResult").innerHTML=result.icon+" <b class='"+result.rarity+"'>"+result.name+"</b> : +"+result.coins+" coins, +"+result.gems+" gems";
+    addXP(30);
+    saveState();
+    render();
+}
+
+/* =========================================================
+   DAILY REWARD
+   ========================================================= */
+
+function todayKey(){
+    return new Date().toISOString().slice(0,10);
+}
+
+function claimDaily(){
+    if(state.dailyClaimed===todayKey()){
+        toast("🎁 Déjà récupéré aujourd'hui.");
+        return;
+    }
+    state.dailyClaimed=todayKey();
+    state.stats.daily++;
+    awardCoins(500 + state.level*20,"bonus journalier");
+    awardGems(10 + Math.floor(state.level/5),"bonus journalier");
+    state.powerRolls++;
+    addXP(100);
+    log("🎁 Bonus journalier récupéré !");
+    saveState();
+    render();
+    toast("🎁 Bonus journalier !");
+}
+
+/* =========================================================
+   MISSIONS
+   ========================================================= */
+
+const quests = [
+    {id:"minutes",icon:"⏱️",name:"Patient",desc:"Accumule 30 minutes AFK.",goal:30,reward:300},
+    {id:"cycles",icon:"🎁",name:"Collectionneur",desc:"Réclame 5 récompenses.",goal:5,reward:500},
+    {id:"coins",icon:"🪙",name:"Économe",desc:"Gagne 5 000 coins.",goal:5000,reward:750},
+    {id:"rolls",icon:"🎲",name:"Chanceux",desc:"Effectue 3 tirages.",goal:3,reward:400},
+    {id:"gems",icon:"💎",name:"Cristallier",desc:"Gagne 50 gems.",goal:50,reward:600}
+];
+
+function claimQuest(id){
+    const q=quests.find(x=>x.id===id);
+    if(!q)return;
+    if(state.missions[id] < q.goal){toast("Mission non terminée.");return;}
+    const key="quest_"+id;
+    if(state.achievements.includes(key)){toast("Déjà récupérée.");return;}
+    state.achievements.push(key);
+    awardCoins(q.reward,"mission "+q.name);
+    awardGems(2,"mission");
+    state.stats.missions++;
+    addXP(80);
+    log("📜 Mission terminée : "+q.name);
+    saveState();
+    render();
+}
+
+function renderQuests(){
+    $("questList").innerHTML=quests.map(q=>{
+        const value=Math.min(q.goal,state.missions[q.id]||0);
+        const done=value>=q.goal;
+        const claimed=state.achievements.includes("quest_"+q.id);
+        return `<div class="quest">
+            <div class="row"><b>${q.icon} ${q.name}</b><span class="badge ${done?"green":""}">${value}/${q.goal}</span></div>
+            <p class="muted">${q.desc} • récompense ${q.reward} 🪙</p>
+            <div class="meter"><i style="width:${value/q.goal*100}%"></i></div>
+            <button class="btn ${claimed?"alt":""}" ${!done||claimed?"disabled":""} onclick="claimQuest('${q.id}')">${claimed?"✅ Récupérée":"🎁 Réclamer"}</button>
+        </div>`;
+    }).join("");
+}
+
+/* =========================================================
+   TITLES / ACHIEVEMENTS
+   ========================================================= */
+
+const titles = [
+    ["🌱","Premier pas",0,"Lancer le jeu"],
+    ["⏱️","Patient",1800,"30 min AFK"],
+    ["🔥","Régulier",3600,"1 h AFK"],
+    ["💎","Collectionneur",10800,"3 h AFK"],
+    ["👑","Roi de l'AFK",36000,"10 h AFK"],
+    ["🌌","Légende",86400,"24 h AFK"]
+];
+
+function renderTitles(){
+    $("titleList").innerHTML=titles.map(t=>{
+        const ok=state.totalSeconds>=t[2];
+        return `<div class="reward"><span>${t[0]} ${t[1]}</span><span class="badge ${ok?"gold":""}">${ok?"DÉBLOQUÉ":"🔒 "+t[3]}</span></div>`;
+    }).join("");
+}
+
+/* =========================================================
+   INVENTORY
+   ========================================================= */
+
+function renderInventory(){
+    const data=[
+        ["⚪","Commun","common"],
+        ["🔵","Rare","rare"],
+        ["🟣","Épique","epic"],
+        ["👑","Légendaire","legendary"],
+        ["🎟️","Tokens","tokens"],
+        ["🎲","Power Rolls","rolls"],
+        ["🛡️","Guards","guards"],
+        ["❤️","Revives","revives"]
+    ];
+    $("inventoryList").innerHTML=data.map(x=>{
+        const count=x[2]==="rolls"?state.powerRolls:x[2]==="guards"?state.guards:x[2]==="revives"?state.revives:state.inventory[x[2]];
+        return `<div class="reward"><span>${x[0]} ${x[1]}</span><b>${fmtNumber(count)}</b></div>`;
+    }).join("");
+    $("effectList").innerHTML=`
+        <div class="reward"><span>⚡ Boosts</span><b>${state.boosts}</b></div>
+        <div class="reward"><span>🍀 Chance</span><b>${luckPercent().toFixed(1)}%</b></div>
+        <div class="reward"><span>🔥 Série</span><b>${state.streak}</b></div>
+        <div class="reward"><span>✨ Multiplicateur</span><b>${getMultiplier().toFixed(2)}x</b></div>`;
+}
+
+/* =========================================================
+   BOOST
+   ========================================================= */
+
+function useBoost(){
+    if(state.gems<5){toast("💎 Il faut 5 gems.");return;}
+    state.gems-=5;
+    state.boosts++;
+    log("⚡ Boost activé : +25% de rendement.");
+    saveState();
+    render();
+}
+
+/* =========================================================
+   PRESTIGE
+   ========================================================= */
+
+function prestige(){
+    const needed=50;
+    if(state.level<needed){
+        toast("🔒 Prestige disponible au niveau "+needed+".");
+        return;
+    }
+    openModal("♻️ Prestige","Tu recommences tes upgrades mais gagnes +10% permanent.",[
+        {text:"Annuler",action:closeModal},
+        {text:"♻️ Prestiger",action:()=>{
+            state.prestiges++;
+            state.multiplier*=1.10;
+            state.level=1;
+            state.xp=0;
+            state.coins=0;
+            state.gems=0;
+            state.upgrades={coinRate:0,gemRate:0,luck:0,offline:0,streak:0};
+            state.powerRolls=3;
+            log("♻️ Prestige effectué ! Multiplicateur permanent : "+state.multiplier.toFixed(2)+"x");
+            saveState();
+            closeModal();
+            render();
+        }}
+    ]);
+}
+
+/* =========================================================
+   OFFLINE PROGRESS
+   ========================================================= */
+
+function processOffline(){
+    const now=Date.now();
+    const away=Math.max(0,Math.floor((now-(state.lastSeen||now))/1000));
+    if(away<30)return;
+    const capped=Math.min(away,8*3600);
+    const minutes=Math.floor(capped/60);
+    if(minutes<=0)return;
+    const rate=coinPerMinute();
+    const coins=minutes*rate;
+    state.sessionSeconds += capped;
+    state.totalSeconds += capped;
+    state.bestSeconds=Math.max(state.bestSeconds,state.sessionSeconds);
+    state.missions.minutes=Math.floor(state.totalSeconds/60);
+    awardCoins(coins,"progression pendant ton absence");
+    addXP(Math.floor(minutes*2));
+    const oldCycle=state.lastClaimCycle;
+    const newCycle=Math.floor(state.sessionSeconds/CYCLE_SECONDS);
+    if(newCycle>oldCycle){
+        for(let c=oldCycle+1;c<=newCycle;c++) grantCycleReward(c);
+        state.lastClaimCycle=newCycle;
+        state.claimedCycles=newCycle;
+        state.stats.rewards+=newCycle-oldCycle;
+    }
+    log("🌙 Retour AFK : "+minutes+" min calculées, +"+fmtNumber(coins)+" coins.");
+}
+
+/* =========================================================
+   MODAL
+   ========================================================= */
+
+function openModal(title,text,buttons){
+    $("modalTitle").textContent=title;
+    $("modalText").textContent=text;
+    $("modalChoices").innerHTML="";
+    buttons.forEach(b=>{
+        const el=document.createElement("button");
+        el.textContent=b.text;
+        el.onclick=b.action;
+        $("modalChoices").appendChild(el);
+    });
+    $("modal").classList.remove("hidden");
+}
+
+function closeModal(){
+    $("modal").classList.add("hidden");
+}
+
+/* =========================================================
+   RENDER
+   ========================================================= */
+
+function render(){
+    $("coins").textContent=fmtNumber(state.coins);
+    $("gems").textContent=fmtNumber(state.gems);
+    $("level").textContent=state.level;
+    $("streak").textContent=state.streak;
+    $("coinBig").textContent=fmtNumber(state.coins);
+    $("gemBig").textContent=fmtNumber(state.gems);
+    $("totalTime").textContent=fmtDuration(state.totalSeconds);
+    $("streakBig").textContent=state.streak;
+    $("bestTime").textContent=fmtDuration(state.bestSeconds);
+    $("levelText").textContent=state.level;
+    $("profileLevel").textContent=state.level;
+    $("profileName").textContent=state.name;
+    $("profileRank").textContent=rankForLevel(state.level);
+    $("rankText").textContent=rankForLevel(state.level);
+    $("xpText").textContent=Math.floor(state.xp)+"/"+xpNeeded(state.level)+" XP";
+    $("xpBar").style.width=Math.min(100,state.xp/xpNeeded(state.level)*100)+"%";
+    $("rateCoins").textContent=coinPerMinute();
+    $("rateGems").textContent=gemsPerCycle();
+    $("multiplier").textContent=getMultiplier().toFixed(2)+"x";
+    $("rolls").textContent=state.powerRolls;
+    $("prestiges").textContent=state.prestiges;
+    $("statTime").textContent=fmtDuration(state.totalSeconds);
+    $("statCycles").textContent=state.claimedCycles;
+    $("statCoins").textContent=fmtNumber(state.stats.coinsEarned);
+    $("statRewards").textContent=state.stats.rewards;
+    $("prestigeInfo").textContent=" • Niveau requis : 50";
+    renderRewards();
+    renderUpgrades();
+    renderQuests();
+    renderTitles();
+    renderInventory();
+    renderTimer();
+    if(state.logs.length===0) log("👋 Bienvenue dans AFK Vault.");
+    else $("log").innerHTML=state.logs.map(x=>"<div>"+escapeHtml(x)+"</div>").join("");
+}
+
+function renderTimer(){
+    $("timer").innerHTML=fmtTime(state.sessionSeconds)+"<small>TEMPS AFK DE LA SESSION</small>";
+    const cycle=Math.floor(state.sessionSeconds/CYCLE_SECONDS);
+    const inside=state.sessionSeconds%CYCLE_SECONDS;
+    const percent=inside/CYCLE_SECONDS*100;
+    $("cycleProgress").style.width=percent+"%";
+    const next=(cycle+1)*CYCLE_SECONDS;
+    const remaining=Math.max(0,next-state.sessionSeconds);
+    if(cycle>state.lastClaimCycle){
+        $("nextReward").innerHTML="🎁 <b>RÉCOMPENSE DISPONIBLE !</b>";
+        $("claimBtn").disabled=false;
+    }else{
+        $("nextReward").textContent="Prochaine récompense : "+fmtTime(remaining);
+        $("claimBtn").disabled=false;
+    }
+}
+
+function renderRewards(){
+    const current=Math.floor(state.sessionSeconds/CYCLE_SECONDS);
+    $("rewardList").innerHTML=rewardTiers.map(r=>{
+        const unlocked=current>=r.cycle;
+        return `<div class="reward">
+            <span><span class="icon">${r.icon}</span> <b>${r.name}</b><br><small>À partir du palier ${r.cycle} • ${r.rarity}</small></span>
+            <span>${r.coins} 🪙<br>${r.gems} 💎 ${r.rolls?"• "+r.rolls+" 🎲":""}</span>
+            <span class="badge ${unlocked?"green":""}">${unlocked?"ATTEINT":"🔒 "+r.cycle*10+" min"}</span>
+        </div>`;
+    }).join("");
+}
+
+function renderUpgrades(){
+    $("upgradeList").innerHTML=upgrades.map(u=>{
+        const level=state.upgrades[u.id];
+        const max=level>=u.max;
+        const cost=upgradeCost(u);
+        return `<div class="item">
+            <div><h3>${u.icon} ${u.name} <span class="badge">Niv. ${level}/${u.max}</span></h3><p>${u.desc}</p><div class="level"><i style="width:${level/u.max*100}%"></i></div></div>
+            <button class="btn" ${max||state.coins<cost?"disabled":""} onclick="buyUpgrade('${u.id}')">${max?"MAX":"🪙 "+fmtNumber(cost)}</button>
+        </div>`;
+    }).join("");
+}
+
+/* =========================================================
+   TABS
+   ========================================================= */
+
+document.querySelectorAll(".tab").forEach(button=>{
+    button.addEventListener("click",()=>{
+        document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
+        document.querySelectorAll(".section").forEach(x=>x.classList.remove("active"));
+        button.classList.add("active");
+        $(button.dataset.tab).classList.add("active");
+    });
+});
+
+/* =========================================================
+   RESET
+   ========================================================= */
+
+$("resetBtn").onclick=()=>{
+    openModal("♻️ Réinitialiser","Toutes les données locales seront supprimées.",[
+        {text:"Annuler",action:closeModal},
+        {text:"Tout supprimer",action:()=>{
+            localStorage.removeItem(SAVE_KEY);
+            location.reload();
+        }}
+    ]);
 };
 
-const defaultProfile={
- coins:0,xp:0,level:1,wins:0,games:0,best:0,rolls:0,revives:0,guardCredits:0,streak:0,totalSeconds:0,claimedRewards:[],owned:[],quests:{}
+/* =========================================================
+   EVENT BINDINGS
+   ========================================================= */
+
+$("claimBtn").onclick=claimAvailable;
+$("boostBtn").onclick=useBoost;
+$("dailyBtn").onclick=claimDaily;
+$("rollBtn").onclick=roll;
+$("prestigeBtn").onclick=prestige;
+
+/* =========================================================
+   MAIN AFK LOOP
+   ========================================================= */
+
+function tick(){
+    if(!running)return;
+    const now=Date.now();
+    let delta=Math.floor((now-lastTick)/1000);
+    if(delta<1)return;
+    if(delta>10)delta=10;
+    lastTick=now;
+
+    state.sessionSeconds+=delta;
+    state.totalSeconds+=delta;
+    state.bestSeconds=Math.max(state.bestSeconds,state.sessionSeconds);
+    state.missions.minutes=Math.floor(state.totalSeconds/60);
+
+    const passive=Math.floor(coinPerMinute()*delta/60);
+    if(passive>0){
+        state.coins+=passive;
+        state.stats.coinsEarned+=passive;
+    }
+
+    if(delta>=1)addXP(Math.floor(delta/30));
+    saveAccumulator+=delta;
+
+    if(saveAccumulator>=10){
+        saveAccumulator=0;
+        saveState();
+    }
+
+    renderTimer();
+    render();
+}
+
+setInterval(tick,1000);
+
+/* =========================================================
+   VISIBILITY / TAB SAFETY
+   ========================================================= */
+
+document.addEventListener("visibilitychange",()=>{
+    if(document.hidden){
+        saveState();
+    }else{
+        processOffline();
+        lastTick=Date.now();
+        render();
+    }
+});
+
+window.addEventListener("beforeunload",saveState);
+
+/* =========================================================
+   NAME
+   ========================================================= */
+
+function askName(){
+    if(state.name && state.name!=="Joueur AFK")return;
+    openModal("👤 Ton pseudo","Choisis un nom pour ton profil.",[
+        {text:"Joueur AFK",action:()=>{
+            state.name="Joueur AFK";
+            saveState();
+            closeModal();
+            render();
+        }},
+        {text:"Personnaliser",action:()=>{
+            const value=prompt("Ton pseudo :","Joueur AFK");
+            if(value && value.trim()){
+                state.name=value.trim().slice(0,18);
+                saveState();
+                closeModal();
+                render();
+            }
+        }}
+    ]);
+}
+
+/* =========================================================
+   STARTUP
+   ========================================================= */
+
+processOffline();
+render();
+askName();
+
+/* =========================================================
+   EXTRA SMALL SYSTEMS
+   ========================================================= */
+
+setInterval(()=>{
+    if(state.sessionSeconds>0 && state.sessionSeconds%3600<2){
+        log("🏆 Une heure AFK supplémentaire !");
+    }
+},1000);
+
+setInterval(()=>{
+    const cycle=Math.floor(state.sessionSeconds/CYCLE_SECONDS);
+    if(cycle>state.lastClaimCycle){
+        toast("🎁 Une récompense AFK attend !");
+    }
+},15000);
+
+/* =========================================================
+   DEBUG-FREE GLOBAL API
+   ========================================================= */
+
+window.afkVault={
+    getState:()=>state,
+    save:saveState,
+    claim:claimAvailable,
+    roll:roll,
+    prestige:prestige
 };
-let profile={...defaultProfile};
-try{profile={...defaultProfile,...JSON.parse(localStorage.getItem("chaosProfile")||"{}")}}catch{}
-function saveProfile(){localStorage.setItem("chaosProfile",JSON.stringify(profile));renderProfile()}
-function levelNeed(){return 100+(profile.level-1)*75}
-function addXP(n){profile.xp+=n;while(profile.xp>=levelNeed()){profile.xp-=levelNeed();profile.level++;toast("⬆️ Niveau "+profile.level+" ! + bonus");profile.coins+=100}saveProfile()}
-function addCoins(n){profile.coins+=Math.max(0,Math.floor(n));saveProfile()}
-function toast(t){const d=document.createElement("div");d.className="toast";d.textContent=t;$('toastHolder').append(d);setTimeout(()=>d.remove(),3200)}
-function show(id){["home","lobby","app","game","result"].forEach(x=>$(x).classList.toggle("hidden",x!==id))}
-function renderProfile(){['coins'].forEach(x=>$(x).textContent=profile.coins);$('level').textContent=profile.level;$('streak').textContent=profile.streak;$('rolls').textContent=profile.rolls;$('profileLevel').textContent=profile.level;$('xpText').textContent=profile.xp+" / "+levelNeed();$('wins').textContent=profile.wins;$('games').textContent=profile.games;renderRewards();renderQuests();renderShop()}
-function pseudo(){state.name=$('name').value.trim().slice(0,14)||"Joueur"+Math.floor(100+Math.random()*900)}
-function cleanId(s){return s.replace(/[.#$\[\]/g,"_").slice(0,30)||("p"+Date.now())}
-function makeCode(){return Math.random().toString(36).slice(2,8).toUpperCase()}
-
-async function initFirebase(){
- try{
-  if(CFG.databaseURL.includes("REMPLACE"))return false;
-  const app=await import("https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js");
-  const dbmod=await import("https://www.gstatic.com/firebasejs/10.12.5/firebase-database.js");
-  const fbApp=app.initializeApp(CFG);state.db=dbmod.getDatabase(fbApp);state.fb=dbmod;state.online=true;return true;
- }catch(e){console.warn("Firebase non disponible",e);state.online=false;return false}
-}
-
-$('solo').onclick=()=>{pseudo();startSolo()};
-$('solo2').onclick=()=>{pseudo();startSolo()};
-$('create').onclick=()=>createRoom();
-$('multi2').onclick=()=>createRoom();
-$('join').onclick=()=>joinRoom();
-$('launch').onclick=launchRoom;
-$('copyCode').onclick=()=>navigator.clipboard?.writeText(state.room).then(()=>toast("📋 Code copié"));
-$('leaveLobby').onclick=()=>{show("home")};
-$('leaveGame').onclick=()=>finish(false);
-$('dash').onclick=dash;
-$('again').onclick=()=>startGame();
-$('backHome').onclick=()=>{show("app");renderProfile()};
-$('profileBtn').onclick=()=>{$('profileModal').classList.remove("hidden");$('mName').textContent=state.name||"-";$('mLevel').textContent=profile.level;$('mXp').textContent=profile.xp;$('mCoins').textContent=profile.coins;$('mWins').textContent=profile.wins;$('mBest').textContent=profile.best};
-$('closeProfile').onclick=()=>$('profileModal').classList.add("hidden");
-$('openRewards').onclick=()=>openPage("pageRewards");
-$('tabPlay').onclick=()=>openPage("pagePlay");$('tabRewards').onclick=()=>openPage("pageRewards");$('tabQuests').onclick=()=>openPage("pageQuests");$('tabShop').onclick=()=>openPage("pageShop");
-function openPage(id){pages.forEach(p=>$(p).classList.toggle("hidden",p!==id));document.querySelectorAll(".nav button").forEach(b=>b.classList.add("alt"));const map={pagePlay:"tabPlay",pageRewards:"tabRewards",pageQuests:"tabQuests",pageShop:"tabShop"};$(map[id]).classList.remove("alt")}
-
-async function createRoom(){
- pseudo();state.host=true;state.solo=false;state.room=makeCode();
- if(await initFirebase()){state.roomRef=state.fb.ref(state.db,"chaosRooms/"+state.room);state.playerId=cleanId(state.name)+"_"+Math.random().toString(36).slice(2,6);await state.fb.set(state.roomRef,{status:"lobby",createdAt:Date.now(),host:state.playerId,players:{[state.playerId]:{name:state.name,score:0,hp:100}}});listenRoom()}else{toast("⚠️ Firebase Realtime Database n'est pas encore configurée : mode local disponible.");state.online=false}
- $('roomCode').textContent=state.room;show("lobby");renderLobby();
-}
-async function joinRoom(){
- pseudo();state.host=false;state.solo=false;state.room=$('room').value.trim().toUpperCase();
- if(!state.room||state.room.length<4){$('homeMsg').textContent="Entre un code valide.";return}
- if(!await initFirebase()){toast("⚠️ Configure d'abord Realtime Database pour le multijoueur.");return}
- state.roomRef=state.fb.ref(state.db,"chaosRooms/"+state.room);state.playerId=cleanId(state.name)+"_"+Math.random().toString(36).slice(2,6);
- const snap=await state.fb.get(state.roomRef);if(!snap.exists()){toast("❌ Salle introuvable");return}const data=snap.val();if(Object.keys(data.players||{}).length>=4){toast("❌ Salle complète");return}
- await state.fb.update(state.roomRef,{["players/"+state.playerId]:{name:state.name,score:0,hp:100}});listenRoom();$('roomCode').textContent=state.room;show("lobby");
-}
-function listenRoom(){state.fb.onValue(state.roomRef,s=>{if(!s.exists())return;const d=s.val();state.players=d.players||{};renderLobby();if(d.status==="game"&&!state.started)startGame();if(d.status==="result"&&state.started)finish(false)})}
-function renderLobby(){const arr=Object.entries(state.players);$('lobbyPlayers').innerHTML=(arr.length?arr:([["local",{name:state.name,score:0}]] )).map(([id,p],i)=>`<div class="row"><div class="player"><div class="avatar">${(p.name||"?").slice(0,2).toUpperCase()}</div><div><b>${p.name||"Joueur"}</b><div class="tiny">${id===state.playerId||state.host&&i===0?"Prêt":"En attente"}</div></div></div><span class="badge">${i===0?"👑 HÔTE":"JOUEUR"}</span></div>`).join("")}
-async function launchRoom(){if(!state.host){toast("Seul l'hôte peut lancer la partie.");return}if(state.online&&state.roomRef)await state.fb.update(state.roomRef,{status:"game",startedAt:Date.now()});startGame()}
-
-function startSolo(){state.room="LOCAL";state.host=true;state.solo=true;state.players={};startGame()}
-function resetRound(){state.x=.5;state.y=.8;state.score=0;state.hp=100;state.time=300;state.orbs=[];state.hazards=[];state.safeZones=[];state.event="NORMAL";state.eventTime=0;state.last=performance.now();state.roundCollected=0;state.roundDamage=0;state.dashCooldown=0}
-function startGame(){if(state.started)return;state.started=true;resetRound();profile.games++;saveProfile();show("game");for(let i=0;i<8;i++)spawnOrb();scheduleEvent();requestAnimationFrame(loop);toast("⚡ La partie commence !")}
-function spawnOrb(epic=false){state.orbs.push({x:.05+Math.random()*.9,y:.12+Math.random()*.8,epic,life:20})}
-function spawnHazard(){state.hazards.push({x:.08+Math.random()*.84,y:.18+Math.random()*.7,r:.035+Math.random()*.065,life:8})}
-function spawnSafe(){state.safeZones.push({x:.12+Math.random()*.76,y:.18+Math.random()*.65,r:.09,life:9})}
-const EVENTS=[
- ["NORMAL","Ramasse les orbes."],["SPEED","⚡ VITESSE X2"],["SLOW","🐌 TOUT RALENTIT"],["INVERT","🔄 CONTRÔLES INVERSÉS"],["DANGER","☠️ PLUIE DE DANGER"],["GOLD","💰 PLUIE D'OR"],["SAFE","🟢 ZONES DE SURVIE"],["BLACKOUT","🌑 BLACKOUT"],["CHAOS","💥 CHAOS TOTAL"]
-];
-function scheduleEvent(){const e=EVENTS[Math.floor(Math.random()*EVENTS.length)];state.event=e[0];state.eventTime=18;for(let i=0;i<(state.event==="DANGER"?7:state.event==="GOLD"?18:state.event==="SAFE"?4:0);i++){if(state.event==="DANGER")spawnHazard();else if(state.event==="GOLD")spawnOrb(true);else spawnSafe()}toast(e[1])}
-function loop(now){if(!state.started)return;const dt=Math.min(.05,(now-state.last)/1000);state.last=now;state.time-=dt;state.eventTime-=dt;state.dashCooldown=Math.max(0,state.dashCooldown-dt);state.activeSeconds+=dt;profile.totalSeconds+=dt;
- if(state.time<=0||state.hp<=0){finish(state.time<=0);return}
- if(state.eventTime<=0)scheduleEvent();move(dt);updateObjects(dt);drawGame();checkTimeReward();if(Math.floor(state.time)!==Math.floor(state.time+dt))syncPlayer();requestAnimationFrame(loop)}
-function move(dt){let dx=(state.keys.ArrowRight?1:0)-(state.keys.ArrowLeft?1:0);let dy=(state.keys.ArrowDown?1:0)-(state.keys.ArrowUp?1:0);if(state.keys.d||state.keys.D)dx++;if(state.keys.a||state.keys.A)dx--;if(state.keys.s||state.keys.S)dy++;if(state.keys.w||state.keys.W)dy--;let mag=Math.hypot(dx,dy)||1;dx/=mag;dy/=mag;let speed=.48;if(state.event==="SPEED")speed*=2;if(state.event==="SLOW")speed*=.45;if(state.event==="INVERT"){dx=-dx;dy=-dy}state.x=Math.max(.025,Math.min(.975,state.x+dx*speed*dt));state.y=Math.max(.09,Math.min(.975,state.y+dy*speed*dt))}
-function updateObjects(dt){
- state.orbs=state.orbs.filter(o=>{o.life-=dt;if(Math.hypot(o.x-state.x,o.y-state.y)<.055){const v=o.epic?350:100;state.score+=v;state.roundCollected++;addXP(o.epic?8:3);return false}return o.life>0});
- if(state.orbs.length<5)spawnOrb();
- state.hazards=state.hazards.filter(h=>{h.life-=dt;if(Math.hypot(h.x-state.x,h.y-state.y)<h.r+.025){state.hp=Math.max(0,state.hp-dt*30);state.roundDamage+=dt*30}return h.life>0});
- state.safeZones=state.safeZones.filter(z=>{z.life-=dt;return z.life>0});
- if(state.event==="GOLD"&&Math.random()<dt*.8)spawnOrb(true);
- if(state.event==="CHAOS"&&Math.random()<dt*.7){spawnHazard();spawnOrb(true)}
- if(state.event==="SAFE"&&state.safeZones.some(z=>Math.hypot(z.x-state.x,z.y-state.y)<z.r)){state.hp=Math.min(100,state.hp+dt*8);state.score+=dt*5}
-}
-function dash(){if(!state.started||state.dashCooldown>0)return;state.x=Math.max(.03,Math.min(.97,state.x+(state.keys.ArrowRight?0.22:state.keys.ArrowLeft?-0.22:0)));state.y=Math.max(.08,Math.min(.97,state.y+(state.keys.ArrowDown?0.22:state.keys.ArrowUp?-0.22:-.16)));state.dashCooldown=5;state.score+=25;toast("💨 DASH !")}
-function drawGame(){const a=$('arena');a.querySelectorAll('.entity').forEach(e=>e.remove());$('gScore').textContent=Math.floor(state.score);$('gHp').textContent=Math.floor(state.hp);$('gTime').textContent=Math.ceil(state.time);$('gEvent').textContent=state.event;$('hpBar').style.width=Math.max(0,state.hp)+"%";$('eventBanner').textContent=EVENTS.find(e=>e[0]===state.event)?.[1]||state.event;
- state.safeZones.forEach(z=>addEntity(a,"safezone",z.x,z.y,z.r*2));state.hazards.forEach(h=>addEntity(a,"dangerzone",h.x,h.y,h.r*2));state.orbs.forEach(o=>addEntity(a,"orb"+(o.epic?" epic":""),o.x,o.y,.03,o.epic?"★":"+") );
- const me=addEntity(a,"me",state.x,state.y,.03,state.name.slice(0,2).toUpperCase());me.title=state.name;
- let rank=1;Object.values(state.players).forEach(p=>{if((p.score||0)>state.score)rank++});$('gRank').textContent=rank;
- if(!state.solo)Object.entries(state.players).forEach(([id,p])=>{if(id===state.playerId)return;const ox=.15+((hash(id)+Math.floor(state.time))%70)/100;const oy=.2+((hash(id)*7+Math.floor(state.time)*2)%65)/100;addEntity(a,"other",ox,oy,.025,(p.name||"?").slice(0,2).toUpperCase())});
-}
-function hash(s){let h=0;for(let i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))>>>0;return h}
-function addEntity(parent,cls,x,y,size,text=""){const e=document.createElement("div");e.className="entity "+cls;e.textContent=text;e.style.left=(x*100)+"%";e.style.top=(y*100)+"%";e.style.width=(size*100)+"%";e.style.height=(size*100)+"%";if(cls.includes("orb")){e.style.width="27px";e.style.height="27px"}parent.append(e);return e}
-function checkTimeReward(){const every=600;const next=Math.floor(profile.totalSeconds/every);while(state.rewardIndex<next){state.rewardIndex++;claimTimeReward(state.rewardIndex)}$('rewardTimer').textContent=formatTime(every-(profile.totalSeconds%every));$('rewardProgress').style.width=((profile.totalSeconds%every)/every*100)+"%";$('rewardText').textContent="Prochain palier : "+Math.max(0,every-(profile.totalSeconds%every)).toFixed(0)+" secondes"}
-function formatTime(sec){sec=Math.max(0,Math.ceil(sec));return String(Math.floor(sec/60)).padStart(2,"0")+":"+String(sec%60).padStart(2,"0")}
-const TIME_REWARDS=[
- {min:10,coins:250,xp:50,rolls:1,revives:0,name:"🎁 Cadeau de bienvenue"},
- {min:20,coins:400,xp:80,rolls:1,revives:1,name:"💰 Pack joueur"},
- {min:30,coins:650,xp:120,rolls:2,revives:1,name:"💎 Pack rare"},
- {min:40,coins:900,xp:160,rolls:2,revives:1,name:"🔥 Pack épique"},
- {min:50,coins:1250,xp:220,rolls:3,revives:2,name:"⚡ Pack légendaire"},
- {min:60,coins:1800,xp:300,rolls:4,revives:2,name:"👑 Pack mythique"}
-];
-function claimTimeReward(index){const base=TIME_REWARDS[Math.min(index-1,TIME_REWARDS.length-1)];const scale=1+Math.max(0,index-TIME_REWARDS.length)*.25;const coins=Math.floor(base.coins*scale),xp=Math.floor(base.xp*scale);profile.coins+=coins;profile.xp+=xp;profile.rolls+=base.rolls;profile.revives+=base.revives;addXP(0);saveProfile();toast(`${base.name} : +${coins} 🪙 +${xp} XP +${base.rolls} 🎲`)}
-function renderRewards(){$('rewardGrid').innerHTML=TIME_REWARDS.map((r,i)=>{const done=profile.totalSeconds>=r.min*60;return `<div class="reward ${done?"claimed":"locked"}"><div style="font-size:30px">${done?"🎁":"🔒"}</div><b>${r.min} min</b><p class="tiny">${r.name}</p><div>🪙 ${r.coins}</div><div>⭐ ${r.xp} XP</div><div>🎲 ${r.rolls} Power Roll</div>${r.revives?`<div>❤️ ${r.revives} Revive</div>`:""}</div>`}).join("")}
-const QUEST_POOL=[
- {id:"collect",name:"Ramasseur",desc:"Ramasse 15 orbes",goal:15,reward:300,xp:35},
- {id:"survive",name:"Survivant",desc:"Joue 5 minutes",goal:300,reward:450,xp:50},
- {id:"score",name:"Scoreur",desc:"Fais 2500 points en partie",goal:2500,reward:600,xp:70}
-];
-function getQuestProgress(q){if(q.id==="collect")return state.roundCollected; if(q.id==="survive")return Math.min(300,state.activeSeconds);if(q.id==="score")return state.score;return 0}
-function renderQuests(){$('quests').innerHTML=QUEST_POOL.map(q=>{const p=profile.quests[q.id]||0;const cur=Math.max(p,getQuestProgress(q));const done=cur>=q.goal;profile.quests[q.id]=Math.min(q.goal,cur);return `<div class="quest"><div><b>${q.name}</b><div class="tiny">${q.desc}</div><div class="progress" style="margin-top:8px"><i style="width:${Math.min(100,cur/q.goal*100)}%"></i></div></div><button ${done?'':'disabled'} data-quest="${q.id}">${done?`Réclamer 🪙 ${q.reward}`:`${Math.floor(cur)}/${q.goal}`}</button></div>`}).join("");document.querySelectorAll("[data-quest]").forEach(b=>b.onclick=()=>claimQuest(b.dataset.quest));saveProfileQuiet()}
-function saveProfileQuiet(){localStorage.setItem("chaosProfile",JSON.stringify(profile))}
-function claimQuest(id){const q=QUEST_POOL.find(x=>x.id===id);if(!q)return;const p=profile.quests[id]||0;if(p<q.goal)return;profile.quests[id]=0;profile.coins+=q.reward;addXP(q.xp);toast(`📜 Mission terminée : +${q.reward} 🪙`);saveProfile()}
-const SHOP=[
- {id:"revive",name:"❤️ Revive",desc:"Te donne une vie de secours.",cost:750,action:()=>profile.revives++},
- {id:"roll",name:"🎲 Power Roll",desc:"Ticket de pouvoir aléatoire.",cost:1200,action:()=>profile.rolls++},
- {id:"boost",name:"⚡ Score Boost",desc:"Cosmétique/progression à collectionner.",cost:2000,action:()=>profile.owned.push("Score Boost")},
- {id:"mythic",name:"👑 Badge Mythique",desc:"Objet ultra rare de collection.",cost:5000,action:()=>profile.owned.push("Badge Mythique")},
- {id:"credits",name:"🛡️ Guard Credits",desc:"Crédits spéciaux de collection.",cost:900,action:()=>profile.guardCredits++},
- {id:"coins",name:"🪙 Pack 1500",desc:"Gros pack de pièces.",cost:0,action:()=>{}}
-];
-function renderShop(){$('shop').innerHTML=SHOP.map((s,i)=>`<div class="shopItem ${i===3?'rarity-mythic':i===2?'rarity-epic':''}"><div style="font-size:27px">${s.name.split(' ')[0]}</div><h3>${s.name.slice(2)}</h3><p class="tiny">${s.desc}</p><b>${s.cost?s.cost+" 🪙":"Bientôt"}</b><button ${s.cost?'':'disabled'} data-shop="${s.id}" style="width:100%;margin-top:10px">Acheter</button></div>`).join("");document.querySelectorAll("[data-shop]").forEach(b=>b.onclick=()=>buy(b.dataset.shop))}
-function buy(id){const s=SHOP.find(x=>x.id===id);if(!s||!s.cost)return;if(profile.coins<s.cost){toast("❌ Pas assez de pièces");return}profile.coins-=s.cost;s.action();saveProfile();toast("🛒 Achat effectué !")}
-async function syncPlayer(){if(!state.online||!state.roomRef||!state.playerId)return;try{await state.fb.update(state.roomRef,{["players/"+state.playerId]:{name:state.name,score:Math.floor(state.score),hp:Math.floor(state.hp)}})}catch(e){console.warn(e)}}
-function finish(won){if(!state.started)return;state.started=false;const finalScore=Math.floor(state.score);profile.best=Math.max(profile.best,finalScore);if(won){profile.wins++;profile.streak++;profile.coins+=Math.floor(500+finalScore*.15);addXP(100)}else{profile.streak=0;profile.coins+=Math.floor(100+finalScore*.05);addXP(30)}saveProfile();if(state.online&&state.host&&state.roomRef)state.fb.update(state.roomRef,{status:"result"}).catch(()=>{});renderResult(won);show("result")}
-function renderResult(won){$('resultTitle').textContent=won?"🏆 SURVIE RÉUSSIE !":"💀 FIN DE PARTIE";$('resultStats').textContent=`Score : ${Math.floor(state.score)} • Orbes : ${state.roundCollected} • Dégâts : ${Math.floor(state.roundDamage)} • Pièces gagnées : ${won?Math.floor(500+state.score*.15):Math.floor(100+state.score*.05)}`;const arr=Object.values(state.players).map(p=>({name:p.name,score:p.score||0}));arr.push({name:state.name,score:state.score});arr.sort((a,b)=>b.score-a.score);$('ranking').innerHTML=arr.map((p,i)=>`<div class="row"><span>${i===0?'👑':i===1?'🥈':i===2?'🥉':'#'+(i+1)} ${p.name}</span><b>${Math.floor(p.score)} pts</b></div>`).join("")}
-
-addEventListener("keydown",e=>{state.keys[e.key]=true;if(["ArrowUp","ArrowDown","ArrowLeft","ArrowRight"," "].includes(e.key))e.preventDefault();if(e.key.toLowerCase()==="q")dash()});addEventListener("keyup",e=>state.keys[e.key]=false);
-document.querySelectorAll(".mobile button").forEach(b=>{b.addEventListener("touchstart",e=>{e.preventDefault();state.keys[b.dataset.k]=true},{passive:false});b.addEventListener("touchend",e=>{e.preventDefault();state.keys[b.dataset.k]=false},{passive:false})});
-renderProfile();openPage("pagePlay");
 </script>
 </body>
 </html>
