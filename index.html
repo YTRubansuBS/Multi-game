@@ -2,14 +2,215 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<title>AFK World</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>AFK World — AFK & Green Light 3D</title>
 <style>
-body{margin:0;background:#05070d;color:white;font-family:Arial,sans-serif}
-button{cursor:pointer}
+:root{--bg:#05070d;--panel:#0d1320ee;--line:#ffffff18;--text:#f7f8fb;--muted:#9aa7bc;--green:#39e875;--red:#ff3d5a;--gold:#ffd84d;--cyan:#42d9ff;--purple:#b77cff;--blue:#5b8cff;--danger:#ff5964}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:Inter,Arial,sans-serif}
+body{user-select:none}
+button{font:inherit}
+canvas{display:block}
+.hidden{display:none!important}
+.ui{position:fixed;inset:0;z-index:20;pointer-events:none}
+.pointer{pointer-events:auto}
+.panel{background:var(--panel);border:1px solid var(--line);backdrop-filter:blur(16px);border-radius:16px;box-shadow:0 16px 55px #0009}
+.top{position:absolute;left:16px;right:16px;top:14px;display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.brand{padding:12px 16px;font-weight:1000;letter-spacing:.5px}
+.brand span{color:var(--gold)}
+.stats{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px}
+.stat{padding:9px 12px;font-size:13px;font-weight:900}
+.stat b{color:var(--gold)}
+.phase{position:absolute;left:50%;top:80px;transform:translateX(-50%);padding:11px 22px;border-radius:999px;background:#08101be8;font-size:18px;font-weight:1000;letter-spacing:1px;border:1px solid #ffffff22}
+.phase.green{color:var(--green);box-shadow:0 0 35px #39e87535}
+.phase.red{color:var(--red);box-shadow:0 0 35px #ff3d5a35}
+.timer{position:absolute;top:128px;left:50%;transform:translateX(-50%);font-size:31px;font-weight:1000;text-shadow:0 3px 15px #000}
+.bottom{position:absolute;left:14px;right:14px;bottom:14px;display:flex;justify-content:space-between;gap:12px;align-items:flex-end}
+.controls{padding:12px 14px;color:var(--muted);font-size:12px;line-height:1.7}
+.controls b{color:#fff}
+.powerbar{padding:10px;display:flex;gap:8px;align-items:center;max-width:65vw;overflow:auto}
+.power{pointer-events:auto;min-width:140px;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:#10192a;color:#fff;text-align:left;cursor:pointer;transition:.18s}
+.power:hover:not(:disabled){transform:translateY(-2px);border-color:#ffffff45}
+.power.equipped{border-color:var(--gold);box-shadow:0 0 22px #ffd84d24;background:#241f0e}
+.power.locked,.power:disabled{cursor:not-allowed;opacity:.48;filter:grayscale(.3)}
+.power small{display:block;color:var(--muted);margin-top:3px}
+.power .key{float:right;color:var(--gold);font-weight:1000}
+.btn{pointer-events:auto;border:0;border-radius:13px;padding:13px 19px;background:var(--gold);color:#211900;font-weight:1000;cursor:pointer;transition:.18s}
+.btn:hover{transform:translateY(-2px);filter:brightness(1.05)}
+.btn.alt{background:#26344e;color:#fff}
+.btn.dark{background:#111a2a;color:#fff;border:1px solid var(--line)}
+.btn.red{background:#5a1621;color:#fff}
+.overlay{position:absolute;inset:0;display:grid;place-items:center;background:#03050ade;pointer-events:auto}
+.menu{width:min(760px,calc(100% - 28px));max-height:calc(100% - 30px);overflow:auto;padding:28px;text-align:center}
+.menu h1{margin:0 0 8px;font-size:clamp(38px,8vw,72px);line-height:.95}
+.menu h1 span{color:var(--gold)}
+.menu p{color:var(--muted);line-height:1.6}
+.rules{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:19px 0;text-align:left}
+.rule{padding:13px;border:1px solid var(--line);border-radius:13px;background:#ffffff06}
+.rule b{display:block;margin-bottom:4px}
+.equip{margin:18px 0;text-align:left}
+.equip h3{margin:0 0 9px}
+.equiprow{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.equipbtn{padding:13px;border-radius:12px;border:1px solid var(--line);background:#111a2a;color:#fff;cursor:pointer;text-align:left}
+.equipbtn.active{border-color:var(--gold);background:#2a2614;box-shadow:0 0 18px #ffd84d14}
+.equipbtn.locked{opacity:.42;cursor:not-allowed}
+.toast{position:absolute;left:50%;bottom:96px;transform:translate(-50%,20px);padding:11px 16px;opacity:0;transition:.25s;background:#111a2a;border:1px solid var(--line);border-radius:12px;font-weight:900;white-space:nowrap}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.nav{position:absolute;left:50%;top:14px;transform:translateX(-50%);display:flex;gap:8px;padding:7px;pointer-events:auto}
+.nav button{border:1px solid var(--line);background:#111a2a;color:#fff;padding:9px 13px;border-radius:11px;font-weight:900;cursor:pointer}
+.nav button.active{border-color:var(--gold);background:#2b2514;color:var(--gold)}
+.afkScreen{position:absolute;inset:0;background:radial-gradient(circle at 50% 20%,#17244a 0,#080d19 42%,#03060c 100%);overflow:auto;pointer-events:auto}
+.afkContent{width:min(1050px,calc(100% - 24px));margin:0 auto;padding:95px 0 35px}
+.afkHero{display:grid;grid-template-columns:1.25fr .75fr;gap:14px}
+.afkCard{padding:22px}
+.afkCard h2{margin:0 0 7px;font-size:30px}
+.afkCard p{color:var(--muted);line-height:1.6}
+.coinBig{font-size:50px;font-weight:1000;color:var(--gold);margin:15px 0}
+.actionRow{display:flex;gap:9px;flex-wrap:wrap}
+.timerBox{padding:18px;border-radius:16px;background:#ffffff07;border:1px solid var(--line)}
+.timerBox .small{color:var(--muted);font-size:12px}
+.timerBox .value{font-size:28px;font-weight:1000;margin-top:5px}
+.rewardGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:14px}
+.reward{padding:14px;border:1px solid var(--line);border-radius:14px;background:#0d1422e8}
+.reward .chance{color:var(--gold);font-weight:1000}
+.reward .meta{color:var(--muted);font-size:12px;margin-top:5px}
+.ownedGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:14px}
+.owned{padding:15px;border-radius:14px;border:1px solid var(--line);background:#ffffff06}
+.owned.locked{opacity:.45}
+.owned b{display:block;margin-bottom:5px}
+.sectionTitle{margin:24px 0 5px;font-size:20px}
+.statusLine{display:flex;justify-content:space-between;gap:10px;padding:11px 0;border-bottom:1px solid #ffffff10;color:var(--muted)}
+.statusLine strong{color:#fff}
+.notice{padding:12px;border:1px solid #ffffff12;border-radius:12px;background:#ffffff05;color:var(--muted);font-size:12px;line-height:1.5;margin-top:12px}
+.smallBtn{border:1px solid var(--line);background:#111a2a;color:#fff;border-radius:9px;padding:7px 10px;cursor:pointer}
+.centerMessage{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:none;text-align:center;pointer-events:auto}
+.centerMessage.show{display:block}
+.worldButton{position:absolute;right:16px;top:75px;pointer-events:auto}
+.worldButton button{border:1px solid var(--line);background:#111a2a;color:#fff;padding:10px 13px;border-radius:11px;font-weight:1000;cursor:pointer}
+.offlineTag{display:inline-flex;gap:6px;padding:5px 9px;border-radius:999px;border:1px solid #ffffff15;color:var(--muted);font-size:11px;font-weight:900}
+@media(max-width:760px){.top{top:8px;left:8px;right:8px}.brand{font-size:12px}.stats{display:none}.nav{top:54px}.phase{top:114px}.timer{top:162px;font-size:26px}.bottom{left:8px;right:8px;bottom:8px}.controls{display:none}.powerbar{width:100%;max-width:none}.power{min-width:130px}.menu{padding:21px}.rules{grid-template-columns:1fr}.equiprow{grid-template-columns:1fr}.afkContent{padding-top:120px}.afkHero{grid-template-columns:1fr}.rewardGrid{grid-template-columns:1fr}.ownedGrid{grid-template-columns:1fr 1fr}.worldButton{top:106px;right:8px}}
+@media(max-width:430px){.ownedGrid{grid-template-columns:1fr}.nav button{padding:8px 10px;font-size:12px}.afkCard{padding:17px}}
 </style>
 </head>
 <body>
-<h1>AFK WORLD</h1>
-<p>Correction appliquée.</p>
+<div id="game"></div>
+<div id="afkScreen" class="afkScreen hidden">
+<div class="nav panel"><button id="navAFK" class="active">🌙 MONDE AFK</button><button id="nav3D">🟢 GREEN LIGHT 3D</button></div>
+<div class="afkContent">
+<div class="afkHero">
+<div class="panel afkCard"><div class="offlineTag">💾 SAUVEGARDE LOCALE</div><h2>AFK World</h2><p>Reste dans le monde AFK pour gagner automatiquement des AFK Coins et des Player Power Rolls. Les pouvoirs gagnés ici sont les seuls pouvoirs utilisables dans le monde 3D.</p><div class="coinBig">🪙 <span id="afkCoins">0</span></div><div class="actionRow"><button class="btn pointer" id="claimCoin">🪙 RÉCUPÉRER LES COINS</button><button class="btn alt" id="rollPower">🎲 TIRER UN POUVOIR</button></div><div class="notice">Les pouvoirs non obtenus restent verrouillés 🔒 dans Green Light Red Light. Aucun pouvoir gratuit n'est équipé automatiquement.</div></div>
+<div class="panel afkCard"><h2>Progression</h2><div class="statusLine"><span>AFK Coins</span><strong id="statCoins">0</strong></div><div class="statusLine"><span>Power Rolls</span><strong id="statRolls">0</strong></div><div class="statusLine"><span>Pouvoirs possédés</span><strong id="statPowerCount">0</strong></div><div class="statusLine"><span>Pouvoir équipé</span><strong id="afkEquipped">Aucun</strong></div><div class="timerBox" style="margin-top:14px"><div class="small">PROCHAIN BONUS AFK</div><div class="value" id="afkCountdown">10:00</div></div><div class="timerBox" style="margin-top:10px"><div class="small">PROCHAIN POWER ROLL</div><div class="value" id="rollCountdown">02:00:00</div></div></div>
+</div>
+<h3 class="sectionTitle">🎁 Récompenses AFK</h3>
+<div class="panel afkCard"><div class="rewardGrid"><div class="reward"><b>5 Million Won</b><div class="chance">66.48%</div><div class="meta">Récompense normale</div></div><div class="reward"><b>25 Million Won</b><div class="chance">15.11%</div><div class="meta">Récompense rare</div></div><div class="reward"><b>75 Million Won</b><div class="chance">0.98%</div><div class="meta">Récompense épique</div></div><div class="reward"><b>1 Billion Won</b><div class="chance">0.14%</div><div class="meta">Récompense légendaire</div></div><div class="reward"><b>Starstruck</b><div class="chance">15.11%</div><div class="meta">Récompense spéciale</div></div><div class="reward"><b>Dreamwalker</b><div class="chance">0.98%</div><div class="meta">Récompense spéciale</div></div><div class="reward"><b>Timeless</b><div class="chance">0.98%</div><div class="meta">Récompense spéciale</div></div><div class="reward"><b>Midnight Miracle</b><div class="chance">0.14%</div><div class="meta">Récompense spéciale</div></div><div class="reward"><b>Ultra Instinct</b><div class="chance">0.042%</div><div class="meta">Pouvoir rare • utilisable en 3D</div></div><div class="reward"><b>Rumor</b><div class="chance">0.042%</div><div class="meta">Pouvoir rare • utilisable en 3D</div></div></div></div>
+<h3 class="sectionTitle">⚡ Mon inventaire de pouvoirs</h3>
+<div class="panel afkCard"><div id="ownedGrid" class="ownedGrid"></div><div class="notice">Tu peux cliquer sur un pouvoir que tu possèdes pour l'équiper. Un pouvoir verrouillé ne peut ni être équipé ni utilisé.</div></div>
+<h3 class="sectionTitle">🎮 Navigation</h3><div class="panel afkCard"><div class="actionRow"><button class="btn" id="go3D">🟢 ALLER AU GREEN LIGHT 3D</button><button class="btn dark" id="resetDemo">🧹 Réinitialiser les données locales</button></div></div>
+</div></div>
+<div class="ui" id="gameUI">
+<div class="top"><div class="panel brand">🎮 <span>AFK WORLD</span> • GREEN LIGHT RED LIGHT</div><div class="stats"><div class="panel stat">🏃 Distance <b id="distance">0m</b></div><div class="panel stat">🏆 Victoires <b id="wins">0</b></div><div class="panel stat">⚡ Pouvoir <b id="powerName">Aucun</b></div><div class="panel stat">🪙 AFK <b id="topCoins">0</b></div></div></div>
+<div id="phase" class="phase green">🟢 GREEN LIGHT</div><div id="timer" class="timer">Départ dans 5</div><div class="worldButton"><button id="goAFK">🌙 MONDE AFK</button></div>
+<div class="bottom"><div class="panel controls"><b>COMMANDES</b><br>WASD / ↑↓←→ : courir • Souris : regarder • ESPACE : saut<br><b>1</b> : utiliser le pouvoir équipé</div><div class="panel powerbar"><button class="power locked" id="power1" disabled>🔒 Ultra Instinct <span class="key">1</span><small>NON POSSÉDÉ • Dash rapide</small></button><button class="power locked" id="power2" disabled>🔒 Rumor <span class="key">2</span><small>NON POSSÉDÉ • Protection rouge</small></button></div></div>
+<div id="toast" class="toast"></div>
+<div id="menu" class="overlay"><div class="panel menu"><h1>GREEN <span>LIGHT</span><br>RED LIGHT</h1><p>Avance uniquement pendant le feu vert. Dès que le feu passe au rouge, arrête complètement tes touches de déplacement. La poupée surveille les mouvements.</p><div class="rules"><div class="rule">🟢 <b>Feu vert</b><span>Tu peux courir vers la ligne d'arrivée.</span></div><div class="rule">🔴 <b>Feu rouge</b><span>Tout déplacement te met en danger.</span></div><div class="rule">⚡ <b>Ultra Instinct</b><span>Un dash puissant, uniquement si tu possèdes le pouvoir.</span></div><div class="rule">🔥 <b>Rumor</b><span>Protection temporaire, uniquement si tu possèdes le pouvoir.</span></div></div><div class="equip"><h3>⚡ Pouvoir équipé</h3><div id="equipStatus" class="notice" style="margin-top:0">Aucun pouvoir possédé. Va dans le Monde AFK pour obtenir des pouvoirs.</div><div class="equiprow" style="margin-top:9px"><button class="equipbtn locked" id="equipUI" disabled>🔒 Ultra Instinct — NON POSSÉDÉ</button><button class="equipbtn locked" id="equipRumor" disabled>🔒 Rumor — NON POSSÉDÉ</button></div></div><div class="actionRow" style="justify-content:center"><button class="btn" id="start">▶ COMMENCER LA PARTIE</button><button class="btn alt" id="menuAFK">🌙 OUVRIR LE MONDE AFK</button></div></div></div>
+<div id="end" class="centerMessage"><div class="panel menu"><h1 id="endTitle">VICTOIRE !</h1><p id="endText"></p><div class="actionRow" style="justify-content:center"><button class="btn" id="again">↻ REJOUER</button><button class="btn alt" id="endAFK">🌙 MONDE AFK</button></div></div></div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.min.js"></script>
+<script>
+'use strict';
+const STORAGE={coins:'afkWorldCoins',rolls:'afkWorldPowerRolls',powers:'afkPowers',equipped:'afkEquippedPower',wins:'rl3dWins',afkTick:'afkWorldLastCoinTick',rollTick:'afkWorldLastRollTick'};
+const POWER_DATA={'Ultra Instinct':{emoji:'⚡',description:'Dash rapide vers la ligne d’arrivée.'},'Rumor':{emoji:'🔥',description:'Protège contre une détection pendant quelques secondes.'}};
+const game=document.getElementById('game');const afkScreen=document.getElementById('afkScreen');const gameUI=document.getElementById('gameUI');const toastEl=document.getElementById('toast');
+function safeNumber(key,fallback=0){const n=Number(localStorage.getItem(key));return Number.isFinite(n)?n:fallback}
+function safeJSON(key,fallback){try{const v=JSON.parse(localStorage.getItem(key)||'null');return v===null?fallback:v}catch(_){return fallback}}
+function uniqueStrings(value){if(!Array.isArray(value))return[];return[...new Set(value.filter(v=>typeof v==='string'&&Object.prototype.hasOwnProperty.call(POWER_DATA,v)))]}
+function loadPowers(){return uniqueStrings(safeJSON(STORAGE.powers,[]))}
+let ownedPowers=loadPowers();let equippedPower=localStorage.getItem(STORAGE.equipped)||'';if(!ownedPowers.includes(equippedPower)){equippedPower='';localStorage.removeItem(STORAGE.equipped)}
+let afkCoins=safeNumber(STORAGE.coins,0);let powerRolls=safeNumber(STORAGE.rolls,0);let wins=safeNumber(STORAGE.wins,0);let lastCoinTick=safeNumber(STORAGE.afkTick,Date.now());let lastRollTick=safeNumber(STORAGE.rollTick,Date.now());
+function saveInventory(){localStorage.setItem(STORAGE.powers,JSON.stringify(ownedPowers));if(equippedPower&&ownedPowers.includes(equippedPower))localStorage.setItem(STORAGE.equipped,equippedPower);else{localStorage.removeItem(STORAGE.equipped);equippedPower=''}localStorage.setItem(STORAGE.coins,String(afkCoins));localStorage.setItem(STORAGE.rolls,String(powerRolls));localStorage.setItem(STORAGE.wins,String(wins));localStorage.setItem(STORAGE.afkTick,String(lastCoinTick));localStorage.setItem(STORAGE.rollTick,String(lastRollTick))}
+function showToast(message){toastEl.textContent=message;toastEl.classList.add('show');clearTimeout(showToast.timer);showToast.timer=setTimeout(()=>toastEl.classList.remove('show'),1800)}
+function isOwned(powerName){return ownedPowers.includes(powerName)}
+function equipPower(powerName){if(!isOwned(powerName)){showToast('🔒 Tu ne possèdes pas ce pouvoir.');refreshPowerUI();return false}equippedPower=powerName;localStorage.setItem(STORAGE.equipped,equippedPower);refreshPowerUI();showToast(POWER_DATA[powerName].emoji+' '+powerName+' équipé !');return true}
+function givePower(powerName){if(!Object.prototype.hasOwnProperty.call(POWER_DATA,powerName))return false;if(!isOwned(powerName)){ownedPowers.push(powerName);saveInventory();showToast(POWER_DATA[powerName].emoji+' Nouveau pouvoir : '+powerName+' !');refreshPowerUI();refreshAFKUI();return true}showToast('✨ Tu possèdes déjà '+powerName+'.');return false}
+function formatTime(totalSeconds){const s=Math.max(0,Math.floor(totalSeconds));const h=Math.floor(s/3600);const m=Math.floor((s%3600)/60);const sec=s%60;if(h>0)return String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(sec).padStart(2,'0');return String(m).padStart(2,'0')+':'+String(sec).padStart(2,'0')}
+function rollPowerReward(){if(powerRolls<=0){showToast('🎲 Aucun Power Roll disponible.');return}powerRolls--;saveInventory();const roll=Math.random()*100;const reward=roll<.042?'Ultra Instinct':roll<.084?'Rumor':(Math.random()<.5?'Ultra Instinct':'Rumor');givePower(reward);refreshAFKUI()}
+function processAFKTime(){const now=Date.now();const coinPeriod=10*60*1000;const rollPeriod=2*60*60*1000;if(now-lastCoinTick>=coinPeriod){const count=Math.floor((now-lastCoinTick)/coinPeriod);afkCoins+=count*2;lastCoinTick+=count*coinPeriod}if(now-lastRollTick>=rollPeriod){const count=Math.floor((now-lastRollTick)/rollPeriod);powerRolls+=count;lastRollTick+=count*rollPeriod}saveInventory()}
+function claimCoin(){const now=Date.now();const period=10*60*1000;if(now-lastCoinTick<period){showToast('⏳ Encore '+formatTime(Math.ceil((period-(now-lastCoinTick))/1000))+' avant le prochain bonus.');return}const count=Math.floor((now-lastCoinTick)/period);afkCoins+=count*2;lastCoinTick+=count*period;saveInventory();refreshAFKUI();showToast('🪙 +'+count*2+' AFK Coins !')}
+function refreshAFKUI(){document.getElementById('afkCoins').textContent=afkCoins;document.getElementById('statCoins').textContent=afkCoins;document.getElementById('topCoins').textContent=afkCoins;document.getElementById('statRolls').textContent=powerRolls;document.getElementById('statPowerCount').textContent=ownedPowers.length;document.getElementById('afkEquipped').textContent=equippedPower||'Aucun';const grid=document.getElementById('ownedGrid');grid.innerHTML='';for(const key of Object.keys(POWER_DATA)){const data=POWER_DATA[key];const card=document.createElement('div');card.className='owned '+(isOwned(key)?'':'locked');const state=isOwned(key)?'✅ POSSÉDÉ':'🔒 NON POSSÉDÉ';card.innerHTML='<b>'+data.emoji+' '+key+'</b><div>'+state+'</div><div style="color:#9aa7bc;margin-top:5px;font-size:12px">'+data.description+'</div>';if(isOwned(key)){const row=document.createElement('div');row.style.marginTop='9px';const button=document.createElement('button');button.className='smallBtn';button.textContent=equippedPower===key?'ÉQUIPÉ':'ÉQUIPER';button.onclick=()=>equipPower(key);row.appendChild(button);card.appendChild(row)}grid.appendChild(card)}}
+function refreshPowerUI(){const ui=document.getElementById('equipUI');const rumor=document.getElementById('equipRumor');const p1=document.getElementById('power1');const p2=document.getElementById('power2');const status=document.getElementById('equipStatus');updateEquipButton(ui,'Ultra Instinct');updateEquipButton(rumor,'Rumor');updatePowerButton(p1,'Ultra Instinct','Dash rapide','1');updatePowerButton(p2,'Rumor','Protection rouge','2');document.getElementById('powerName').textContent=equippedPower||'Aucun';status.textContent=equippedPower?'✅ Pouvoir équipé : '+equippedPower:'🔒 Aucun pouvoir possédé équipé.'}
+function updateEquipButton(el,name){const data=POWER_DATA[name];const owned=isOwned(name);el.disabled=!owned;el.classList.toggle('locked',!owned);el.classList.toggle('active',owned&&equippedPower===name);el.textContent=owned?(equippedPower===name?'✅ '+data.emoji+' '+name+' — ÉQUIPÉ':'⚡ '+data.emoji+' '+name+' — ÉQUIPER'):'🔒 '+name+' — NON POSSÉDÉ'}
+function updatePowerButton(el,name,desc,key){const data=POWER_DATA[name];const owned=isOwned(name);el.disabled=!owned;el.classList.toggle('locked',!owned);el.classList.toggle('equipped',owned&&equippedPower===name);el.innerHTML=owned?data.emoji+' '+name+' <span class="key">'+key+'</span><small>'+desc+'</small>':'🔒 '+name+' <span class="key">'+key+'</span><small>NON POSSÉDÉ • '+desc+'</small>'}
+function enterAFK(){running=false;afkScreen.classList.remove('hidden');gameUI.classList.add('hidden');refreshAFKUI();refreshNav()}
+function enter3D(){afkScreen.classList.add('hidden');gameUI.classList.remove('hidden');refreshPowerUI();refreshNav()}
+document.getElementById('goAFK').onclick=enterAFK;document.getElementById('menuAFK').onclick=enterAFK;document.getElementById('endAFK').onclick=enterAFK;document.getElementById('navAFK').onclick=enterAFK;document.getElementById('go3D').onclick=enter3D;document.getElementById('nav3D').onclick=enter3D;document.getElementById('claimCoin').onclick=claimCoin;document.getElementById('rollPower').onclick=rollPowerReward;
+document.getElementById('resetDemo').onclick=()=>{if(!confirm('Effacer les données AFK et Green Light locales ?'))return;Object.values(STORAGE).forEach(key=>localStorage.removeItem(key));ownedPowers=[];equippedPower='';afkCoins=0;powerRolls=0;wins=0;lastCoinTick=Date.now();lastRollTick=Date.now();saveInventory();refreshAFKUI();refreshPowerUI();resetPlayer();showToast('🧹 Données réinitialisées.')};
+const scene=new THREE.Scene();scene.background=new THREE.Color(0x07101a);scene.fog=new THREE.Fog(0x07101a,45,230);const camera=new THREE.PerspectiveCamera(68,innerWidth/innerHeight,.1,450);const renderer=new THREE.WebGLRenderer({antialias:true});renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.setSize(innerWidth,innerHeight);renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;game.appendChild(renderer.domElement);scene.add(new THREE.HemisphereLight(0xbfd8ff,0x18200f,1.25));const sun=new THREE.DirectionalLight(0xffffff,2.2);sun.position.set(-35,55,30);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);sun.shadow.camera.left=-90;sun.shadow.camera.right=90;sun.shadow.camera.top=90;sun.shadow.camera.bottom=-90;scene.add(sun);const world=new THREE.Group();scene.add(world);
+function mat(color,roughness=.55,metalness=0){return new THREE.MeshStandardMaterial({color,roughness,metalness})}
+function box(w,h,d,color,x,y,z,group=world){const mesh=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat(color));mesh.position.set(x,y,z);mesh.castShadow=true;mesh.receiveShadow=true;group.add(mesh);return mesh}
+function cyl(radius,height,color,x,y,z,group=world){const mesh=new THREE.Mesh(new THREE.CylinderGeometry(radius,radius,height,24),mat(color));mesh.position.set(x,y,z);mesh.castShadow=true;mesh.receiveShadow=true;group.add(mesh);return mesh}
+function sphere(radius,color,x,y,z,group=world){const mesh=new THREE.Mesh(new THREE.SphereGeometry(radius,24,18),mat(color));mesh.position.set(x,y,z);mesh.castShadow=true;mesh.receiveShadow=true;group.add(mesh);return mesh}
+box(42,.5,230,0x18241d,0,0,-75);box(36,.2,230,0x263b2b,0,.27,-75);box(1,.08,230,0x151b16,-9,.53,-75);box(1,.08,230,0x151b16,9,.53,-75);for(let z=34;z>-190;z-=12){box(1,.05,6,0xe9e2c5,0,.54,z)}
+for(let z=35;z>-195;z-=8){box(.25,2,.35,0x5c6670,-19,1,z);box(.25,2,.35,0x5c6670,19,1,z)}box(.25,2,230,0x38434b,-19,1,-75);box(.25,2,230,0x38434b,19,1,-75);
+function tree(x,z,s=1){const g=new THREE.Group();g.position.set(x,0,z);world.add(g);cyl(.45*s,4*s,0x5b3924,0,2*s,0,g);for(let i=0;i<4;i++){const crown=new THREE.Mesh(new THREE.ConeGeometry((2.4-i*.3)*s,(4-i*.3)*s,10),mat(i%2?0x174d2c:0x21613a));crown.position.set(0,4*s+i*1.4*s,0);crown.castShadow=true;g.add(crown)}}for(let i=0;i<28;i++){const z=30-i*8+Math.random()*4;tree(-24-Math.random()*7,z,.8+Math.random()*.5);tree(24+Math.random()*7,z,.8+Math.random()*.5)}
+for(let x=-17;x<18;x+=2)box(2,.04,3,(x/2)%2===0?0xffffff:0x111111,x,.56,-181);box(36,.5,1,0xffffff,0,.58,-179);box(36,.5,1,0x111111,0,.6,-182);
+const doll=new THREE.Group();doll.position.set(0,0,-194);world.add(doll);cyl(2.15,1.2,0x8b3f3f,0,1.1,0,doll);const dollBody=cyl(1.45,3.8,0xe9b58e,0,4,0,doll);dollBody.scale.z=.7;sphere(1.65,0xf0c29b,0,6.7,0,doll);const dollHair=new THREE.Mesh(new THREE.SphereGeometry(1.72,32,20,0,Math.PI*2,0,Math.PI*.52),mat(0x17171b));dollHair.position.set(0,7.35,0);dollHair.castShadow=true;doll.add(dollHair);box(1.15,.18,.15,0x111111,-.55,6.75,-1.52,doll);box(1.15,.18,.15,0x111111,.55,6.75,-1.52,doll);const dress=new THREE.Mesh(new THREE.ConeGeometry(2.4,3.6,24),mat(0xc94c56));dress.position.y=2.8;dress.castShadow=true;doll.add(dress);
+box(.35,8,.35,0x252b31,7,4,-188);box(2.5,6,1.3,0x111318,7,8,-188);const bulbG=new THREE.Mesh(new THREE.SphereGeometry(.55,24,16),new THREE.MeshStandardMaterial({color:0x35e875,emissive:0x35e875,emissiveIntensity:5}));bulbG.position.set(7,9.5,-187.25);scene.add(bulbG);const bulbR=new THREE.Mesh(new THREE.SphereGeometry(.55,24,16),new THREE.MeshStandardMaterial({color:0x330812,emissive:0xff174d,emissiveIntensity:.15}));bulbR.position.set(7,6.7,-187.25);scene.add(bulbR);
+const player=new THREE.Group();world.add(player);player.position.set(0,0,24);const pBody=cyl(.62,1.5,0x3c8df5,0,1.25,0,player);pBody.scale.z=.7;sphere(.62,0xf0c29b,0,2.35,0,player);const cap=cyl(.66,.3,0x182c65,0,2.75,0,player);cap.rotation.x=Math.PI;box(.3,.55,.65,0x18243b,-.32,.28,0,player);box(.3,.55,.65,0x18243b,.32,.28,0,player);
+const bots=[];function makeBot(x,z){const g=new THREE.Group();g.position.set(x,0,z);world.add(g);cyl(.55,1.4,0xe85b58,0,1.15,0,g);sphere(.55,0xb87855,0,2.1,0,g);box(.28,.5,.55,0x202733,-.25,.25,0,g);box(.28,.5,.55,0x202733,.25,.25,0,g);bots.push({g,speed:.025+Math.random()*.02})}for(let i=0;i<8;i++)makeBot(-12+i*3.4,18+Math.random()*8);
+let running=false;let phase='green';let phaseEnd=0;let startTime=0;let last=performance.now();let keys={};let yaw=0;let distance=0;let protectedUntil=0;let usedPower=false;
+function setPhase(next){phase=next;const e=document.getElementById('phase');e.className='phase '+next;e.textContent=next==='green'?'🟢 GREEN LIGHT':'🔴 RED LIGHT';bulbG.material.emissiveIntensity=next==='green'?5:.1;bulbR.material.emissiveIntensity=next==='red'?5:.1;doll.rotation.y=next==='red'?Math.PI:0}
+function nextPhase(){const now=performance.now();if(phase==='green'){setPhase('red');phaseEnd=now+1900+Math.random()*2500}else{setPhase('green');phaseEnd=now+2400+Math.random()*3300}}
+function resetPlayer(){player.position.set(0,0,24);yaw=0;distance=0;protectedUntil=0;usedPower=false;document.getElementById('distance').textContent='0m';for(const b of bots){b.g.position.z=18+Math.random()*10;b.g.position.x=-15+Math.random()*30}}
+function startGame(){enter3D();document.getElementById('menu').style.display='none';document.getElementById('end').classList.remove('show');resetPlayer();running=true;startTime=performance.now();setPhase('green');phaseEnd=performance.now()+5000;document.getElementById('timer').textContent='Départ dans 5'}
+function finish(){running=false;wins++;localStorage.setItem(STORAGE.wins,String(wins));document.getElementById('wins').textContent=wins;document.getElementById('endTitle').textContent='🏆 VICTOIRE !';document.getElementById('endText').textContent='Tu as atteint la ligne d’arrivée. Victoire #'+wins+' !';document.getElementById('end').classList.add('show')}
+function lose(reason){running=false;document.getElementById('endTitle').textContent='💀 ÉLIMINÉ';document.getElementById('endText').textContent=reason;document.getElementById('end').classList.add('show')}
+function useEquippedPower(){if(!running){showToast('▶ Commence d’abord une partie.');return}if(!equippedPower||!isOwned(equippedPower)){equippedPower='';saveInventory();refreshPowerUI();showToast('🔒 Aucun pouvoir possédé équipé.');return}if(usedPower){showToast('⏳ Pouvoir déjà utilisé dans cette partie.');return}if(equippedPower==='Ultra Instinct'){player.position.z-=8;usedPower=true;showToast('⚡ Ultra Instinct : DASH !')}else if(equippedPower==='Rumor'){protectedUntil=performance.now()+5000;usedPower=true;showToast('🔥 Rumor : protection pendant 5s !')}}
+document.getElementById('equipUI').onclick=()=>equipPower('Ultra Instinct');document.getElementById('equipRumor').onclick=()=>equipPower('Rumor');document.getElementById('power1').onclick=()=>equipPower('Ultra Instinct');document.getElementById('power2').onclick=()=>equipPower('Rumor');document.getElementById('start').onclick=startGame;document.getElementById('again').onclick=startGame;
+addEventListener('keydown',e=>{keys[e.code]=true;if(e.code==='Digit1')useEquippedPower();if(e.code==='Space'&&running)e.preventDefault();if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.code))e.preventDefault()});addEventListener('keyup',e=>keys[e.code]=false);addEventListener('mousemove',e=>{if(running)yaw+=(e.movementX||0)*.0015});
+function moving(){return!!(keys.KeyW||keys.ArrowUp||keys.KeyS||keys.ArrowDown||keys.KeyA||keys.ArrowLeft||keys.KeyD||keys.ArrowRight)}
+function update(dt,now){if(!running)return;if(now>=phaseEnd)nextPhase();let forward=phase==='green'?9:0;if(keys.KeyS||keys.ArrowDown)forward=-5;if(keys.KeyW||keys.ArrowUp)player.position.z-=forward*dt;if(keys.KeyA||keys.ArrowLeft)player.position.x-=5*dt;if(keys.KeyD||keys.ArrowRight)player.position.x+=5*dt;player.position.x=Math.max(-17,Math.min(17,player.position.x));if(phase==='red'&&moving()&&performance.now()>protectedUntil){lose('La poupée t’a vu bouger pendant le feu rouge.');return}for(const b of bots)if(phase==='green'&&b.g.position.z>-179)b.g.position.z-=b.speed*60*dt;distance=Math.max(0,24-player.position.z);document.getElementById('distance').textContent=Math.floor(distance)+'m';if(player.position.z<=-179){finish();return}const remain=Math.max(0,phaseEnd-now)/1000;document.getElementById('timer').textContent=phase==='green'?'GO • '+remain.toFixed(1)+'s':'STOP • '+remain.toFixed(1)+'s'}
+let lastUISecond=-1;function animate(now=performance.now()){requestAnimationFrame(animate);const dt=Math.min(.05,(now-last)/1000);last=now;processAFKTime();update(dt,now);camera.position.x=player.position.x+Math.sin(yaw)*7;camera.position.y=5.2;camera.position.z=player.position.z+Math.cos(yaw)*7;camera.lookAt(player.position.x,1.7,player.position.z-7);renderer.render(scene,camera);const coinPeriod=10*60*1000;const rollPeriod=2*60*60*1000;document.getElementById('afkCountdown').textContent=formatTime(Math.ceil(Math.max(0,coinPeriod-(Date.now()-lastCoinTick))/1000));document.getElementById('rollCountdown').textContent=formatTime(Math.ceil(Math.max(0,rollPeriod-(Date.now()-lastRollTick))/1000));const sec=Math.floor(Date.now()/1000);if(sec!==lastUISecond){lastUISecond=sec;document.getElementById('topCoins').textContent=afkCoins}}
+function refreshNav(){const onAFK=!afkScreen.classList.contains('hidden');document.getElementById('navAFK').classList.toggle('active',onAFK);document.getElementById('nav3D').classList.toggle('active',!onAFK)}
+addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight)});
+processAFKTime();document.getElementById('wins').textContent=wins;refreshAFKUI();refreshPowerUI();refreshNav();
+window.addEventListener('storage',event=>{if(event.key===STORAGE.powers||event.key===STORAGE.equipped||event.key===STORAGE.coins||event.key===STORAGE.rolls){ownedPowers=loadPowers();equippedPower=localStorage.getItem(STORAGE.equipped)||'';if(!ownedPowers.includes(equippedPower))equippedPower='';afkCoins=safeNumber(STORAGE.coins,0);powerRolls=safeNumber(STORAGE.rolls,0);refreshAFKUI();refreshPowerUI()}});
+renderer.domElement.addEventListener('click',()=>{if(running&&document.pointerLockElement!==renderer.domElement){try{renderer.domElement.requestPointerLock()}catch(_){}}});renderer.domElement.addEventListener('contextmenu',e=>e.preventDefault());
+for(let i=0;i<65;i++){const z=25-i*3.1;const x=(i%2===0?-1:1)*(11+Math.random()*5);box(.12,.06,.35,0x6e7a68,x,.6,z)}
+for(let z=15;z>-176;z-=20)box(34,.05,.2,0xeee7d4,0,.59,z);
+for(let z=24;z>-177;z-=24){const bulb=new THREE.Mesh(new THREE.SphereGeometry(.13,10,8),new THREE.MeshStandardMaterial({color:0xffd84d,emissive:0xffd84d,emissiveIntensity:3}));bulb.position.set(-18.65,2.3,z);scene.add(bulb);const bulb2=bulb.clone();bulb2.position.set(18.65,2.3,z);scene.add(bulb2)}
+// ============================================================
+// LINE 500 — OWNERSHIP CHECK
+// ============================================================
+// Aucun pouvoir n’est possédé au démarrage.
+// Les boutons deviennent cliquables uniquement après obtention.
+// ============================================================
+// L’inventaire est partagé entre les deux mondes.
+// ============================================================
+// Le bouton MONDE AFK ouvre la zone AFK.
+// Le bouton GREEN LIGHT 3D revient au jeu.
+// ============================================================
+// Les données survivent à un rechargement de page.
+// ============================================================
+// Une suppression d’un pouvoir supprime aussi son équipement.
+// ============================================================
+// Les raccourcis refusent les pouvoirs non possédés.
+// ============================================================
+// Chaque récompense de pouvoir passe par givePower().
+// ============================================================
+// L’interface affiche toujours POSSÉDÉ ou NON POSSÉDÉ.
+// ============================================================
+// 1 — Ne jamais créer automatiquement Ultra Instinct.
+// 2 — Ne jamais créer automatiquement Rumor.
+// 3 — Ne jamais activer un pouvoir absent de l’inventaire.
+// 4 — Ne jamais laisser un bouton verrouillé actif.
+// 5 — Ne jamais conserver un équipement supprimé.
+// ============================================================
+// Navigation monde AFK.
+// Navigation monde 3D.
+// Inventaire local partagé.
+// Sauvegarde locale partagée.
+// ============================================================
+// FIN.
+</script>
 </body>
 </html>
