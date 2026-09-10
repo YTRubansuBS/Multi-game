@@ -10,14 +10,20 @@ if(!url||!anonKey){
 
 let html=fs.readFileSync('index.html','utf8');
 
-// IMPORTANT: le runtime Supabase doit être disponible AVANT le JavaScript principal du jeu.
-// On l'injecte directement dans le <head>, avec les variables Vercel déjà remplacées au build.
+// Injecte la configuration Supabase AVANT tous les scripts du jeu.
 const runtime={url,anonKey};
 const bootstrap=`<script>\nwindow.__CROWN_RIFT_SUPABASE__=${JSON.stringify(runtime)};\n(function(){const originalFetch=window.fetch.bind(window);window.fetch=async function(input,init){const u=typeof input==='string'?input:(input&&input.url)||'';if(u==='/api/config'||u.endsWith('/api/config')){const c=window.__CROWN_RIFT_SUPABASE__;return new Response(JSON.stringify({url:c.url,anonKey:c.anonKey}),{status:200,headers:{'Content-Type':'application/json','Cache-Control':'no-store'}})}return originalFetch(input,init)}})();\n</script>`;
 
 if(!html.includes('window.__CROWN_RIFT_SUPABASE__')){
   html=html.replace('<head>','<head>'+bootstrap);
 }
+
+// IMPORTANT : le code principal utilise une variable locale "sb" tandis que
+// les patches utilisent window.sb. On expose donc exactement le même client.
+html=html.replace(
+  'sb=window.supabase.createClient(cfg.url,cfg.anonKey);',
+  'sb=window.supabase.createClient(cfg.url,cfg.anonKey);window.sb=sb;'
+);
 
 const scripts=['rooms.js','gamepatch.js','authfix.js','roomfix.js','adminfix.js'];
 for(const file of scripts){
@@ -31,4 +37,4 @@ for(const file of scripts){
   fs.copyFileSync(file,`public/${file}`);
 }
 
-console.log('CROWN RIFT build OK: Supabase injecte directement avant le code du jeu.');
+console.log('CROWN RIFT build OK: client Supabase partage entre le jeu et les patches.');
