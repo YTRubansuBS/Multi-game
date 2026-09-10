@@ -1,7 +1,5 @@
 const fs=require('fs');
-const file='index.html';
-let html=fs.readFileSync(file,'utf8');
-html=html.replaceAll('__SUPABASE_URL__',process.env.NEXT_PUBLIC_SUPABASE_URL||'');
-html=html.replaceAll('__SUPABASE_PUBLISHABLE_KEY__',process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY||'');
-fs.writeFileSync(file,html);
-console.log('CROWN RIFT build: Supabase variables injected.');
+if(!fs.existsSync('public')) fs.mkdirSync('public');
+const html=fs.readFileSync('index.html','utf8');
+fs.writeFileSync('public/index.html',html);
+console.log('CROWN RIFT build OK: public/index.html created.');
