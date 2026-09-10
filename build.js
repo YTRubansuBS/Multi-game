@@ -1,9 +1,9 @@
 const fs=require('fs');
 if(!fs.existsSync('public')) fs.mkdirSync('public');
 let html=fs.readFileSync('index.html','utf8');
-if(!html.includes('rooms.js')) html=html.replace('</body>','<script src="/rooms.js"></script></body>');
-if(!html.includes('gamepatch.js')) html=html.replace('</body>','<script src="/gamepatch.js"></script></body>');
+for(const file of ['rooms.js','gamepatch.js','authfix.js','roomfix.js']){
+  if(!html.includes(file)) html=html.replace('</body>',`<script src="/${file}"></script></body>`);
+}
 fs.writeFileSync('public/index.html',html);
-fs.copyFileSync('rooms.js','public/rooms.js');
-fs.copyFileSync('gamepatch.js','public/gamepatch.js');
-console.log('CROWN RIFT build OK: rooms + admin + deck + battle improvements copied.');
+for(const file of ['rooms.js','gamepatch.js','authfix.js','roomfix.js']) fs.copyFileSync(file,`public/${file}`);
+console.log('CROWN RIFT build OK: auth pseudo+password + rooms + deck + battle patches copied.');
