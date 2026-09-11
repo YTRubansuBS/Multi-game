@@ -1,27 +1,10 @@
-(()=>{
-'use strict';
+(()=>{'use strict';
+const ADMIN_NAME='RUBANSU1';
 const toast=m=>window.toast?window.toast(m):alert(m);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-function cardList(){return Array.isArray(window.CARDS)?window.CARDS:[]}
-function buildAdmin(){
- const admin=[...document.querySelectorAll('.roomModal')].find(x=>/ADMIN CROWN RIFT/i.test(x.textContent||''));
- if(!admin||document.getElementById('crAdminTools'))return;
- const panel=admin.querySelector('#adminPanel'); if(!panel||panel.style.display==='none')return;
- const tools=document.createElement('div');tools.id='crAdminTools';tools.className='rp';tools.style.marginTop='12px';
- tools.innerHTML=`<h3>🎁 ME RÉCOMPENSER</h3><div style="color:#ae9eb9;font-size:11px;margin-bottom:10px">Choisis exactement ce que tu veux ajouter à TON compte.</div><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px"><div><small>💰 Pièces</small><input id="admPieces" class="ri" type="number" min="0" value="1000"></div><div><small>💎 Gemmes</small><input id="admGems" class="ri" type="number" min="0" value="500"></div><div><small>🃏 Carte</small><select id="admCard" class="ri"><option value="">Aucune carte</option>${cardList().map(c=>`<option value="${esc(c.id)}">${esc(c.name)} — ${esc(c.rarity||'')}</option>`).join('')}</select><input id="admCardQty" class="ri" type="number" min="1" value="1"></div></div><button id="admReward" class="rb rgold">✨ AJOUTER LES RÉCOMPENSES</button><div id="admStatus" style="margin-top:8px;color:#ae9eb9;font-size:10px"></div>`;
- panel.appendChild(tools);document.getElementById('admReward').onclick=grant;
-}
-async function grant(){
- const u=window.user||(await window.sb?.auth?.getSession())?.data?.session?.user;if(!u||!window.sb)return toast('Connecte-toi d’abord.');
- const pieces=Math.max(0,parseInt(document.getElementById('admPieces').value)||0),gems=Math.max(0,parseInt(document.getElementById('admGems').value)||0),cardId=document.getElementById('admCard').value,qty=Math.max(1,parseInt(document.getElementById('admCardQty').value)||1),p=window.profile||{};
- const owned={...(p.owned_cards||p.cards||{})};if(cardId)owned[cardId]=(parseInt(owned[cardId])||0)+qty;
- const patch={gems:(parseInt(p.gems)||0)+gems,gold:(parseInt(p.gold)||0)+pieces,owned_cards:owned};
- if(Array.isArray(p.cards)){const arr=[...p.cards];if(cardId)for(let i=0;i<qty;i++)if(!arr.includes(Number(cardId))&&!arr.includes(cardId))arr.push(Number.isNaN(Number(cardId))?cardId:Number(cardId));patch.cards=arr}
- const q=await window.sb.from('profiles').update(patch).eq('id',u.id);if(q.error)return toast('Erreur sauvegarde : '+q.error.message);
- Object.assign(p,patch);window.profile=p;if(typeof window.renderAll==='function')window.renderAll();
- const parts=[];if(pieces)parts.push(`+${pieces} pièces`);if(gems)parts.push(`+${gems} gemmes`);if(cardId){const c=cardList().find(x=>String(x.id)===String(cardId));parts.push(`+${qty} ${c?.name||'carte'}`)}
- document.getElementById('admStatus').textContent=parts.join(' • ')||'Rien ajouté';toast(parts.join(' • ')||'Aucune récompense choisie.');
-}
-function boot(){buildAdmin()}
-window.addEventListener('load',()=>setTimeout(boot,900));setInterval(boot,1000);
+function cards(){return Array.isArray(window.CARDS)?window.CARDS:[]}
+function build(){const admin=[...document.querySelectorAll('.roomModal')].find(x=>/ADMIN CROWN RIFT/i.test(x.textContent||''));if(!admin||document.getElementById('crAdminTools'))return;const panel=admin.querySelector('#adminPanel');if(!panel||panel.style.display==='none')return;const old=panel.querySelector('.rp');if(old)old.style.display='none';const tools=document.createElement('div');tools.id='crAdminTools';tools.className='rp';tools.innerHTML='<h3>👑 GIVE — ADMIN UNIQUEMENT</h3><div style="color:#ae9eb9;font-size:11px;margin-bottom:10px">Recherche un pseudo puis donne directement au joueur.</div><input id="admSearch" class="ri" placeholder="Rechercher un pseudo..." autocomplete="off"><div id="admResults" style="margin:6px 0"></div><div id="admTarget" style="color:#ffd23f;font-size:11px;margin:8px 0">Aucun joueur sélectionné</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><input id="admPieces" class="ri" type="number" min="0" value="0" placeholder="Pièces"><input id="admGems" class="ri" type="number" min="0" value="0" placeholder="Gemmes"></div><select id="admCard" class="ri"><option value="">Aucune carte</option>'+cards().map(c=>'<option value="'+esc(c.id)+'">'+esc(c.name)+'</option>').join('')+'</select><input id="admQty" class="ri" type="number" min="1" value="1" placeholder="Quantité"><button id="admGive" class="rb rgold">🎁 DONNER</button><div id="admStatus" style="margin-top:8px;color:#ae9eb9;font-size:10px"></div>';panel.appendChild(tools);document.getElementById('admSearch').oninput=search;document.getElementById('admGive').onclick=give}
+async function search(){const q=document.getElementById('admSearch').value.trim();const box=document.getElementById('admResults');if(!box)return;if(q.length<1){box.innerHTML='';return}const r=await window.sb.from('profiles').select('id,username,display_name').ilike('username','%'+q+'%').limit(8);if(r.error){box.textContent=r.error.message;return}box.innerHTML=r.data.map(x=>'<button class="rb" style="width:100%;text-align:left" data-id="'+x.id+'" data-name="'+esc(x.username)+'">👤 '+esc(x.username)+(x.display_name&&x.display_name!==x.username?' — '+esc(x.display_name):'')+'</button>').join('')||'<span style="color:#ae9eb9">Aucun joueur.</span>';box.querySelectorAll('[data-id]').forEach(b=>b.onclick=()=>{window.crAdminTarget={id:b.dataset.id,name:b.dataset.name};document.getElementById('admTarget').textContent='🎯 Cible : '+b.dataset.name;box.innerHTML=''})}
+async function give(){const me=window.user||(await window.sb?.auth?.getSession())?.data?.session?.user;if(!me||!window.sb)return toast('Connecte-toi d’abord.');if(String(window.profile?.username||'').toUpperCase()!==ADMIN_NAME)return toast('Accès admin refusé.');const t=window.crAdminTarget;if(!t)return toast('Recherche puis sélectionne un joueur.');const pieces=Math.max(0,parseInt(document.getElementById('admPieces').value)||0),gems=Math.max(0,parseInt(document.getElementById('admGems').value)||0),card=document.getElementById('admCard').value,qty=Math.max(1,parseInt(document.getElementById('admQty').value)||1);if(!pieces&&!gems&&!card)return toast('Choisis une récompense.');const r=await window.sb.rpc('admin_give_rewards',{target_id:t.id,pieces,gems,card_id:card?parseInt(card):null,card_qty:card?qty:0});if(r.error)return toast('Erreur : '+r.error.message);document.getElementById('admStatus').textContent='✅ Donné à '+t.name;toast('Récompense envoyée 🎁')}
+window.addEventListener('load',()=>setTimeout(build,900));setInterval(build,1200);
 })();
