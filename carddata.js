@@ -1,0 +1,1 @@
+(()=>{'use strict';if(!Array.isArray(window.CARDS))return;window.CROWN_RIFT_CARD_COUNT=window.CARDS.length;})();
